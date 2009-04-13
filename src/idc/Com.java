@@ -9,7 +9,7 @@ public interface Com {
 	
 	//envoie du message msg.
 	public void send(Message msg);
-	//reception du message dans la structure (initialement vide) msg.
-	public void receive(Message msg);
+	
+	
 	
 }
