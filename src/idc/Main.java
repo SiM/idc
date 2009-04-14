@@ -19,6 +19,7 @@ public class Main {
     public static void main(String[] args) {
         Node my_node=new Node("el-indio","id");
         System.out.println("Node "+my_node.getNickname()+" created with the id : "+my_node.getId());
+        IDCManager manager = new IDCManager();
     }
-    IDCManager manager = new IDCManager();
+    
 }

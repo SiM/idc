@@ -19,9 +19,6 @@ public class IDCManager {
     
     static private Server server; // le serveur qui écoute sur le port Config.port
 
-    private Vector VectorOfPublicKey;
-    private Vector VectorOfSecretKeys; //vecteur de clefs secrète correspondant à chaque conversation privée
-    
     IDCManager() {
         nodes = new ArrayList();
         friends = new ArrayList();
@@ -34,7 +31,7 @@ public class IDCManager {
         local.send(new Message("coucou", local));
          */
     }
-        
+    
     /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
      * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
      * de connexion directe à chacun de ces noeuds */

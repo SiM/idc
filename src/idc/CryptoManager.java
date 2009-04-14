@@ -8,8 +8,8 @@ import java.math.*;
 
 public class CryptoManager {
 
-    private PublicKey public_key;
-    private PrivateKey private_key;
+    static private PublicKey public_key;
+    static private PrivateKey private_key;
 
     private Signature IdSign;
 
