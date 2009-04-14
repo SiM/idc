@@ -30,7 +30,7 @@ public class IDCManager implements Com{
         local.send(new Message("coucou", local));
          */
     }
-        
+    
     /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
      * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
      * de connexion directe à chacun de ces noeuds */

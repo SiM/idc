@@ -20,9 +20,11 @@ public class Main {
     	CryptoManager CM=new CryptoManager();
         Node my_node=new Node("el-indio","id");
         System.out.println("Node "+my_node.getNickname()+" created with the id : "+my_node.getId());
-
+<<<<<<< HEAD:src/idc/Main.java
         CM.CreateSecretKey();
-
+=======
+        IDCManager manager = new IDCManager();
+>>>>>>> 7dd643ac8523a01cff5ec65f2f010f540c29570b:src/idc/Main.java
     }
     
 }
