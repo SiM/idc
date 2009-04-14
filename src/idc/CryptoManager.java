@@ -83,27 +83,34 @@ public class CryptoManager {
 
     }
 
-    public void CreateSecretKey(){
+    static public SecretKey CreateSecretKey(){
+    	    	
     	int i;
     	SecretKey Secret;
-    	byte[] RandWord= new byte[31];
+    
     	try{
     	
-    	Cipher SecretCipher=Cipher.getInstance("AES");
+    	Cipher coding=Cipher.getInstance("AES");
+    	Cipher decoding=Cipher.getInstance("AES");
     	
     	KeyGenerator Gen=KeyGenerator.getInstance("AES");
     	Gen.init(256);
     	Secret=Gen.generateKey();
-    	SecretKeyVect.add(Secret);
+    	
     	//for the moment the key is not bounded to the cipher.
+    	//now we bound both elements.
     	
        	System.out.println(Secret);
+      
        	
     	}catch(NoSuchPaddingException err){
     		System.out.println(err);
     	}catch(NoSuchAlgorithmException err){
     		System.out.println(err);
     	}
+    	
+     	return Secret;
+    	
     	
     }
     
