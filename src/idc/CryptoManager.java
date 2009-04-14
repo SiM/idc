@@ -5,43 +5,52 @@ import java.io.*;
 import java.security.*;
 import java.security.spec.*;
 import java.math.*;
+import idc.Config;
+import javax.crypto.*;
+import javax.crypto.interfaces.*;
+import javax.crypto.spec.*;
 
 public class CryptoManager {
 
-    private PublicKey public_key;
-    private PrivateKey private_key;
-
+    private byte[] PubKey;
+    private byte[] PrivKey;
+    private Vector SecretKeyVect;
     private Signature IdSign;
 
     public CryptoManager() {
-        File FilePub = new File("id.pub");
-        File FilePriv = new File("id.private");
-
+    	
+    	SecretKeyVect=new Vector();
+    	
         try {
-            FileOutputStream FileStreamPub = new FileOutputStream(FilePub);
-            FileOutputStream FileStreamPriv = new FileOutputStream(FilePriv);
-
+            FileOutputStream FileStreamPubO = new FileOutputStream(Config.FilePub);
+            FileOutputStream FileStreamPrivO = new FileOutputStream(Config.FilePriv);
+            FileInputStream FileStreamPubI =new FileInputStream(Config.FilePub);
+            FileInputStream FileStreamPrivI =new FileInputStream(Config.FilePriv);
+            
             KeyPairGenerator KeyFact = KeyPairGenerator.getInstance("RSA");
-            KeyFact.initialize(512);
+            KeyFact.initialize(1024);
             KeyPair PairOfKey = KeyFact.genKeyPair();
 
-            public_key = PairOfKey.getPublic();
-            private_key = PairOfKey.getPrivate();
+            PublicKey public_key = PairOfKey.getPublic();
+            PrivateKey private_key = PairOfKey.getPrivate();
+            
+            PubKey = public_key.getEncoded();
+            PrivKey = private_key.getEncoded();
 
-            byte[] PubKey = public_key.getEncoded();
-            byte[] PrivKey = private_key.getEncoded();
-
-            if (!FilePub.isFile()) {
-                if (FilePub.createNewFile()) {
-                    FileStreamPub.write(PubKey);
-                }
+            System.out.println("publick key :"+PubKey);
+            System.out.println("private key :"+PrivKey);
+            	
+            if (Config.FilePub.isFile()&&Config.FilePub.exists()) {
+                FileStreamPubO.write(PubKey);
+            }else{
+            	FileStreamPubI.read(PubKey);
             }
 
 
-            if (!FilePriv.isFile()) {
-                if (FilePriv.createNewFile()) {
-                    FileStreamPriv.write(PrivKey);
-                }
+            if (Config.FilePriv.isFile()) {
+                FileStreamPrivO.write(PrivKey);
+            }else{
+            	FileStreamPrivI.read(PrivKey);
             }
 
             //------------- AUTHENTIFICATION ---------------------
@@ -74,12 +83,48 @@ public class CryptoManager {
 
     }
 
+    public void CreateSecretKey(){
+    	int i;
+    	SecretKey Secret;
+    	byte[] RandWord= new byte[31];
+    	try{
+    	
+    	Cipher SecretCipher=Cipher.getInstance("AES");
+    	
+    	KeyGenerator Gen=KeyGenerator.getInstance("AES");
+    	Gen.init(256);
+    	Secret=Gen.generateKey();
+    	SecretKeyVect.add(Secret);
+    	//for the moment the key is not bounded to the cipher.
+    	
+       	System.out.println(Secret);
+       	
+    	}catch(NoSuchPaddingException err){
+    		System.out.println(err);
+    	}catch(NoSuchAlgorithmException err){
+    		System.out.println(err);
+    	}
+    	
+    }
+    
+    static void codeAndSend(Message msg,Node node){
+    	
+    }
+    
+    public Message code(Message msg){
+    	integrity();
+    	
+    	return msg;
+    }
+    
     public Message decode(Message msg) {
         integrity();
         return msg;
     }
 
     private void integrity() {
-
+    	assert(IdSign!=null);
+    	assert(PubKey!=null);
+    	assert(PrivKey!=null);
     }
 }

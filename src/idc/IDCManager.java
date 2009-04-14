@@ -13,15 +13,11 @@ import java.util.*;
  *
  * @author fridim
  */
-public class IDCManager {
+public class IDCManager implements Com{
     static private List nodes; // tous les noeuds connus du réseau
     static private List friends; // Connexions directes
-    
     static private Server server; // le serveur qui écoute sur le port Config.port
 
-    private Vector VectorOfPublicKey;
-    private Vector VectorOfSecretKeys; //vecteur de clefs secrète correspondant à chaque conversation privée
-    
     IDCManager() {
         nodes = new ArrayList();
         friends = new ArrayList();
@@ -44,14 +40,19 @@ public class IDCManager {
     }
     
     /* envoie un message au réseau */
-    static public void send(Message message) {
+     public void send(Message message) {
         // TODO
     }
+     
+    
     
     /* envoie un message à un noeud du réseau */
     static public void send(Node n, Message message) {
         // TODO
 
     }
-
+    public void integrity(){
+    	assert(nodes!=null);
+    	assert(friends!=null);
+    }
 }

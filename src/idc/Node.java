@@ -16,7 +16,7 @@ import java.math.*;
  * Cette classe identifie un noeud du réseau. Selon le cahier des charges, 
  * un noeud est identifié par un nickname et par un id.
  */
-public class Node {
+public class Node implements Com{
 
     private String nickname;
     private String id;
@@ -55,6 +55,13 @@ public class Node {
         /* C'est le manager qui choisi le noeud ami (connexion directe) pour
          * envoyer le message. Ce dernier va ensuite être routé */
         IDCManager.send(this, message);
+    }
+    
+    public void sendCiphered(Message msg,Node node){
+    	integrity();
+    	msg.setAsCiphered(true);
+    	CryptoManager.codeAndSend(msg,node);
+    	integrity();
     }
 
     protected void integrity() {

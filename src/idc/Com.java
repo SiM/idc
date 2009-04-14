@@ -9,4 +9,6 @@ public interface Com {
 	
 	//envoie du message msg.
 	public void send(Message msg);
+	
+	
 }
