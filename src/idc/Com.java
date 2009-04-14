@@ -8,7 +8,5 @@ public interface Com {
 	 */
 	
 	//envoie du message msg.
-	public void send(Message msg);
-	
-	
+	public void send(Message 	
 }
