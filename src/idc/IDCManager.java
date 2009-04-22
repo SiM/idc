@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author fridim
  */
-public class IDCManager implements Com{
+public class IDCManager{
     static private List nodes; // tous les noeuds connus du réseau
     static private List friends; // Connexions directes
     static private Server server; // le serveur qui écoute sur le port Config.port
@@ -40,17 +40,26 @@ public class IDCManager implements Com{
     }
     
     /* envoie un message au réseau */
-     public void send(Message message) {
+    /*
+    static public void send(Message message) {
         // TODO
     }
-     
-    
-    
-    /* envoie un message à un noeud du réseau */
-    static public void send(Node n, Message message) {
-        // TODO
+     */
+       
+    /* envoie un message à un channel du réseau */
+    /*
+    static public void send(int id_chan, Message message) {
+        
 
     }
+    */
+    
+    static public void request(Node node){
+    	/**
+    	 * send a request to a friend node in order to open a private channel
+    	 */
+    }
+    
     public void integrity(){
     	assert(nodes!=null);
     	assert(friends!=null);

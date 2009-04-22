@@ -54,13 +54,25 @@ public class Node implements Com{
         integrity();
         /* C'est le manager qui choisi le noeud ami (connexion directe) pour
          * envoyer le message. Ce dernier va ensuite être routé */
-        IDCManager.send(this, message);
+        //IDCManager.send(message);
     }
     
-    public void sendCiphered(Message msg,Node node){
+    public void send(int id_chan,Message message) {
+        assert (message != null);
+        integrity();
+        
+        
+        
+        /* C'est le manager qui choisi le noeud ami (connexion directe) pour
+         * envoyer le message. Ce dernier va ensuite être routé 
+         * */
+        //IDCManager.send(id_chan,message);
+    }
+    
+    public void sendCiphered(Message msg,int id_chan){
     	integrity();
     	msg.setAsCiphered(true);
-    	CryptoManager.codeAndSend(msg,node);
+    	CryptoManager.codeAndSend(msg,id_chan);
     	integrity();
     }
 

@@ -8,7 +8,8 @@ public interface Com {
 	 */
 	
 	//envoie du message msg.
-	public void send(Message msg);
+	abstract public void send(Message msg);
+	abstract  public void send(int id_chan,Message msg);
 	
 	
 }
