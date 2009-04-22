@@ -78,7 +78,7 @@ public class CryptoManager {
         integrity();
         return msg;
     }
-
+    static public String getId() {return "ID:BLABLA";}
     private void integrity() {
 
     }

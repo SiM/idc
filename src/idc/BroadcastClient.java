@@ -27,18 +27,12 @@ public class BroadcastClient extends Thread {
             
             // send request
             byte[] buf = new byte[256];
-            buf = "I'am the client".getBytes();
-            InetAddress address = InetAddress.getByName("localhost");
+            buf = (Config.nickname + " " + CryptoManager.getId()).getBytes();
+            InetAddress address = InetAddress.getByName("255.255.255.255");
+
+
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Config.broadcastPort);
             sock.send(packet);
-
-            // get response
-            packet = new DatagramPacket(buf, buf.length);
-            sock.receive(packet);
-
-            // display response
-            String received = new String(packet.getData(), 0, packet.getLength());
-            // System.out.println("Client received : " + received);
 
             sock.close();
             // sleep((long) Math.random() * 100 * Config.broadcastSleep);

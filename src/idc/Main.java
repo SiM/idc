@@ -15,13 +15,9 @@ public class Main {
    /**
     * @param args the command line arguments
     */
+   public static IDCManager manager;
+   
    public static void main(String[] args) {
-      Node my_node = new Node("el-indio", "id");
-      System.out.println(
-              "Node " 
-              + my_node.getNickname() 
-              + " created with the id : " + my_node.getId()
-      );
-      IDCManager manager = new IDCManager();
+      manager = new IDCManager();
    }
 }

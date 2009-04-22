@@ -11,17 +11,18 @@ import java.util.*;
 
 /**
  *
- * @author fridim
+ @author fridim
  */
 public class IDCManager {
 
    static private List nodes; // tous les noeuds connus du réseau
    static private List friends; // Connexions directes
    static private Server server; // le serveur qui écoute sur le port Config.port
-
+   static public Node myNode;
    IDCManager() {
       nodes = new ArrayList();
       friends = new ArrayList();
+      myNode = new Node(Config.nickname, CryptoManager.getId());
 
       new Server().start();
       new BroadcastServer().start();
@@ -43,7 +44,7 @@ public class IDCManager {
    }
 
    /* envoie un message au réseau */
-   static public void send(Message message) {
+   public void send(Message message) {
    // TODO
    }
 
@@ -52,4 +53,10 @@ public class IDCManager {
    // TODO
 
    }
+   
+   public static void addNode(Node n) {
+      if (!nodes.contains(n))
+         nodes.add(n);
+   }
+   
 }

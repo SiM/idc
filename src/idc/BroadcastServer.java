@@ -29,18 +29,12 @@ public class BroadcastServer extends Thread {
 
             // figure out response
             buf = packet.getData();
-
+            
             String dString = new String(buf);
-            //System.out.println("Server received : " + dString);
-
-            /* send the response to the client at "address"
-             * and "port"
-             * echo server */
-            InetAddress address = packet.getAddress();
-            int port = packet.getPort();
-            buf = "I'am the server".getBytes();
-            packet = new DatagramPacket(buf, buf.length, address, port);
-            socket.send(packet);
+            System.out.println("Broadcast received : " + dString);
+            
+            String[] d = dString.split(" ");
+            IDCManager.addNode(new Node(d[0], d[1]));
          } catch (Exception e) {
             e.printStackTrace(System.err);
             listening = false;
