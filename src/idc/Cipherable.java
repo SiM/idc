@@ -11,5 +11,5 @@ public interface Cipherable {
 	
 	public boolean authentification();
 	
-	
+
 }

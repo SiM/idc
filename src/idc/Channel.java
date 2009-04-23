@@ -13,7 +13,6 @@ public class Channel {
 	static private String name;
 	static private List nodes;
 		
-	
 	static public int getId(){
 		integrity();
 		return id;
@@ -28,23 +27,20 @@ public class Channel {
 	
 	public Channel(String nickname){
 		nodes =new ArrayList();
-		//création de la clef de session
-	
 		id=IdGen.getID();
-		
+		integrity();
 	}
 	
-	
-	
+
 	public void addNode(Node node){
+		integrity();
 		nodes.add(node);		
 	}
 	
 	static public void integrity(){
 		assert(name!=null);
 		assert(name.length()>=0);
-		assert(nodes!=null);
-		
+		assert(nodes!=null);		
 	}
 }
 

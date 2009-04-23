@@ -14,27 +14,22 @@ public class Message implements Serializable, Cipherable {
     private Node sender;
     private Integer size;
     private Date date;
-    //private String str;
-    public String data;
-   
-    public byte[] crypted;
+    private byte[] data;
     private boolean isciphered;
     private byte[] signature;
 
     public Message(String message, Node sender) {
         this.sender = sender;
         date = new Date();
-        //str = new String(message);
-        data=message;
-        crypted = new byte[0];               
+        data=message.getBytes();          
         signature=new byte[0];
         integrity();
     // ici on calcule signature avec sender+date+str pour éviter les redondances
     }
+    
     public Message(Message msg){
     	sender=msg.sender;
     	data=msg.data;
-    	crypted=msg.crypted;
     	date=new Date();
     	signature=new byte[0];
     	integrity();
@@ -46,55 +41,66 @@ public class Message implements Serializable, Cipherable {
     
     public boolean isByteEmpty(){
     	integrity();
-    	return data.isEmpty();
+    	if(data.length==0){
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
     
     public void setAsCiphered(boolean bool){
+    	integrity();
     	isciphered=bool;
     }
     
     public boolean authentification(){
+    	integrity();
     	return false;
     }
     
     public String getMessage() {
-        return data;
+    	integrity();
+        return new String(data);
     }
     
-    public byte[] getByte(){
+    public byte[] getData(){
     	integrity();
-    	return data.getBytes();
+    	return data;
     }
-    
-    public void setData(byte[] arrayOfByte){
+
+    public void setData(byte[] ocTab){
     	integrity();
-    	
+    	data=ocTab;
     	integrity();
     }
+   
        
     private void writeObject(ObjectOutputStream stream) throws IOException {
-        //stream.defaultWriteObject();
+        integrity();
+    	//stream.defaultWriteObject();
         stream.writeObject(size);
         stream.writeObject(date);
         //stream.writeObject(str);
         stream.writeObject(signature);
+        integrity();
     }
 
     private void readObject(ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
-        //stream.defaultReadObject();
+        integrity();
+    	//stream.defaultReadObject();
         size = (Integer) stream.readObject();
         date = (Date) stream.readObject();
         //str = (String) stream.readObject();
         signature = (byte[]) stream.readObject();
+        integrity();
     }
     
     private void integrity(){
     	assert(sender!=null);
     	assert(size>=0);
     	assert(signature!=null);
-    	assert(this.isCiphered()?data.length()>0:data!=null);
-    	//assert(this.isCiphered()?str.equalsIgnoreCase("destroyed"):str!=null);
+    	assert(data!=null);    
     }
 }
 

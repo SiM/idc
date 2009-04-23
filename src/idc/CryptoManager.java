@@ -118,13 +118,13 @@ public class CryptoManager {
 		integrity();
 
 	}
-
+	
 	static void codeAndSend(Message msg, int id_chan) {
 
 	}
 
 	public Message code(int id_chan, Message msg) {
-		
+		integrity();
 		Coder makeIt = new Coder( KeyVect.elementAt(id_chan), msg);
 		makeIt.start();
 		
@@ -134,15 +134,13 @@ public class CryptoManager {
 			System.out.println(err);
 		}
 		
-		msg.data="null";
 		msg.setAsCiphered(true);
-		
+		integrity();
 		return msg;
 	}
 
 	public Message decode(int id_chan, Message msg) {
-	
-		
+		integrity();
 		Decoder makeIt = new Decoder(KeyVect.elementAt(id_chan), msg);
 		makeIt.start();
 		
@@ -152,9 +150,8 @@ public class CryptoManager {
 			System.out.println(err);
 		}
 		 
-		msg.crypted=new byte[0];
 		msg.setAsCiphered(false);
-		
+		integrity();
 		return msg;
 	}
 
@@ -177,11 +174,27 @@ class Coder extends Thread {
 
 	public Coder(SecretKey key, Message msg) {
 		key_chan= key;
-		message = new Message(msg);
+		message = msg;
 		
 		integrity();
 	}
 
+	public void fitPadding(Message message){
+		integrity();
+		int lack,i;
+		
+		if(message.getData().length%16!=0)
+		{
+			lack=16-(message.getData().length%16);
+			String str=new String(message.getData());
+			for(i=0;i<lack;i++){
+				str+=" ";
+			}
+			message.setData(str.getBytes());
+		}
+		integrity();
+	}
+	
 	private void integrity() {
 		assert (key_chan != null);
 		assert (message != null);
@@ -189,11 +202,17 @@ class Coder extends Thread {
 
 	public void run() {
 		integrity();
+		
+		this.fitPadding(message);
+		
 		try {
-			Cipher cipher = Cipher.getInstance("AES");
+				
+			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");	
 			cipher.init(Cipher.ENCRYPT_MODE,key_chan);
+			byte[] result=cipher.doFinal(message.getData());
+			message.setData(result);
 			
-			message.crypted=cipher.doFinal(message.getByte());
+					
 		} catch (IllegalBlockSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -207,6 +226,7 @@ class Coder extends Thread {
 			System.out.println(err);
 		}catch(InvalidKeyException err){
 			System.out.println(err);
+			err.printStackTrace();
 		}catch(NoSuchAlgorithmException err){
 			System.out.println(err);
 		}
@@ -221,8 +241,7 @@ class Decoder extends Thread {
 
 	public Decoder(SecretKey key, Message msg) {
 		key_chan= key;
-		message = new Message(msg);
-		
+		message =msg;		
 		integrity();
 	}
 
@@ -230,32 +249,41 @@ class Decoder extends Thread {
 		assert (key_chan != null);
 		assert (message != null);
 	}
-
+	
+	public void fitPadding(Message message){
+		integrity();
+		int lack,i;
+		
+		if(message.getData().length%16!=0)
+		{
+			lack=16-(message.getData().length%16);
+			String str=new String(message.getData());
+			for(i=0;i<lack;i++){
+				str+=" ";
+			}
+			message.setData(str.getBytes());
+		}
+		integrity();
+	}
+	
 	public void run() {
 		integrity();
-		int i,lack;
+			
+		this.fitPadding(message);
+	
 		try {
-			Cipher cipher = Cipher.getInstance("AES");
+			
+			Cipher cipher=Cipher.getInstance("AES/ECB/NoPadding");
 			cipher.init(Cipher.DECRYPT_MODE,key_chan);
-			
-			if(message.getByte().length%16!=0)
-			{
-				lack=16-(message.getByte().length%16);
-				for(i=0;i<lack;i++){
-					message.data+=" ";
-				}
-				
-			}
-			System.out.println(message.getByte().length%16);
-			
-			message.crypted=cipher.doFinal(message.data.getBytes("UTF-8"));
-			
+			byte[] result=cipher.doFinal(message.getData());
+			message.setData(result);
+					
 		} catch (IllegalBlockSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
@@ -263,12 +291,10 @@ class Decoder extends Thread {
 			System.out.println(err);
 		}catch(InvalidKeyException err){
 			System.out.println(err);
+			err.printStackTrace();
 		}catch(NoSuchAlgorithmException err){
 			System.out.println(err);
-		}catch(UnsupportedEncodingException err){
-			System.out.println(err);
 		}
-		
 		
 		integrity();
 	}

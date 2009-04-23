@@ -10,6 +10,7 @@ final class IdGen{
 	static public int getID(){
 		integrity();
 		id=id+1;
+		integrity();
 		return id;
 	}
 	
