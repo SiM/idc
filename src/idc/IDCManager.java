@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  *
- @author fridim
+@author fridim
  */
 public class IDCManager {
 
@@ -20,6 +20,7 @@ public class IDCManager {
    static private List friends; // Connexions directes
    static private Server server; // le serveur qui écoute sur le port Config.port
    static public Node myNode;
+
    IDCManager() {
       nodes = new ArrayList();
       localNodes = new ArrayList();
@@ -47,10 +48,16 @@ public class IDCManager {
    // TODO
 
    }
-   
-   public static void addNode(Node n) {
-      if (!localNodes.contains(n))
+
+   public static void addLocalNode(Node n) {
+      if (!localNodes.contains(n)) {
          localNodes.add(n);
+      }
    }
-   
+
+   public static void addNode(Node n) {
+      if (!nodes.contains(n)) {
+         nodes.add(n);
+      }
+   }
 }
