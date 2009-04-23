@@ -16,11 +16,13 @@ import java.util.*;
 public class IDCManager {
 
    static private List nodes; // tous les noeuds connus du réseau
+   static private List localNodes; // noeuds découverts par broadcast
    static private List friends; // Connexions directes
    static private Server server; // le serveur qui écoute sur le port Config.port
    static public Node myNode;
    IDCManager() {
       nodes = new ArrayList();
+      localNodes = new ArrayList();
       friends = new ArrayList();
       myNode = new Node(Config.nickname, CryptoManager.getId());
 
@@ -35,14 +37,6 @@ public class IDCManager {
     */
    }
 
-   /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
-    * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
-    * de connexion directe à chacun de ces noeuds */
-   public List getLANNodes() {
-      // TODO
-      return new ArrayList();
-   }
-
    /* envoie un message au réseau */
    public void send(Message message) {
    // TODO
@@ -55,8 +49,8 @@ public class IDCManager {
    }
    
    public static void addNode(Node n) {
-      if (!nodes.contains(n))
-         nodes.add(n);
+      if (!localNodes.contains(n))
+         localNodes.add(n);
    }
    
 }
