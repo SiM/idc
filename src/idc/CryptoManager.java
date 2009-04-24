@@ -172,6 +172,7 @@ class Coder extends Thread {
 	private SecretKey key_chan;
 	private Message message;
 
+
 	public Coder(SecretKey key, Message msg) {
 		key_chan= key;
 		message = msg;
@@ -199,6 +200,7 @@ class Coder extends Thread {
 		assert (key_chan != null);
 		assert (message != null);
 	}
+
 
 	public void run() {
 		integrity();

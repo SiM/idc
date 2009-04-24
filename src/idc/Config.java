@@ -13,9 +13,17 @@ import java.io.File;
  */
 public class Config {
     static public int port = 44441; // listening port for the server
+
     static public int broadcastPort=44442;
+
+    static public int broadcastPort = 44442; // listening port for the server
+    static public long broadcastSleep = 5000;
+    static public String nickname = "fridim";
     static public String keyfile = System.getProperty("user.home") + "/.IDC-known_hosts";
     static public File FilePub = new File("id.pub");
     static public File FilePriv = new File("id.private");
     // Here we can imagine parsing a conf file
+    public static void loadConfig() {
+      
+    }
 }

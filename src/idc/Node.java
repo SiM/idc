@@ -71,8 +71,7 @@ public class Node implements Com{
     
     public void sendCiphered(Message msg,int id_chan){
     	integrity();
-    	msg.setAsCiphered(true);
-    	CryptoManager.codeAndSend(msg,id_chan);
+
     	integrity();
     }
 
@@ -81,4 +80,32 @@ public class Node implements Com{
         assert (id != null);
         assert (nickname.length() > 0);
     }
+
+
+   @Override
+   public boolean equals(Object aThat) {
+      //check for self-comparison
+      if (this == aThat) {
+         return true;
+      }
+
+      //use instanceof instead of getClass here for two reasons
+      //1. if need be, it can match any supertype, and not just one class;
+      //2. it renders an explict check for "that == null" redundant, since
+      //it does the check for null already - "null instanceof [type]" always
+      //returns false. (See Effective Java by Joshua Bloch.)
+      if (!(aThat instanceof Server)) {
+         return false;
+      }
+      //Alternative to the above line :
+      //if ( aThat == null || aThat.getClass() != this.getClass() ) return false;
+
+      //cast to native object is now safe
+      Node that = (Node) aThat;
+
+      //now a proper field-by-field evaluation can be made
+      return this.nickname.equals(that.nickname) && this.id.equals(that.id);
+
+   }
+
 }

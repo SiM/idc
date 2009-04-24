@@ -2,66 +2,66 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package idc;
 
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.*;
+
 /**
  *
- * @author fridim
+ @author fridim
  */
-public class IDCManager{
-    static private List nodes; // tous les noeuds connus du réseau
-    static private List friends; // Connexions directes
-    static private Server server; // le serveur qui écoute sur le port Config.port
+public class IDCManager {
 
-    IDCManager() {
-        nodes = new ArrayList();
-        friends = new ArrayList();
-        
-        new Server().start();
-        
-        /* Test */
-        /*
-        FriendNode local = new FriendNode("fridim", "blabla", "localhost");
-        local.send(new Message("coucou", local));
-         */
-    }
-        
-    /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
-     * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
-     * de connexion directe à chacun de ces noeuds */
-    public List getLANNodes() {
-       // TODO
-       return new ArrayList();
-    }
-    
-    /* envoie un message au réseau */
-    /*
-    static public void send(Message message) {
-        // TODO
-    }
-     */
-       
-    /* envoie un message à un channel du réseau */
-    /*
-    static public void send(int id_chan, Message message) {
-        
+   static private List nodes; // tous les noeuds connus du réseau
+   static private List friends; // Connexions directes
+   static private Server server; // le serveur qui écoute sur le port Config.port
+   static public Node myNode;
+   IDCManager() {
+      nodes = new ArrayList();
+      friends = new ArrayList();
+      myNode = new Node(Config.nickname, CryptoManager.getId());
 
-    }
+      new Server().start();
+      new BroadcastServer().start();
+      new BroadcastClient().start();
+
+   /* Test */
+   /*
+   FriendNode local = new FriendNode("fridim", "blabla", "localhost");
+   local.send(new Message("coucou", local));
     */
-    
-    static public void request(Node node){
-    	/**
-    	 * send a request to a friend node in order to open a private channel
-    	 */
-    }
-    
-    public void integrity(){
+   }
+
+   /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
+    * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
+    * de connexion directe à chacun de ces noeuds */
+   public List getLANNodes() {
+      // TODO
+      return new ArrayList();
+   }
+
+   /* envoie un message au réseau */
+   public void send(Message message) {
+   // TODO
+   }
+
+   /* envoie un message à un noeud du réseau */
+   static public void send(Node n, Message message) {
+   // TODO
+
+   }
+   
+   public static void addNode(Node n) {
+      if (!nodes.contains(n))
+         nodes.add(n);
+   }
+
+   public void integrity(){
     	assert(nodes!=null);
     	assert(friends!=null);
-    }
+   }
+
 }

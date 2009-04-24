@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package idc;
 
 import java.security.*;
@@ -13,6 +12,7 @@ import java.security.*;
  */
 
 public class Main {
+
 
     /**
      * @param args the command line arguments
@@ -31,7 +31,8 @@ public class Main {
         System.out.println("The message is encoded :"+msg.isCiphered());
         CM.decode(chan.getId(),msg);
         System.out.println("Decoded Message :"+msg.getMessage());
-        
+        //TEST idc manager 
+	IDCManager manager = new IDCManager();
     }
-    IDCManager manager = new IDCManager();
+    
 }
