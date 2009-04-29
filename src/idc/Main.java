@@ -1,11 +1,14 @@
+package idc;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package idc;
+
 
 import java.security.*;
+import idc.CryptoManager;
 
 /**
  *
@@ -29,9 +32,11 @@ public class Main {
         CM.code(chan.getId(),msg);
         System.out.println("Encoded Message :"+msg.getMessage());
         System.out.println("The message is encoded :"+msg.isCiphered());
+        CM.SignMessage(msg);
+        System.out.println("The signed digest :"+new String(msg.getDigest()));
         CM.decode(chan.getId(),msg);
         System.out.println("Decoded Message :"+msg.getMessage());
-        
+        IDCManager manager = new IDCManager();
     }
-    IDCManager manager = new IDCManager();
+    
 }

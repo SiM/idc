@@ -9,6 +9,7 @@ import javax.crypto.spec.*;
 
 
 public class Channel {
+	
 	static private int id;
 	static private String name;
 	static private List nodes;
@@ -23,18 +24,26 @@ public class Channel {
 		return name;
 	}
 	
-	
-	
 	public Channel(String nickname){
 		nodes =new ArrayList();
 		id=IdGen.getID();
 		integrity();
 	}
 	
-
 	public void addNode(Node node){
 		integrity();
-		nodes.add(node);		
+		
+		if(node!=null){
+			return;	
+		}else{
+			nodes.add(node);
+		}
+		
+	}
+	
+	static public List getNodeList(){
+		integrity();
+		return nodes;
 	}
 	
 	static public void integrity(){

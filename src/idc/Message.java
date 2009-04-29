@@ -4,7 +4,20 @@ import java.util.Date;
 import java.io.*;
 import java.nio.charset.*;
 import java.lang.reflect.Array;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.util.*;
+import java.io.*;
+import java.security.*;
+import java.security.spec.*;
 
+import idc.Config;
+
+import javax.crypto.*;
+import javax.crypto.interfaces.*;
+import javax.crypto.spec.*;
 /**
  *
  * @author fridim
@@ -17,7 +30,8 @@ public class Message implements Serializable, Cipherable {
     private byte[] data;
     private boolean isciphered;
     private byte[] signature;
-
+    private byte[] digest;
+    
     public Message(String message, Node sender) {
         this.sender = sender;
         date = new Date();
@@ -53,14 +67,29 @@ public class Message implements Serializable, Cipherable {
     	isciphered=bool;
     }
     
-    public boolean authentification(){
+    public void authentification(){
     	integrity();
-    	return false;
+    	try{
+    	MessageDigest shasum=MessageDigest.getInstance("SHA1");
+    	digest = shasum.digest(data);
+    	}catch(NoSuchAlgorithmException err){
+    		System.out.println(err);
+    	}
+    	
     }
     
     public String getMessage() {
     	integrity();
         return new String(data);
+    }
+    
+    public byte[] getDigest(){
+    	integrity();
+    	return digest;
+    }
+    public void setDigest(byte[] dig){
+    	integrity();
+    	digest=dig;
     }
     
     public byte[] getData(){

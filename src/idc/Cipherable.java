@@ -9,7 +9,7 @@ public interface Cipherable {
 	 */
 	public boolean isCiphered();
 	
-	public boolean authentification();
+	public void authentification();
 	
 
 }

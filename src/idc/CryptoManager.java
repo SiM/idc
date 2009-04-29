@@ -7,7 +7,7 @@ import java.security.spec.*;
 import java.math.*;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
+import javax.crypto.Cipher.*;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
@@ -16,12 +16,18 @@ import javax.crypto.*;
 import javax.crypto.interfaces.*;
 import javax.crypto.spec.*;
 
+import com.sun.crypto.provider.RSACipher;
+
 public class CryptoManager {
 
 	private byte[] PubKey;
 
 	private byte[] PrivKey;
 
+	private PublicKey public_key;
+	
+	private PrivateKey private_key;
+	
 	private Vector <SecretKey> KeyVect;
 	
 	private Signature IdSign;
@@ -43,12 +49,12 @@ public class CryptoManager {
 			KeyFact.initialize(1024);
 			KeyPair PairOfKey = KeyFact.genKeyPair();
 
-			PublicKey public_key = PairOfKey.getPublic();
-			PrivateKey private_key = PairOfKey.getPrivate();
-
+			public_key = PairOfKey.getPublic();
+			private_key = PairOfKey.getPrivate();
+			
 			PubKey = public_key.getEncoded();
 			PrivKey = private_key.getEncoded();
-
+ 			
 			if (Config.FilePub.isFile() && Config.FilePub.exists()) {
 				FileStreamPubO.write(PubKey);
 			} else {
@@ -89,7 +95,32 @@ public class CryptoManager {
 		integrity();
 
 	}
-
+	
+	public void SignMessage(Message msg){
+		integrity();
+		msg.authentification();
+		
+		try{
+		Cipher rsaCoder=Cipher.getInstance("RSA");
+		rsaCoder.init(Cipher.ENCRYPT_MODE, private_key);
+		
+		byte[] coded=rsaCoder.doFinal(msg.getDigest());
+		msg.setDigest(coded);
+		
+		}catch(NoSuchAlgorithmException err){
+			System.out.println(err);
+		}catch(NoSuchPaddingException err){
+			System.out.println(err);
+		}catch(InvalidKeyException err){
+			System.out.println(err);
+		}catch(IllegalBlockSizeException err){
+			System.out.println(err);			
+		}	catch(BadPaddingException err){
+			System.out.println(err);
+		}
+		
+	}
+	
 	public void CreateSecretKey() {
 		integrity();
 
