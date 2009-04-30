@@ -30,14 +30,6 @@ public class IDCManager{
         local.send(new Message("coucou", local));
          */
     }
-        
-    /* fait du broadcast et retourne une liste de noeuds connectés et qui ne
-     * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
-     * de connexion directe à chacun de ces noeuds */
-    public List getLANNodes() {
-       // TODO
-       return new ArrayList();
-    }
     
     /* envoie un message au réseau */
     /*
@@ -56,7 +48,7 @@ public class IDCManager{
     
     static public void request(Node node){
     	/**
-    	 * send a request to a friend node in order to open a private channel
+    	 * send a request to a node in order to open a private channel
     	 */
     }
     
