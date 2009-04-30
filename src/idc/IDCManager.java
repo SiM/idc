@@ -13,6 +13,7 @@ import java.util.*;
  *
 @author fridim
  */
+
 public class IDCManager {
 
    static private List nodes; // tous les noeuds connus du réseau

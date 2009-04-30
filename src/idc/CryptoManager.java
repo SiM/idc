@@ -6,80 +6,96 @@ import java.security.*;
 import java.security.spec.*;
 import java.math.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher.*;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import javax.crypto.*;
+import javax.crypto.interfaces.*;
+import javax.crypto.spec.*;
+
 public class CryptoManager {
 
-    static private PublicKey public_key;
-    static private PrivateKey private_key;
+   private PublicKey public_key;
+   private PrivateKey private_key;
+   private Signature IdSign;
 
-    private Signature IdSign;
+   public CryptoManager() {
+      try {
+         loadKeyPair();
+      } catch (IOException ex) {
+         Logger.getLogger(CryptoManager.class.getName()).log(Level.SEVERE, null, ex);
+         genKeyPair();
+      }
 
-    public CryptoManager() {
-        File FilePub = new File("id.pub");
-        File FilePriv = new File("id.private");
+      integrity();
+   }
 
-        try {
-            FileOutputStream FileStreamPub = new FileOutputStream(FilePub);
-            FileOutputStream FileStreamPriv = new FileOutputStream(FilePriv);
+   private void loadKeyPair() throws IOException {
+      try {
+         ObjectInputStream pub = new ObjectInputStream(new FileInputStream(Config.FilePub));
+         ObjectInputStream priv = new ObjectInputStream(new FileInputStream(Config.FilePriv));
 
+         public_key = (PublicKey) pub.readObject();
+         private_key = (PrivateKey) priv.readObject();
+      } catch (ClassNotFoundException ex) {
+         Logger.getLogger(CryptoManager.class.getName()).log(Level.SEVERE, null, ex);
+      }
+   }
+
+   private void genKeyPair() {
+      {
+         try {
             KeyPairGenerator KeyFact = KeyPairGenerator.getInstance("RSA");
-            KeyFact.initialize(512);
+            KeyFact.initialize(Config.RSA_size);
             KeyPair PairOfKey = KeyFact.genKeyPair();
-
             public_key = PairOfKey.getPublic();
             private_key = PairOfKey.getPrivate();
 
-            byte[] PubKey = public_key.getEncoded();
-            byte[] PrivKey = private_key.getEncoded();
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(Config.FilePub));
+            out.writeObject(public_key);
 
-            if (!FilePub.isFile()) {
-                if (FilePub.createNewFile()) {
-                    FileStreamPub.write(PubKey);
-                }
-            }
+            out = new ObjectOutputStream(new FileOutputStream(Config.FilePriv));
+            out.writeObject(private_key);
+         } catch (IOException ex) {
+            Logger.getLogger(CryptoManager.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(CryptoManager.class.getName()).log(Level.SEVERE, null, ex);
+         }
+      }
+   }
 
+   public void SignMessage(Message msg) {
+      integrity();
 
-            if (!FilePriv.isFile()) {
-                if (FilePriv.createNewFile()) {
-                    FileStreamPriv.write(PrivKey);
-                }
-            }
+      try {
+         Cipher rsaCoder = Cipher.getInstance("RSA");
+         rsaCoder.init(Cipher.ENCRYPT_MODE, private_key);
 
-            //------------- AUTHENTIFICATION ---------------------
+         byte[] coded = rsaCoder.doFinal(msg.getDigest());
+         msg.setSignature(coded);
+      } catch (NoSuchAlgorithmException err) {
+         System.out.println(err);
+      } catch (NoSuchPaddingException err) {
+         System.out.println(err);
+      } catch (InvalidKeyException err) {
+         System.out.println(err);
+      } catch (IllegalBlockSizeException err) {
+         System.out.println(err);
+      } catch (BadPaddingException err) {
+         System.out.println(err);
+      }
+   }
+   
+   static public String getId() {
+      // TODO
+      return "ID:myid";
+   }
 
-            IdSign = Signature.getInstance("SHA1withRSA");
-            IdSign.initSign(private_key);
-
-            /* Update and sign the data */
-            //IdSign.update(data);
-            byte[] sig = IdSign.sign();
-
-            IdSign.initVerify(public_key);
-
-            /* Update and verify the data */
-            //IdSign.update(data);
-            boolean verifies = IdSign.verify(sig);
-
-
-            System.out.println("signature verifies: " + verifies);
-
-        } catch (SignatureException err) {
-            System.out.println(err);
-        } catch (NoSuchAlgorithmException err) {
-            System.out.println(err);
-        } catch (Exception err) {
-            System.out.println(err);
-        }
-
-        integrity();
-
-    }
-
-    public Message decode(Message msg) {
-        integrity();
-        return msg;
-    }
-    static public String getId() {return "ID:BLABLA";}
-    private void integrity() {
-
-    }
+   private void integrity() {
+   }
 }
+

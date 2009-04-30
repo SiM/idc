@@ -16,8 +16,7 @@ import java.math.*;
  * Cette classe identifie un noeud du réseau. Selon le cahier des charges, 
  * un noeud est identifié par un nickname et par un id.
  */
-public class Node {
-
+public class Node implements Com {
    private String nickname;
    private String id;
    private byte[] key;
