@@ -68,13 +68,6 @@ public class Node implements Com{
          * */
         //IDCManager.send(id_chan,message);
     }
-    
-    public void sendCiphered(Message msg,int id_chan){
-    	integrity();
-    	msg.setAsCiphered(true);
-    	CryptoManager.codeAndSend(msg,id_chan);
-    	integrity();
-    }
 
     protected void integrity() {
         assert (nickname != null);
