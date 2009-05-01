@@ -1,8 +1,6 @@
 package idc;
 
-import java.io.IOException;
 import java.net.*;
-import java.util.Date;
 
 public class BroadcastServer extends Thread {
 
@@ -19,10 +17,10 @@ public class BroadcastServer extends Thread {
 
    public void run() {
       while (listening) {
-         
+
          try {
             byte[] buf = new byte[256];
-            
+
             // receive request
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             socket.receive(packet);
@@ -34,7 +32,8 @@ public class BroadcastServer extends Thread {
             System.out.println("Broadcast received : " + dString);
             
             String[] d = dString.split(" ");
-            IDCManager.addNode(new Node(d[0], d[1]));
+            IDCManager.addLocalNode(new FriendNode(d[0], d[1], packet.getAddress().toString()));
+
          } catch (Exception e) {
             e.printStackTrace(System.err);
             listening = false;
