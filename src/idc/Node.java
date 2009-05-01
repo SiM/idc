@@ -19,17 +19,23 @@ import java.math.*;
 public class Node implements Com{
 
     private String nickname;
-    private String id;
-    private byte[] key;
-
-    public Node(String nickname, String id) {
+    private byte[] id;
+        
+    public Node(String nickname) {
 
         if (nickname == null || nickname.length() <= 0) {
             nickname = "Anonymous";
         }
-
-        this.id = new String(id);
         this.nickname = new String(nickname);
+        
+        try{
+        	MessageDigest shasum=MessageDigest.getInstance("SHA1");
+        	id = shasum.digest((nickname+System.currentTimeMillis()).getBytes());
+        	}catch(NoSuchAlgorithmException err){
+        		System.out.println(err);
+        	}
+       
+            
         integrity();
     }
 
@@ -38,17 +44,23 @@ public class Node implements Com{
         return nickname;
     }
 
-    public String getId() {
+    public byte[] getId() {
         integrity();
         return id;
     }
-
-    // vérifie que la signature de la clef publique correspond bien à l'id
-    public boolean checkKey() {
-        // TODO
-        return true;
+    
+    public void askForRequest(){
+    	integrity();
+    	/**
+    	 *  1 -> we ask someone to engage a private conversation 
+    	 *  
+    	 */
+    	
+    	
+    	integrity();
     }
 
+    
     public void send(Message message) {
         assert (message != null);
         integrity();

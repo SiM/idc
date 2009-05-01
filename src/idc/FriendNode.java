@@ -17,8 +17,8 @@ public class FriendNode extends Node {
     private String address;
     private int port = Config.port;
     
-    public FriendNode(String nickname, String id, String address) {
-        super(nickname, id);
+    public FriendNode(String nickname, String address) {
+        super(nickname);
         
         this.address = address;
         integrity();
@@ -54,5 +54,10 @@ public class FriendNode extends Node {
         }
     }
     
-    //public Message receive() {}
+    public String getAddress(){
+    	integrity();
+    	return address;
+    }
+    
+   
 }

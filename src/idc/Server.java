@@ -7,21 +7,27 @@ import java.io.*;
  *
  * @author fridim
  */
-public class Server extends Thread {
+public class Server extends Thread{
 
-    static private ServerSocket serverSocket;
+    private ServerSocket serverSocket;
+    static private boolean listeningOnServer=false;
 
+   
+    
     public void run() {
-        try {
+            	
+    	try {        	
+        	
             ServerSocket server = new ServerSocket(Config.port);
-            boolean listening = true;
+            listeningOnServer = true;
 
             Socket client = null;
-            while (listening) {
+            while (listeningOnServer) {
                 client = server.accept();
+                                
                 // on traite la connexion dans un thread
                 new ServerThread(client).start();
-
+                
             }
         } catch (IOException e) {
             e.printStackTrace(System.err);

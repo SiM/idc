@@ -67,25 +67,7 @@ public class CryptoManager {
 				FileStreamPrivI.read(PrivKey);
 			}
 
-			// ------------- AUTHENTIFICATION ---------------------
-
-			IdSign = Signature.getInstance("SHA1withRSA");
-			IdSign.initSign(private_key);
-
-			/* Update and sign the data */
-			// IdSign.update(data);
-			byte[] sig = IdSign.sign();
-
-			IdSign.initVerify(public_key);
-
-			/* Update and verify the data */
-			// IdSign.update(data);
-			boolean verifies = IdSign.verify(sig);
-
-			//System.out.println("signature verifies: " + verifies);
-
-		} catch (SignatureException err) {
-			System.out.println(err);
+		
 		} catch (NoSuchAlgorithmException err) {
 			System.out.println(err);
 		} catch (Exception err) {
