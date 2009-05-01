@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 
 import java.util.*;
+<<<<<<< HEAD:src/idc/IDCManager.java
 import idc.Server;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -59,9 +60,7 @@ public class IDCManager {
 		return new ArrayList();
 	}
 
-	public void addFriend(FriendNode friend) {
-		friends.add(friend);
-	}
+
 
 	/* envoie un message au réseau */
 	public void send(Message message) {
@@ -115,5 +114,11 @@ public class IDCManager {
 			nodes.add(n);
 		System.out.println("Noded added");
 	}
+
+   public static void addLocalNode(Node n) {
+      if (!localNodes.contains(n)) {
+         localNodes.add(n);
+      }
+   }
 
 }
