@@ -39,7 +39,7 @@ public class BroadcastServer extends Thread {
             String[] d = dString.split(" ");
        
 
-            IDCManager.addLocalNode(new FriendNode(d[0], d[1], packet.getAddress().toString()));
+            IDCManager.addLocalNode(new FriendNode(d[0],packet.getAddress().toString()));
 
          } catch (Exception e) {
             e.printStackTrace(System.err);

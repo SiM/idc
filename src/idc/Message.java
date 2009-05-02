@@ -19,21 +19,22 @@ import javax.crypto.spec.*;
  * 
  * @author fridim
  */
-public class Message implements Serializable, Cipherable {
+public class Message extends Object implements Serializable, Cipherable {
 
    private Node sender;
    private Date date;
    private boolean isCiphered;
    private byte[] data;
    private byte[] digest;
-   private byte[] signature;
+   private byte[] id;
 
    public Message(String message, Node sender) {
-      this.sender = sender;
+	  super();
+	  this.sender = sender;
       date = new Date();
       data = message.getBytes();
       id = shasum(new String(data) + date.toString() + sender.getId());
-      signature = shasum(new String(data));
+      digest = shasum(new String(data));
 
       integrity();
    }
@@ -48,16 +49,8 @@ public class Message implements Serializable, Cipherable {
       isCiphered = bool;
    }
 
-   public String getMessage() {
-      integrity();
-      return new String(data);
-   }
-
-   public byte[] getDigest() {
-      integrity();
-      return shasum(new String(data));
-   }
-
+  
+   
    private byte[] shasum(String in) {
       try {
          MessageDigest shasum = MessageDigest.getInstance("SHA-256");
@@ -67,22 +60,7 @@ public class Message implements Serializable, Cipherable {
          System.exit(-1);
       }
       return new byte[0];
-   }
-
-   public void setSignature(byte[] s) {
-      signature = s;
-      integrity();
-   }
-
-  public void authentification() {
-    integrity();
-    try {
-      MessageDigest shasum = MessageDigest.getInstance("SHA1");
-      digest = shasum.digest(data);
-    } catch (NoSuchAlgorithmException err) {
-      System.out.println(err);
-    }
-
+ 
   }
   
   public String getMessage() {
@@ -94,7 +72,13 @@ public class Message implements Serializable, Cipherable {
     integrity();
     return digest;
   }
-
+  
+  public void setSignature(byte[] s){
+	  integrity();
+	  digest=s;
+	  integrity();
+  }
+  
   public void setDigest(byte[] dig) {
     integrity();
     digest = dig;
@@ -113,28 +97,33 @@ public class Message implements Serializable, Cipherable {
 
   private void writeObject(ObjectOutputStream stream) throws IOException {
     integrity();
-    // stream.defaultWriteObject();
-    
+    stream.writeObject(sender);
     stream.writeObject(date);
-    // stream.writeObject(str);
-    stream.writeObject(signature);
+    //stream.writeObject(isCiphered);
+    stream.writeObject(data);
+    stream.writeObject(digest);
+    stream.writeObject(id);
     integrity();
   }
 
   private void readObject(ObjectInputStream stream) throws IOException,
     ClassNotFoundException {
     integrity();
-    date = (Date) stream.readObject();
-    signature = (byte[]) stream.readObject();
+    sender=(Node)stream.readObject();
+    date=(Date)stream.readObject();
+    //isCiphered=(boolean)stream.readBoolean();
+    data = (byte[])stream.readObject();
+    digest=(byte[])stream.readObject();
+    id=(byte[])stream.readObject();
     integrity();
   }
 
   private void integrity() {
     assert (sender != null);
-    assert (signature != null);
+    assert (digest != null);
     assert (data != null);
     assert (data.length > 0);
-    assert (signature.length > 0);
+    assert (digest.length > 0);
     assert (digest!=null);
     
   }

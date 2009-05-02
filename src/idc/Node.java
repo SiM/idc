@@ -7,6 +7,8 @@ package idc;
 import java.util.*;
 import java.security.*;
 import java.security.spec.*;
+import java.io.IOException;
+import java.io.*;
 import java.math.*;
 
 /**
@@ -17,27 +19,44 @@ import java.math.*;
  * un noeud est identifié par un nickname et par un id.
  */
     
-public class Node implements Com {
+public class Node extends Object implements Serializable,Com {
   private String nickname;
   private byte[] key;
   private byte[] id;
   
   public Node(String nickname) {
-    
+    super();
     if (nickname == null || nickname.length() <= 0) {
       nickname = "Anonymous";
     }
     this.nickname = new String(nickname);
     
     try{
-      MessageDigest shasum=MessageDigest.getInstance("SHA1");
+      MessageDigest shasum=MessageDigest.getInstance("SHA-256");
       id = shasum.digest((nickname+System.currentTimeMillis()).getBytes());
     }catch(NoSuchAlgorithmException err){
       System.out.println(err);
     }
+    
     integrity();
     }
 
+  	private void writeObject(ObjectOutputStream stream) throws IOException {
+	    integrity();  	    
+	    stream.writeUTF(nickname);
+	    stream.writeObject(id);
+	    stream.writeObject(key);
+	    integrity();
+	  }
+
+  	private void readObject(ObjectInputStream stream) throws IOException,
+	    ClassNotFoundException {
+	    integrity();
+	    nickname=stream.readLine();
+	    key = (byte[]) stream.readObject();
+	    id= (byte[]) stream.readObject();
+	    integrity();
+	  }
 
 
   public byte[] getId() {
@@ -57,12 +76,12 @@ public class Node implements Com {
   }
 
     
-  public void send(Message message) {
-    assert (message != null);
+  public void send(Message msg) {
+    assert (msg != null);
     integrity();
     /* C'est le manager qui choisi le noeud ami (connexion directe) pour
      * envoyer le message. Ce dernier va ensuite être routé */
-    //IDCManager.send(message);
+    //IDCManager.send(msg);
   }
 
 
@@ -74,13 +93,7 @@ public class Node implements Com {
 
 
 
-  public void send(Message message) {
-    assert (message != null);
-    integrity();
-    /* C'est le manager qui choisi le noeud ami (connexion directe) pour
-     * envoyer le message. Ce dernier va ensuite être routé */
-    IDCManager.send(this, message);
-  }
+  
   
   protected void integrity() {
     assert (nickname != null);

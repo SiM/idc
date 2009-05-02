@@ -105,8 +105,8 @@ public class CryptoManager {
 
    private void integrity() {
      assert (IdSign != null);
-     assert (PubKey != null);
-     assert (PrivKey != null);
+     assert (public_key != null);
+     assert (private_key != null);
    }
 
 }

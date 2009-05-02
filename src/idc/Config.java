@@ -29,11 +29,11 @@ public class Config {
     integrity();
    }
 
-  public void integrity(){
+  static public void integrity(){
     assert(port<PORTMAX);
-    assert(broadcatPort<PORTMAX);
+    assert(broadcastPort<PORTMAX);
     assert(port>PORTMIN);
-    assert(broadcatPort>PORTMIN);
+    assert(broadcastPort>PORTMIN);
     
   }
 

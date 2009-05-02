@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 
 import java.util.*;
-<<<<<<< HEAD:src/idc/IDCManager.java
 import idc.Server;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -26,7 +25,7 @@ public class IDCManager {
 
 	static private List nodes; // tous les noeuds connus du réseau
 
-	static private Vector<FriendNode> friends; // Connexions directes
+	static private List friends; // Connexions directes
 
 	static private Server server; // le serveur qui écoute sur le port
 
@@ -36,12 +35,12 @@ public class IDCManager {
 
 	IDCManager() {
 		nodes = new ArrayList();
-		friends = new Vector<FriendNode>(100, 100);
+		friends = new ArrayList();
 		myNode = new Node(Config.nickname);
 
 		new Server().start();
-		new BroadcastServer().start();
-		new BroadcastClient().start();
+		// new BroadcastServer().start();
+		// new BroadcastClient().start();
 
 		/* Test */
 		/*
@@ -60,8 +59,6 @@ public class IDCManager {
 		return new ArrayList();
 	}
 
-
-
 	/* envoie un message au réseau */
 	public void send(Message message) {
 		/**
@@ -69,24 +66,27 @@ public class IDCManager {
 		 * monde on envoi sur le port server de l'application.
 		 * 
 		 */
-		int i;
-
-		byte[] buf = new byte[256];
-		for (i = 0; i < friends.size(); i++) {
+		int i = 0;
+		
+		while (i < friends.size()) {
 			System.out.println("Address of Friend node :"
-					+ friends.get(i).getAddress());
+					+ ((FriendNode) friends.get(i)).getAddress());
+			i++;
 		}
+
+		i = 0;
+
 		/* obtention de l'adresse par les friend node */
-		for (i = 0; i < friends.size(); i++) {
+		while (i < friends.size()) {
 			Socket socket = null;
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
 
 			try {
-				socket = new Socket(friends.get(i).getAddress(), Config.port);
+				socket = new Socket(((FriendNode)friends.get(i)).getAddress(), Config.port);
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
-				out.flush();
+				
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
 			} catch (IOException e) {
@@ -95,12 +95,14 @@ public class IDCManager {
 
 			try {
 				out.writeObject(message);
+				out.flush();
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
+			i++;
 
-			System.out.println("Message sent");
 		}
+
 	}
 
 	/* envoie un message à un noeud du réseau */
@@ -115,10 +117,10 @@ public class IDCManager {
 		System.out.println("Noded added");
 	}
 
-   public static void addLocalNode(Node n) {
-      if (!localNodes.contains(n)) {
-         localNodes.add(n);
-      }
-   }
+	public static void addLocalNode(FriendNode n) {
+		if (!friends.contains(n)) {
+			friends.add(n);
+		}
+	}
 
 }

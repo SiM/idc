@@ -1,45 +1,104 @@
 package idc;
 
 import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.internal.*;
 
-
 public class TestClass {
-	
+
 	@Test
-	public void TestChan(){
-		Channel chan=new Channel("TEST CHANNEL");
-		assertTrue(chan.getName()!="");
-		
+	public void TestChan() {
+		Channel chan = new Channel("TEST CHANNEL");
+		assertTrue(chan.getName() != "");
+
 		Node node = new Node("TEST NODE");
 		chan.addNode(node);
 		assertTrue(chan.getNodeList().isEmpty());
-		
-		}
-	
-	@Test 
-	public void TestMessage(){
-		Node node=new Node("TEST NODE");
-		Message msg=new Message("TEST NODE",node);
-		assertTrue(msg.getData()!=null);
+
 	}
-	
+
 	@Test
-	public void TestNode(){
-		Node node =new Node("TEST NODE");
-		assertTrue(node.getId()!=null);
+	public void TestMessage() {
+		Node node = new Node("TEST NODE");
+		Message msg = new Message("TEST NODE", node);
+		assertTrue(msg.getData() != null);
 	}
+
+	@Test
+	public void TestNode() {
+		Node node = new Node("TEST NODE");
+		assertTrue(node.getId() != null);
+	}
+
+	@Test
+	public void TestCrypto() {
+		System.out.println("TESTING CryptoManager ------>");
+		CryptoManager crypto = new CryptoManager();
+		Node node = new Node("TEST NODE");
+		Message msg = new Message("TEST NODE", node);
+		crypto.SignMessage(msg);
+		System.out.println("CryptoManager TESTED SUCCESSFULLY !");
+	}
+
 	
-	@Test 
-	public void TestSend(){
-		Node node=new Node("TEST NODE");
-		Message msg=new Message("TEST NODE",node);
-		assertTrue(msg.getData()!=null);
+	public void TestConnection() {
+		System.out.println("TESTING CONNECTION ---->");
+		int i = 0;
+		Node node = new Node("TEST NODE");
+		Message msg = new Message("TEST MESSAGE", node);
+		assertTrue(msg.getData() != null);
+		assertTrue(msg.getMessage() != null);
+
+		new Server().start();
+		System.out.println("SERVER UP !");
+
+		ObjectOutputStream out = null;
+
+		try {
+			Socket socket = new Socket("localhost", Config.port);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket
+					.getInputStream());
+		} catch (UnknownHostException e) {
+			e.printStackTrace(System.err);
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+		}
+
+		while (i < 100) {
+			try {
+				out.writeObject("SERIALIZABLE STRING");
+
+			} catch (UnknownHostException e) {
+				e.printStackTrace(System.err);
+
+			} catch (IOException e) {
+				e.printStackTrace(System.err);
+			}
+			i++;
+		}
+
+		System.out.println("CONNECTION TESTED SUCCESSFULLY");
+	}
+
+	@Test
+	public void TestSend() {
+		System.out.println("TESTING IDCManager ------>");
+		Node node = new Node("TEST NODE");
+		Message msg = new Message("TEST MESSAGE", node);
+		assertTrue(msg.getData() != null);
+		assertTrue(msg.getMessage() != null);
 		IDCManager manager = new IDCManager();
-		manager.addFriend(new FriendNode("el-indio","127.0.0.1"));
-		System.out.println("Sending processing");
+		manager.addLocalNode(new FriendNode("el-indio", "localhost"));
 		manager.send(msg);
+		System.out.println("IDCManager TESTED SUCCESSFULLY !");
 	}
 }

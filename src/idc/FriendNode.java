@@ -28,11 +28,15 @@ public class FriendNode extends Node {
 
    protected void integrity() {
       super.integrity();
-
       assert (address != null);
       assert (address.length() > 0);
    }
 
+   public String getAddress(){
+	   integrity();
+	   return address;
+   }
+   
    public void send(Message message) {
       Socket socket = null;
       ObjectOutputStream out = null;
