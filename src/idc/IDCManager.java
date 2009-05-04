@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class IDCManager {
 
 	static private List nodes; // tous les noeuds connus du réseau
-
+	static private HashMap<Node,Queue<InetAddress>> gate;
 	static private List friends; // Connexions directes
 
 	static private Server server; // le serveur qui écoute sur le port
@@ -37,10 +37,10 @@ public class IDCManager {
 		nodes = new ArrayList();
 		friends = new ArrayList();
 		myNode = new Node(Config.nickname);
-
+		gate =new HashMap<Node, Queue<InetAddress>>(100,100);
 		new Server().start();
-		// new BroadcastServer().start();
-		// new BroadcastClient().start();
+		new BroadcastServer().start();
+		new BroadcastClient().start();
 
 		/* Test */
 		/*
@@ -59,6 +59,27 @@ public class IDCManager {
 		return new ArrayList();
 	}
 
+	
+	static public void enQueue(Node node,InetAddress address){
+		/**
+		 * on enfile les InetAddress pour chaque noeud. La tête correspond a la meilleur gate.
+		 * L'esprit du truc est le suivant, pour atteindre tel noeuds, je dois passer par telle gate.
+		 * si celle-ci tombe on defile la tête et le suivant devient la meilleur gate.
+		 */
+		
+		assert(node!=null);
+		assert(address!=null);
+		
+		if(gate.containsKey(node)){
+			if(gate.get(node).contains(address)){
+				return;
+			}else{
+				gate.get(node).add(address);
+			}
+		}
+		return;	
+	}
+	
 	/* envoie un message au réseau */
 	public void send(Message message) {
 		/**
@@ -108,7 +129,6 @@ public class IDCManager {
 	/* envoie un message à un noeud du réseau */
 	static public void send(Node n, Message message) {
 		// TODO
-
 	}
 
 	public static void addNode(Node n) {
@@ -122,5 +142,4 @@ public class IDCManager {
 			friends.add(n);
 		}
 	}
-
 }

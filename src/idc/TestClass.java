@@ -22,7 +22,6 @@ public class TestClass {
 		Node node = new Node("TEST NODE");
 		chan.addNode(node);
 		assertTrue(chan.getNodeList().isEmpty());
-
 	}
 
 	@Test
@@ -89,6 +88,27 @@ public class TestClass {
 		System.out.println("CONNECTION TESTED SUCCESSFULLY");
 	}
 
+	
+	@Test 
+	public void TestChannel(){
+		System.out.println("TESTING Channel ------>");
+		Channel chan=new Channel("TEST CHANNEL");
+		assertTrue(chan.getName()!=null);
+		assertTrue(chan.getNodeList()!=null);
+		Node node = new Node("TEST NODE");
+		Message msg=new Message("TEST MESSAGE",node);
+		int i=0;
+		
+		while(i<100){
+			chan.CreateSecretKey();
+			chan.cipher(msg);
+			chan.decipher(msg);
+			i++;
+		}
+		
+		System.out.println("CHANNEL TESTED SUCCESSFULLY");
+	}
+	
 	@Test
 	public void TestSend() {
 		System.out.println("TESTING IDCManager ------>");
@@ -98,7 +118,12 @@ public class TestClass {
 		assertTrue(msg.getMessage() != null);
 		IDCManager manager = new IDCManager();
 		manager.addLocalNode(new FriendNode("el-indio", "localhost"));
-		manager.send(msg);
+		int i=0;
+		while(i<10){
+			manager.send(msg);
+			i++;
+		}
+		
 		System.out.println("IDCManager TESTED SUCCESSFULLY !");
 	}
 }

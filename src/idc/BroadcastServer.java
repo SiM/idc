@@ -32,15 +32,16 @@ public class BroadcastServer extends Thread {
             // figure out response
             
             buf = packet.getData();
-                     
+            
+            
             String dString = new String(buf);
-            System.out.println("Broadcast received : " + dString);
+       
             
             String[] d = dString.split(" ");
        
-
             IDCManager.addLocalNode(new FriendNode(d[0],packet.getAddress().toString()));
-
+            IDCManager.enQueue(new Node(d[0]),packet.getAddress());
+            
          } catch (Exception e) {
             e.printStackTrace(System.err);
             listening = false;
