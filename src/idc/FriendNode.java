@@ -8,7 +8,7 @@ import java.io.*;
 import java.net.*;
 
 /**
- *
+ * 
  * @author fridim
  * 
  * On ajoute à Node une adresse pour pouvoir s'y connecter. Il s'agit d'une
@@ -16,48 +16,51 @@ import java.net.*;
  */
 public class FriendNode extends Node {
 
-   private String address;
-   private int port = Config.port;
+	private String address;
 
-   public FriendNode(String nickname, String address) {
-      super(nickname);
+	private int port = Config.port;
 
-      this.address = address;
-      integrity();
-   }
+	public FriendNode(String nickname, String address) {
+		super(nickname);
 
-   protected void integrity() {
-      super.integrity();
-      assert (address != null);
-      assert (address.length() > 0);
-   }
+		this.address = address;
+		integrity();
+	}
 
-   public String getAddress(){
-	   integrity();
-	   return address;
-   }
-   
-   public void send(Message message) {
-      Socket socket = null;
-      ObjectOutputStream out = null;
-      ObjectInputStream in = null;
+	protected void integrity() {
+		super.integrity();
+		assert (address != null);
+		assert (address.length() > 0);
+	}
 
-      try {
-         socket = new Socket(address, port);
-         out = new ObjectOutputStream(socket.getOutputStream());
-         in = new ObjectInputStream(socket.getInputStream());
-         out.flush();
-      } catch (UnknownHostException e) {
-         e.printStackTrace(System.err);
-      } catch (IOException e) {
-         e.printStackTrace(System.err);
-      }
+	public String getAddress() {
+		integrity();
+		return address;
+	}
 
-      try {
-         out.writeObject(message);
-      } catch (IOException e) {
-         e.printStackTrace(System.err);
-      }
-   }
-   //public Message receive() {}
+	
+	
+	public void send(Message message) {
+		Socket socket = null;
+		ObjectOutputStream out = null;
+		ObjectInputStream in = null;
+
+		try {
+			socket = new Socket(address, port);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
+			out.flush();
+		} catch (UnknownHostException e) {
+			e.printStackTrace(System.err);
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+		}
+
+		try {
+			out.writeObject(message);
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+		}
+	}
+	// public Message receive() {}
 }

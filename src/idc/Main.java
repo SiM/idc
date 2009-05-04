@@ -23,8 +23,8 @@ public class Main {
 	public static void main(String[] args) {
 		CryptoManager CM = new CryptoManager();
 		IDCManager manager = new IDCManager();
-		Node node=new Node("TEST NODE");
-		
+		Node node = new Node("TEST NODE");
+
 	}
 
 }

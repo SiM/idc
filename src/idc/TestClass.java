@@ -22,6 +22,7 @@ public class TestClass {
 		Node node = new Node("TEST NODE");
 		chan.addNode(node);
 		assertTrue(chan.getNodeList().isEmpty());
+
 	}
 
 	@Test
@@ -31,6 +32,29 @@ public class TestClass {
 		assertTrue(msg.getData() != null);
 	}
 
+
+	@Test 
+	public void TestChannel(){
+		System.out.println("TESTING Channel ------>");
+		Channel chan=new Channel("TEST CHANNEL");
+		assertTrue(chan.getName()!=null);
+		assertTrue(chan.getNodeList()!=null);
+		Node node = new Node("TEST NODE");
+		Message msg=new Message("TEST MESSAGE",node);
+		int i=0;
+		
+		while(i<100){
+			chan.CreateSecretKey();
+			chan.cipher(msg);
+			chan.decipher(msg);
+			i++;
+		}
+		
+		System.out.println("CHANNEL TESTED SUCCESSFULLY");
+	}
+	
+	
+	
 	@Test
 	public void TestNode() {
 		Node node = new Node("TEST NODE");
@@ -46,8 +70,8 @@ public class TestClass {
 		crypto.SignMessage(msg);
 		System.out.println("CryptoManager TESTED SUCCESSFULLY !");
 	}
-
 	
+	@Test
 	public void TestConnection() {
 		System.out.println("TESTING CONNECTION ---->");
 		int i = 0;
@@ -72,43 +96,18 @@ public class TestClass {
 			e.printStackTrace(System.err);
 		}
 
-		while (i < 100) {
-			try {
-				out.writeObject("SERIALIZABLE STRING");
-
-			} catch (UnknownHostException e) {
-				e.printStackTrace(System.err);
-
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
+		
+		IDCManager manager =new IDCManager();
+		
+		while (i < 10) {
+			
+			manager.send(msg);
 			i++;
 		}
 
 		System.out.println("CONNECTION TESTED SUCCESSFULLY");
 	}
 
-	
-	@Test 
-	public void TestChannel(){
-		System.out.println("TESTING Channel ------>");
-		Channel chan=new Channel("TEST CHANNEL");
-		assertTrue(chan.getName()!=null);
-		assertTrue(chan.getNodeList()!=null);
-		Node node = new Node("TEST NODE");
-		Message msg=new Message("TEST MESSAGE",node);
-		int i=0;
-		
-		while(i<100){
-			chan.CreateSecretKey();
-			chan.cipher(msg);
-			chan.decipher(msg);
-			i++;
-		}
-		
-		System.out.println("CHANNEL TESTED SUCCESSFULLY");
-	}
-	
 	@Test
 	public void TestSend() {
 		System.out.println("TESTING IDCManager ------>");
@@ -118,12 +117,7 @@ public class TestClass {
 		assertTrue(msg.getMessage() != null);
 		IDCManager manager = new IDCManager();
 		manager.addLocalNode(new FriendNode("el-indio", "localhost"));
-		int i=0;
-		while(i<10){
-			manager.send(msg);
-			i++;
-		}
-		
+		manager.send(msg);
 		System.out.println("IDCManager TESTED SUCCESSFULLY !");
 	}
 }

@@ -5,6 +5,7 @@
 package idc;
 
 import java.net.*;
+import java.security.PublicKey;
 import java.io.*;
 import static org.junit.Assert.*;
 
@@ -26,13 +27,12 @@ public class ServerThread extends Thread {
 
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-		
 
 		try {
 
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
-			Object message=new Object();
+			Object message = new Object();
 			message = in.readObject();
 
 			if (message.getClass().toString().equals("class idc.Message")) {
@@ -41,7 +41,21 @@ public class ServerThread extends Thread {
 
 				// par exemple on l'affiche :
 				System.out.println("PASSAGE DANS LE TEST");
-				System.out.println(((Message) message).getMessage());
+				System.out.println("message :"
+						+ ((Message) message).getMessage());
+			} else if (message.getClass().toString()
+					.equals("class idc.Request")) {
+				if(((Request)message).getKey()!=null){
+					CryptoManager.addPubKey(((Request)message).getSource(),((Request)message).getKey());
+				}
+				
+				IDCManager.catchRequest(((Request) message));
+				
+			} else if (message.getClass().toString()
+					.equals("class idc.Agreement")) {
+				
+				Channel chan=CryptoManager.decryptChannel((Agreement) message);
+				IDCManager.addChannel(chan);
 			}
 
 			out.close();
