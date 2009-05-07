@@ -29,10 +29,22 @@ public class CryptoManager {
 
 	static private PrivateKey private_key;
 
-	static private Signature IdSign;
+	static private byte[] id;
 	
 	static private HashMap<byte[], PublicKey> pubKeyMap;
 	
+        private byte[] shasum(String in) {
+		try {
+			MessageDigest shasum = MessageDigest.getInstance("SHA-256");
+			return shasum.digest(in.getBytes());
+		} catch (NoSuchAlgorithmException ex) {
+			Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null,
+					ex);
+			System.exit(-1);
+		}
+		return new byte[0];
+
+	}
 	
 	public CryptoManager() {
 		pubKeyMap=new HashMap<byte[], PublicKey>(100,100);
@@ -43,6 +55,7 @@ public class CryptoManager {
 					null, ex);
 			genKeyPair();
 		}
+                id = shasum(public_key.toString());
 
 		integrity();
 	}
@@ -254,15 +267,15 @@ public class CryptoManager {
 
 	}
 
-	public String getId() {
+	public byte[] getId() {
 		// TODO
-		return "ID:myid";
+		return id;
 	}
 
 	
 
 	static private void integrity() {
-		assert (IdSign != null);
+		assert (id != null);
 		assert (public_key != null);
 		assert (private_key != null);
 	}

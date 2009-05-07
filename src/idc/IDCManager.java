@@ -10,18 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 
 import java.util.*;
-import idc.Server;
 import ihm.Accueil;
-
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.JList;
-
-import sun.org.mozilla.javascript.internal.ObjToIntMap.Iterator;
 
 import ihm.*;
 /**

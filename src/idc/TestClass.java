@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 
 import org.junit.*;
 import org.junit.runner.*;
-import org.junit.internal.*;
 
 public class TestClass {
 
