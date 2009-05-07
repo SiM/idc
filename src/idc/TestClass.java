@@ -20,6 +20,7 @@ public class TestClass {
 	@Test 
 	public void TestMain(){
 		manager=new IDCManager();
+		
 		System.out.println("SERVER UP !");
 	}
 	
@@ -89,9 +90,6 @@ public class TestClass {
 		assertTrue(msg.getData() != null);
 		assertTrue(msg.getMessage() != null);
 
-		/*new Server().start();
-		System.out.println("SERVER UP !");
-		 */
 		ObjectOutputStream out = null;
 
 		try {
@@ -104,9 +102,6 @@ public class TestClass {
 		} catch (IOException e) {
 			e.printStackTrace(System.err);
 		}
-
-		
-		IDCManager manager =new IDCManager();
 		
 		while (i < 10) {
 			

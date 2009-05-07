@@ -16,11 +16,11 @@ import java.net.*;
  */
 public class FriendNode extends Node {
 
-	private String address;
+	private InetAddress address;
 
 	private int port = Config.port;
 
-	public FriendNode(String nickname, String address) {
+	public FriendNode(String nickname, InetAddress address) {
 		super(nickname);
 
 		this.address = address;
@@ -30,10 +30,10 @@ public class FriendNode extends Node {
 	protected void integrity() {
 		super.integrity();
 		assert (address != null);
-		assert (address.length() > 0);
+		
 	}
 
-	public String getAddress() {
+	public InetAddress getAddress() {
 		integrity();
 		return address;
 	}

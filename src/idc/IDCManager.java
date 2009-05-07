@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JList;
 
+import sun.org.mozilla.javascript.internal.ObjToIntMap.Iterator;
+
 import ihm.*;
 /**
  * 
@@ -42,14 +44,28 @@ public class IDCManager {
 
 	public IDCManager() {
 		nodes = new HashMap<byte[], Node>(100,100);
-		friends = new ArrayList<FriendNode>();
+		friends = new ArrayList<FriendNode>(10);
 		Channels=new Vector<Channel>(100,100);
 		myNode = new Node(Config.nickname);
 		WaitingStruct=new HashMap<byte[], byte[]>(100,100);
 		gate =new HashMap<Node, Queue<InetAddress>>(100,100);
-		new Server().start();
+		Server server=new Server();
+		server.start();
+		/*try {
+			server.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		//new BroadcastServer().checkAccess();
-		new BroadcastServer().start();
+		BroadcastServer broadcaster =new BroadcastServer();
+		broadcaster.start();
+		/*try {
+			broadcaster.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		new BroadcastClient().start();
 
 		/* Test */
@@ -120,31 +136,26 @@ public class IDCManager {
 		 * monde on envoi sur le port server de l'application.
 		 * 
 		 */
-		int i = 0;
-
-	
-
+		
 		if(friends.isEmpty()){
 			System.out.println("YOU HAVE NO FRIENDS !");
 			return;
-		}else{
-			while (i < friends.size()) {
-				System.out.println("Friend added : "+((FriendNode)friends.get(i)).getNickname());
-				i++;
-			}
 		}
-		i=0;
+		
+		ListIterator<FriendNode> iter= friends.listIterator();
 		/* obtention de l'adresse par les friend node */
-		while (i < friends.size()) {
+		
+		while (iter.hasNext()) {
 			Socket socket = null;
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
-			
-			
+			FriendNode friend=iter.next();
 			try {
-				System.out.println("get(i) = "+ ((FriendNode)friends.get(i)).getAddress() + "i = " + i);
-				socket = new Socket(((FriendNode)friends.get(i)).getAddress(),
-						Config.port);
+				System.out.println("Size of the friends list :"+friends.size());
+				System.out.println("address of next friend = "+ friend.getAddress());
+				
+				socket = new Socket(friend.getAddress(),Config.port);
+				
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
 
@@ -160,7 +171,7 @@ public class IDCManager {
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
-			i++;
+			
 
 		}
 
@@ -283,7 +294,7 @@ public class IDCManager {
 			nodes.put(n.getId(),n);
 		System.out.println("Noded added");
 	}
-
+	
 	public static void addChannel(Channel chan){
 		if(!Channels.contains(chan)){
 			Channels.add(chan.getId(),chan);

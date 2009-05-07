@@ -9,15 +9,17 @@ public class BroadcastServer extends Thread {
 
 	protected boolean listening = true;
 
-	BroadcastServer() {
+	public BroadcastServer() {
 		if(!IDCManager.isBroadcastServerUp()){
-			IDCManager.setBroadcastServerAsUp(true);
+			
 			try {
 				socket = new DatagramSocket(Config.broadcastPort);
-	
+				IDCManager.setBroadcastServerAsUp(true);
 			} catch (SocketException e) {
 				e.printStackTrace(System.err);
 			}
+		}else{
+			System.err.println("Th broadcast server is already up");
 		}
 	}
 
@@ -35,15 +37,15 @@ public class BroadcastServer extends Thread {
 				socket.receive(packet);
 
 				// figure out response
-
+				
 				buf = packet.getData();
-
+				
 				String dString = new String(buf);
 				//System.out.println("Broadcast received : " + dString);
-
+				
 				String[] d = dString.split(" ");
-
-				IDCManager.addLocalNode(new FriendNode(d[0], packet.getAddress().toString()));
+				
+				IDCManager.addLocalNode(new FriendNode(d[0], packet.getAddress()));
 	
 				System.out.println("Address of the packet :"+packet.getAddress());
 				IDCManager.enQueue(new Node(d[0]),packet.getAddress());
