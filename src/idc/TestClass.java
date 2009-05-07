@@ -28,7 +28,7 @@ public class TestClass {
 		Channel chan = new Channel("TEST CHANNEL");
 		assertTrue(chan.getName() != "");
 
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		chan.addNode(node);
 		assertTrue(chan.getNodeList().isEmpty());
 
@@ -36,7 +36,7 @@ public class TestClass {
 
 	@Test
 	public void TestMessage() {
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		Message msg = new Message("TEST NODE", node);
 		assertTrue(msg.getData() != null);
 	}
@@ -48,7 +48,7 @@ public class TestClass {
 		Channel chan=new Channel("TEST CHANNEL");
 		assertTrue(chan.getName()!=null);
 		assertTrue(chan.getNodeList()!=null);
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		Message msg=new Message("TEST MESSAGE",node);
 		int i=0;
 		
@@ -66,7 +66,7 @@ public class TestClass {
 	
 	@Test
 	public void TestNode() {
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		assertTrue(node.getId() != null);
 	}
 
@@ -74,7 +74,7 @@ public class TestClass {
 	public void TestCrypto() {
 		System.out.println("TESTING CryptoManager ------>");
 		CryptoManager crypto = new CryptoManager();
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		Message msg = new Message("TEST NODE", node);
 		crypto.SignMessage(msg);
 		System.out.println("CryptoManager TESTED SUCCESSFULLY !");
@@ -84,7 +84,7 @@ public class TestClass {
 	public void TestConnection() {
 		System.out.println("TESTING CONNECTION ---->");
 		int i = 0;
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		Message msg = new Message("TEST MESSAGE", node);
 		assertTrue(msg.getData() != null);
 		assertTrue(msg.getMessage() != null);
@@ -114,7 +114,7 @@ public class TestClass {
 	@Test
 	public void TestSend() {
 		System.out.println("TESTING IDCManager ------>");
-		Node node = new Node("TEST NODE");
+		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
 		Message msg = new Message("TEST MESSAGE", node);
 		assertTrue(msg.getData() != null);
 		assertTrue(msg.getMessage() != null);

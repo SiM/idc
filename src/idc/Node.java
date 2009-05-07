@@ -19,46 +19,36 @@ import java.math.*;
  * noeud est identifié par un nickname et par un id.
  */
 
-public class Node extends Object implements Serializable, Com {
+public class Node implements Serializable, Com {
 	private String nickname;
 	
 	private byte[] key;
 
 	private byte[] id;
 
-	public Node(String nickname)  {
-		super();
+	public Node(String nickname, byte[] id)  {
+		
 		if (nickname == null || nickname.length() <= 0) {
 			nickname = "Anonymous";
 		}
 		this.nickname = new String(nickname);
-
-		try {
-			MessageDigest shasum = MessageDigest.getInstance("SHA-256");
-			id = shasum.digest("nickan"
-					.getBytes());
-		} catch (NoSuchAlgorithmException err) {
-			System.out.println(err);
-		}
-
-		integrity();
+                this.id = id;
 	}
 
 	private void writeObject(ObjectOutputStream stream) throws IOException {
 		integrity();
-		stream.writeUTF(nickname);
+		stream.writeObject(nickname);
 		stream.writeObject(id);
 		stream.writeObject(key);
-		integrity();
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
-		integrity();
-		nickname = stream.readLine();
-		key = (byte[]) stream.readObject();
+		nickname = (String) stream.readObject();
 		id = (byte[]) stream.readObject();
-		integrity();
+                key = (byte[]) stream.readObject();
+		
+                integrity();
 	}
 
 	public byte[] getId() {

@@ -36,7 +36,7 @@ public class IDCManager {
 		nodes = new HashMap<byte[], Node>(100,100);
 		friends = new ArrayList<FriendNode>(10);
 		Channels=new Vector<Channel>(100,100);
-		myNode = new Node(Config.nickname);
+		myNode = new Node(Config.nickname, CryptoManager.getId());
 		WaitingStruct=new HashMap<byte[], byte[]>(100,100);
 		gate =new HashMap<Node, Queue<InetAddress>>(100,100);
 		Server server=new Server();
