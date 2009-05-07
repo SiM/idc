@@ -11,12 +11,17 @@ import java.net.*;
 
 import java.util.*;
 import idc.Server;
+import ihm.Accueil;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JList;
+
+import ihm.*;
 /**
  * 
  * @author fridim
@@ -28,20 +33,22 @@ public class IDCManager {
 	static private List friends; // Connexions directes
 	static private Vector<Channel> Channels;
 	static private HashMap<Node,Queue<InetAddress>> gate;
-	
+	static private boolean server=false;
+	static private boolean broadcastserver=false;
 	
 	// Config.port
 
 	static public Node myNode;
 
-	IDCManager() {
+	public IDCManager() {
 		nodes = new HashMap<byte[], Node>(100,100);
-		friends = new ArrayList();
+		friends = new ArrayList<FriendNode>();
 		Channels=new Vector<Channel>(100,100);
 		myNode = new Node(Config.nickname);
 		WaitingStruct=new HashMap<byte[], byte[]>(100,100);
 		gate =new HashMap<Node, Queue<InetAddress>>(100,100);
 		new Server().start();
+		//new BroadcastServer().checkAccess();
 		new BroadcastServer().start();
 		new BroadcastClient().start();
 
@@ -78,15 +85,32 @@ public class IDCManager {
 	 * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
 	 * de connexion directe à chacun de ces noeuds
 	 */
-	public List getLANNodes() {
+	static public List getLANNodes() {
 		// TODO
-		return new ArrayList();
+		return friends;
 	}
 
 	static public HashMap<byte[], Node> getNodeStruct(){
 		return nodes;
 	}
 	
+	static public void setBroadcastServerAsUp(boolean bool){
+		broadcastserver=bool;
+	}
+	
+	static public boolean isBroadcastServerUp(){
+		return broadcastserver;
+		
+	}
+	static public boolean isServerUp(){
+		return server;
+		
+	}
+	
+	
+	static public void setServerAsUp(boolean bool){
+		server=bool;
+	}
 	
 	
 	/* envoie un message au réseau */
@@ -98,22 +122,28 @@ public class IDCManager {
 		 */
 		int i = 0;
 
-		while (i < friends.size()) {
-			System.out.println("Address of Friend node :"
-					+ ((FriendNode) friends.get(i)).getAddress());
-			i++;
+	
+
+		if(friends.isEmpty()){
+			System.out.println("YOU HAVE NO FRIENDS !");
+			return;
+		}else{
+			while (i < friends.size()) {
+				System.out.println("Friend added : "+((FriendNode)friends.get(i)).getNickname());
+				i++;
+			}
 		}
-
-		i = 0;
-
+		i=0;
 		/* obtention de l'adresse par les friend node */
 		while (i < friends.size()) {
 			Socket socket = null;
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
-
+			
+			
 			try {
-				socket = new Socket(((FriendNode) friends.get(i)).getAddress(),
+				System.out.println("get(i) = "+ ((FriendNode)friends.get(i)).getAddress() + "i = " + i);
+				socket = new Socket(((FriendNode)friends.get(i)).getAddress(),
 						Config.port);
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
@@ -125,7 +155,7 @@ public class IDCManager {
 			}
 
 			try {
-				out.writeObject(message);
+				out.writeObject((Message)message);
 				out.flush();
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
@@ -261,9 +291,12 @@ public class IDCManager {
 	}
 	
 	public static void addLocalNode(FriendNode n) {
+		System.out.println("nom: "+ n.getNickname()+ " adresse : "+ n.getAddress());
 		if (!friends.contains(n)) {
 			friends.add(n);
+			Accueil.listJlist2.add(n.getNickname());
+			if(Accueil.listJlist2.isEmpty()) System.out.println("problemme");
+			Accueil.jList2.setListData(Accueil.listJlist2);
 		}
 	}
-
 }

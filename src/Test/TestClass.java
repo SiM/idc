@@ -31,7 +31,7 @@ public class TestClass {
 	@Test
 	public void TestNode() {
 		Node node = new Node("TEST NODE");
-		
+
 		assertTrue(node.getId() != null);
 	}
 

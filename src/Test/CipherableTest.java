@@ -50,6 +50,10 @@ public class CipherableTest {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
+			public void setAsCiphered(boolean bool) {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+			
 			public void setSignature(byte[] s) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
@@ -75,6 +79,11 @@ public class CipherableTest {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
+			public void setAsCiphered(boolean bool) {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+			
+			
 			public void setSignature(byte[] s) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}

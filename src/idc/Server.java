@@ -14,10 +14,11 @@ public class Server extends Thread {
 	static private boolean listeningOnServer = false;
 
 	public void run() {
-
+		if(IDCManager.isServerUp()) return;
 		try {
 
 			ServerSocket server = new ServerSocket(Config.port);
+			IDCManager.setServerAsUp(true);
 			listeningOnServer = true;
 
 			Socket client = null;

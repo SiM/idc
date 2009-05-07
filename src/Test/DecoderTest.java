@@ -45,8 +45,8 @@ public class DecoderTest {
 	public void fitPadding() {
 		System.out.println("fitPadding");
 		Message message = null;
-		//Decoder instance = null;
-		//instance.fitPadding(message);
+		// Decoder instance = null;
+		// instance.fitPadding(message);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -58,8 +58,8 @@ public class DecoderTest {
 	@Test
 	public void run() {
 		System.out.println("run");
-		//Decoder instance = null;
-		//instance.run();
+		// Decoder instance = null;
+		// instance.run();
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");

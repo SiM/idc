@@ -46,8 +46,8 @@ public class IdGenTest {
 	public void getID() {
 		System.out.println("getID");
 		int expResult = 0;
-		//int result = IdGen.getID();
-		//assertEquals(expResult, result);
+		// int result = IdGen.getID();
+		// assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -59,7 +59,7 @@ public class IdGenTest {
 	@Test
 	public void integrity() {
 		System.out.println("integrity");
-		//IdGen.integrity();
+		// IdGen.integrity();
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");

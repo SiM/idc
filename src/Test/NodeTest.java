@@ -62,8 +62,8 @@ public class NodeTest {
 		System.out.println("getId");
 		Node instance = null;
 		String expResult = "";
-		//String result = instance.getId();
-		//assertEquals(expResult, result);
+		// String result = instance.getId();
+		// assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -77,8 +77,8 @@ public class NodeTest {
 		System.out.println("checkKey");
 		Node instance = null;
 		boolean expResult = false;
-		//boolean result = instance.checkKey();
-		//assertEquals(expResult, result);
+		// boolean result = instance.checkKey();
+		// assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -105,7 +105,7 @@ public class NodeTest {
 	public void integrity() {
 		System.out.println("integrity");
 		Node instance = null;
-		//instance.integrity();
+		// instance.integrity();
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");

@@ -4,9 +4,13 @@
  */
 package idc;
 
+import ihm.*;
 import java.net.*;
 import java.security.PublicKey;
 import java.io.*;
+
+import javax.swing.JTextArea;
+
 import static org.junit.Assert.*;
 
 /**
@@ -40,9 +44,11 @@ public class ServerThread extends Thread {
 				// Ici on fait quelque chose avec le message
 
 				// par exemple on l'affiche :
-				System.out.println("PASSAGE DANS LE TEST");
+				//System.out.println("PASSAGE DANS LE TEST");
 				System.out.println("message :"
 						+ ((Message) message).getMessage());
+				Accueil.jtrep.get(0).append(((Message) message).getMessage());
+				Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
 			} else if (message.getClass().toString()
 					.equals("class idc.Request")) {
 				if(((Request)message).getKey()!=null){

@@ -107,8 +107,8 @@ public class MessageTest {
 		String in = "";
 		Message instance = null;
 		byte[] expResult = null;
-		//byte[] result = instance.shasum(in);
-		//assertEquals(expResult, result);
+		// byte[] result = instance.shasum(in);
+		// assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");

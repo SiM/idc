@@ -4,6 +4,7 @@
  */
 
 package idc;
+import ihm.*;
 
 import java.security.*;
 import java.io.IOException;
@@ -20,11 +21,10 @@ public class Main {
 	 * @param args
 	 *            the command line arguments
 	 */
-	public static void main(String[] args) {
-		CryptoManager CM = new CryptoManager();
-		IDCManager manager = new IDCManager();
-		Node node = new Node("TEST NODE");
+	public static void main(String[] args) {		
+		Accueil temp = new Accueil(/*manager,crypto*/);
 
+		temp.setVisible(true);	
 	}
 
 }

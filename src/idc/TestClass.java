@@ -14,6 +14,15 @@ import org.junit.internal.*;
 
 public class TestClass {
 
+	private IDCManager manager;
+
+	
+	@Test 
+	public void TestMain(){
+		manager=new IDCManager();
+		System.out.println("SERVER UP !");
+	}
+	
 	@Test
 	public void TestChan() {
 		Channel chan = new Channel("TEST CHANNEL");
@@ -80,9 +89,9 @@ public class TestClass {
 		assertTrue(msg.getData() != null);
 		assertTrue(msg.getMessage() != null);
 
-		new Server().start();
+		/*new Server().start();
 		System.out.println("SERVER UP !");
-
+		 */
 		ObjectOutputStream out = null;
 
 		try {
@@ -115,8 +124,8 @@ public class TestClass {
 		Message msg = new Message("TEST MESSAGE", node);
 		assertTrue(msg.getData() != null);
 		assertTrue(msg.getMessage() != null);
-		IDCManager manager = new IDCManager();
-		manager.addLocalNode(new FriendNode("el-indio", "localhost"));
+		
+		//manager.addLocalNode(new FriendNode("stickman", "localhost"));
 		manager.send(msg);
 		System.out.println("IDCManager TESTED SUCCESSFULLY !");
 	}

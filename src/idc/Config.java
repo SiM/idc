@@ -21,7 +21,7 @@ public class Config {
 
 	static public long broadcastSleep = 5000;
 
-	static public String nickname = "el-indio";
+	static public String nickname = "stickman";
 
 	static public byte[] identity = nickname.getBytes();
 

@@ -46,10 +46,10 @@ public class IDCManagerTest {
 	@Test
 	public void getLANNodes() {
 		System.out.println("getLANNodes");
-		//IDCManager instance = new IDCManager();
+		// IDCManager instance = new IDCManager();
 		List expResult = null;
-		//List result = instance.getLANNodes();
-		//assertEquals(expResult, result);
+		// List result = instance.getLANNodes();
+		// assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -62,7 +62,7 @@ public class IDCManagerTest {
 	public void request() {
 		System.out.println("request");
 		Node node = null;
-		//IDCManager.request(node);
+		// IDCManager.request(node);
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");
@@ -74,8 +74,8 @@ public class IDCManagerTest {
 	@Test
 	public void integrity() {
 		System.out.println("integrity");
-		//IDCManager instance = new IDCManager();
-		//instance.integrity();
+		// IDCManager instance = new IDCManager();
+		// instance.integrity();
 		// TODO review the generated test code and remove the default call to
 		// fail.
 		fail("The test case is a prototype.");

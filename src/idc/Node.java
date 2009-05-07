@@ -26,7 +26,7 @@ public class Node extends Object implements Serializable, Com {
 
 	private byte[] id;
 
-	public Node(String nickname) {
+	public Node(String nickname)  {
 		super();
 		if (nickname == null || nickname.length() <= 0) {
 			nickname = "Anonymous";
@@ -35,7 +35,7 @@ public class Node extends Object implements Serializable, Com {
 
 		try {
 			MessageDigest shasum = MessageDigest.getInstance("SHA-256");
-			id = shasum.digest((nickname + System.currentTimeMillis())
+			id = shasum.digest("nickan"
 					.getBytes());
 		} catch (NoSuchAlgorithmException err) {
 			System.out.println(err);
