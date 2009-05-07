@@ -38,7 +38,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		this.sender = sender;
 		date = new Date();
 		data = message.getBytes();
-		id = shasum(new String(data) + date.toString() + sender.getId());
+		id = shasum(new String(data) + date.getTime() + sender.getId());
 		digest = shasum(new String(data));
 
 		integrity();

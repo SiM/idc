@@ -85,6 +85,5 @@ public class FriendNode extends Node {
 
       // now a proper field-by-field evaluation can be made
       return this.getNickname().equals(that.getNickname()) /*&& this.id.equals(that.id) */ && this.address.equals(that.address);
-
    }
 }

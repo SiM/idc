@@ -17,7 +17,6 @@ public class Config {
    static public int broadcastPort = 44442; // listening port for the server
    static public long broadcastSleep = 5000;
    static public String nickname = "fridim";
-   static public byte[] identity = nickname.getBytes();
    static public int AES_size = 128;
    static public int RSA_size = 1024;
    static public String keyfile = System.getProperty("user.home") + "/.IDC-known_hosts";

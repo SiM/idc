@@ -364,6 +364,7 @@ public class Accueil extends javax.swing.JFrame {
 
 		crypto=new CryptoManager();
 		manager = new IDCManager();
+                jTextArea1.setLineWrap(true);
     }// </editor-fold>//GEN-END:initComponents
 
   
