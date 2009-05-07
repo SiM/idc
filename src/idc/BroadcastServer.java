@@ -10,7 +10,7 @@ public class BroadcastServer extends Thread {
 	protected boolean listening = true;
 
 	BroadcastServer() {
-		if(IDCManager.isBroadcastServerUp()){
+		if(!IDCManager.isBroadcastServerUp()){
 			IDCManager.setBroadcastServerAsUp(true);
 			try {
 				socket = new DatagramSocket(Config.broadcastPort);
@@ -22,13 +22,8 @@ public class BroadcastServer extends Thread {
 	}
 
 	public void run() {
-		socket = null;
-		try {
-			socket = new DatagramSocket(Config.broadcastPort);
-		} catch (SocketException e1) {
-			// TODO Bloc catch auto-généré
-			e1.printStackTrace();
-		}
+		
+		
 		while (listening) {
 
 			try {
