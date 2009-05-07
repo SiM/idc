@@ -36,20 +36,17 @@ public class Accueil extends javax.swing.JFrame {
             }
 
             public void keyPressed(KeyEvent arg0) {
+            	
                 if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
-                	 if (!jFormattedTextField1.getText().isEmpty())
-                     {
-                         String dial = new String(jFormattedTextField1.getText());
-                         dial = "[hh:mm] "+Config.nickname+" : " + dial + "\n";
-                        
-                         manager.send(new Message(dial, IDCManager.myNode));
-                         jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-                         jFormattedTextField1.setText("");
-                         //Node nd = new Node("stickman");
-                         //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
-          
-                         
-                     }
+                    if(jList1.getSelectedIndex() != -1)
+	                	if (!jFormattedTextField1.getText().isEmpty())
+	                    {
+	                        String dial = new String(jFormattedTextField1.getText());
+	                        dial = "[hh:mm] "+ Config.nickname +" : " + dial + "\n";
+	                        manager.send(new Message(dial, IDCManager.myNode));
+	                        jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
+	                        jFormattedTextField1.setText("");
+	                    }
             }
             public void keyReleased(KeyEvent arg0) {
             }
@@ -373,18 +370,15 @@ public class Accueil extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-   
+
+        	if(jList1.getSelectedIndex() != -1)
                 if (!jFormattedTextField1.getText().isEmpty())
                 {
                     String dial = new String(jFormattedTextField1.getText());
-                    dial = "[hh:mm] "+Config.nickname+" : " + dial + "\n";
+                    dial = "[hh:mm] "+ Config.nickname +" : " + dial + "\n";
                     manager.send(new Message(dial, IDCManager.myNode));
                     jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
                     jFormattedTextField1.setText("");
-                    //Node nd = new Node("stickman");
-                    //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
-                    
-                    
                 }
         
     }//GEN-LAST:event_jButton1ActionPerformed
