@@ -267,7 +267,7 @@ public class CryptoManager {
 
 	}
 
-	public byte[] getId() {
+	static public byte[] getId() {
 		// TODO
 		return id;
 	}

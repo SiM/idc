@@ -19,61 +19,58 @@ import static org.junit.Assert.*;
  */
 public class ServerThread extends Thread {
 
-	private Socket socket = null;
+   private Socket socket = null;
 
-	public ServerThread(Socket socket) {
-		this.socket = socket;
-		integrity();
-	}
+   public ServerThread(Socket socket) {
+      this.socket = socket;
+      integrity();
+   }
 
-	public void run() {
-		integrity();
+   public void run() {
+      integrity();
 
-		ObjectOutputStream out = null;
-		ObjectInputStream in = null;
+      ObjectOutputStream out = null;
+      ObjectInputStream in = null;
 
-		try {
+      try {
 
-			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
-			Object message = new Object();
-			message = in.readObject();
+         out = new ObjectOutputStream(socket.getOutputStream());
+         in = new ObjectInputStream(socket.getInputStream());
+         Object message = new Object();
+         message = in.readObject();
 
-			if (message.getClass().toString().equals("class idc.Message")) {
+         if (message.getClass().toString().equals("class idc.Message")) {
 
-				// Ici on fait quelque chose avec le message
+            // Ici on fait quelque chose avec le message
 
-				// par exemple on l'affiche :
-				//System.out.println("PASSAGE DANS LE TEST");
-				System.out.println("message :"
-						+ ((Message) message).getMessage());
-				Accueil.jtrep.get(0).append(((Message) message).getMessage());
-				Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
-			} else if (message.getClass().toString()
-					.equals("class idc.Request")) {
-				if(((Request)message).getKey()!=null){
-					CryptoManager.addPubKey(((Request)message).getSource(),((Request)message).getKey());
-				}
-				
-				IDCManager.catchRequest(((Request) message));
-				
-			} else if (message.getClass().toString()
-					.equals("class idc.Agreement")) {
-				
-				Channel chan=CryptoManager.decryptChannel((Agreement) message);
-				IDCManager.addChannel(chan);
-			}
+            // par exemple on l'affiche :
+            //System.out.println("PASSAGE DANS LE TEST");
+            System.out.println("message :" + ((Message) message).getMessage());
+            Accueil.jtrep.get(0).append(((Message) message).getMessage());
+            Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
+         } else if (message.getClass().toString().equals("class idc.Request")) {
+            if (((Request) message).getKey() != null) {
+               CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
+            }
 
-			out.close();
-			in.close();
-			socket.close();
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
-		}
-		integrity();
-	}
+            IDCManager.catchRequest(((Request) message));
 
-	public void integrity() {
-		assertTrue(socket != null);
-	}
+         } else if (message.getClass().toString().equals("class idc.Agreement")) {
+
+            Channel chan = CryptoManager.decryptChannel((Agreement) message);
+            IDCManager.addChannel(chan);
+         }
+
+         out.close();
+         in.close();
+         socket.close();
+      } catch (Exception e) {
+         e.printStackTrace(System.err);
+      }
+      integrity();
+   }
+
+   public void integrity() {
+      assertTrue(socket != null);
+   }
 }

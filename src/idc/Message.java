@@ -107,12 +107,10 @@ public class Message extends Object implements Serializable, Cipherable {
 		stream.writeObject(data);
 		stream.writeObject(digest);
 		stream.writeObject(id);
-		integrity();
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
-		integrity();
 		sender = (Node) stream.readObject();
 		date = (Date) stream.readObject();
 		// isCiphered=(boolean)stream.readBoolean();

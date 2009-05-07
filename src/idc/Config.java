@@ -11,45 +11,30 @@ import java.io.*;
  */
 public class Config {
 
-	static public int PORTMAX = 65636;
+   static public int PORTMAX = 65636;
+   static public int PORTMIN = 1024;
+   static public int port = 44441; // listening port for the server
+   static public int broadcastPort = 44442; // listening port for the server
+   static public long broadcastSleep = 5000;
+   static public String nickname = "fridim";
+   static public byte[] identity = nickname.getBytes();
+   static public int AES_size = 128;
+   static public int RSA_size = 1024;
+   static public String keyfile = System.getProperty("user.home") + "/.IDC-known_hosts";
+   static public File FilePub = new File(System.getProperty("user.home") + "/.idc.id.pub");
+   static public File FilePriv = new File(System.getProperty("user.home") + "/.idc.id.private");
 
-	static public int PORTMIN = 1024;
+   // Here we can imagine parsing a conf file
+   public static void loadConfig() {
 
-	static public int port = 44441; // listening port for the server
+      integrity();
+   }
 
-	static public int broadcastPort = 44442; // listening port for the server
+   static public void integrity() {
+      assert (port < PORTMAX);
+      assert (broadcastPort < PORTMAX);
+      assert (port > PORTMIN);
+      assert (broadcastPort > PORTMIN);
 
-	static public long broadcastSleep = 5000;
-
-	static public String nickname = "el-indio";
-
-	static public byte[] identity = nickname.getBytes();
-
-	static public int AES_size = 128;
-
-	static public int RSA_size = 1024;
-
-	static public String keyfile = System.getProperty("user.home")
-			+ "/.IDC-known_hosts";
-
-	static public File FilePub = new File(System.getProperty("user.home")
-			+ "/.idc.id.pub");
-
-	static public File FilePriv = new File(System.getProperty("user.home")
-			+ "/.idc.id.private");
-
-	// Here we can imagine parsing a conf file
-	public static void loadConfig() {
-
-		integrity();
-	}
-
-	static public void integrity() {
-		assert (port < PORTMAX);
-		assert (broadcastPort < PORTMAX);
-		assert (port > PORTMIN);
-		assert (broadcastPort > PORTMIN);
-
-	}
-
+   }
 }
