@@ -18,94 +18,90 @@ import java.math.*;
  * Cette classe identifie un noeud du réseau. Selon le cahier des charges, un
  * noeud est identifié par un nickname et par un id.
  */
-
 public class Node implements Serializable, Com {
-	private String nickname;
-	
-	private byte[] key;
 
-	private byte[] id;
+   private String nickname;
+   private byte[] key;
+   private byte[] id;
 
-	public Node(String nickname, byte[] id)  {
-		
-		if (nickname == null || nickname.length() <= 0) {
-			nickname = "Anonymous";
-		}
-		this.nickname = new String(nickname);
-                this.id = id;
-	}
+   public Node(String nickname, byte[] id) {
 
-	private void writeObject(ObjectOutputStream stream) throws IOException {
-		integrity();
-		stream.writeObject(nickname);
-		stream.writeObject(id);
-		stream.writeObject(key);
-	}
+      if (nickname == null || nickname.length() <= 0) {
+         nickname = "Anonymous";
+      }
+      this.nickname = new String(nickname);
+      this.id = id;
+   }
 
-	private void readObject(ObjectInputStream stream) throws IOException,
-			ClassNotFoundException {
-		nickname = (String) stream.readObject();
-		id = (byte[]) stream.readObject();
-                key = (byte[]) stream.readObject();
-		
-                integrity();
-	}
+   private void writeObject(ObjectOutputStream stream) throws IOException {
+      integrity();
+      stream.writeObject(nickname);
+      stream.writeObject(id);
+      stream.writeObject(key);
+   }
 
-	public byte[] getId() {
-		integrity();
-		return id.clone();
-	}
+   private void readObject(ObjectInputStream stream) throws IOException,
+           ClassNotFoundException {
+      nickname = (String) stream.readObject();
+      id = (byte[]) stream.readObject();
+      key = (byte[]) stream.readObject();
 
-	
-	public void send(Message msg) {
-		assert (msg != null);
-		integrity();
-		/*
-		 * C'est le manager qui choisi le noeud ami (connexion directe) pour
-		 * envoyer le message. Ce dernier va ensuite être routé
-		 */
-		// IDCManager.send(msg);
-	}
+      integrity();
+   }
 
-	public String getNickname() {
-		integrity();
-		return nickname;
-	}
+   public byte[] getId() {
+      integrity();
+      return id.clone();
+   }
 
-	protected void integrity() {
-		assert (nickname != null);
-		assert (id != null);
-                assert(id.length > 0);
-		assert (nickname.length() > 0);
-	}
+   public void send(Message msg) {
+      assert (msg != null);
+      integrity();
+   /*
+    * C'est le manager qui choisi le noeud ami (connexion directe) pour
+    * envoyer le message. Ce dernier va ensuite être routé
+    */
+   // IDCManager.send(msg);
+   }
 
-	@Override
-	public boolean equals(Object aThat) {
-		// check for self-comparison
-		if (this == aThat) {
-			return true;
-		}
+   public String getNickname() {
+      integrity();
+      return nickname;
+   }
 
-		// use instanceof instead of getClass here for two reasons
-		// 1. if need be, it can match any supertype, and not just one class;
-		// 2. it renders an explict check for "that == null" redundant, since
-		// it does the check for null already - "null instanceof [type]" always
-		// returns false. (See Effective Java by Joshua Bloch.)
+   protected void integrity() {
+      assert (nickname != null);
+      assert (id != null);
+      assert (id.length > 0);
+      assert (nickname.length() > 0);
+   }
 
-		if (!(aThat instanceof Node)) {
+   @Override
+   public boolean equals(Object aThat) {
+      // check for self-comparison
+      if (this == aThat) {
+         return true;
+      }
 
-			return false;
-		}
-		// Alternative to the above line :
-		// if ( aThat == null || aThat.getClass() != this.getClass() ) return
-		// false;
+      // use instanceof instead of getClass here for two reasons
+      // 1. if need be, it can match any supertype, and not just one class;
+      // 2. it renders an explict check for "that == null" redundant, since
+      // it does the check for null already - "null instanceof [type]" always
+      // returns false. (See Effective Java by Joshua Bloch.)
 
-		// cast to native object is now safe
-		Node that = (Node) aThat;
+      if (!(aThat instanceof Node)) {
 
-		// now a proper field-by-field evaluation can be made
-		return this.nickname.equals(that.nickname) && this.id.equals(that.id);
+         return false;
+      }
+      // Alternative to the above line :
+      // if ( aThat == null || aThat.getClass() != this.getClass() ) return
+      // false;
 
-	}
+      // cast to native object is now safe
+      Node that = (Node) aThat;
 
+      // now a proper field-by-field evaluation can be made
+      return this.nickname.equals(that.nickname) && this.id.equals(that.id);
+
+   }
 }

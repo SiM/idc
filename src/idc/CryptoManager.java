@@ -27,9 +27,9 @@ public class CryptoManager {
    static public PublicKey public_key;
    static private PrivateKey private_key;
    static private byte[] id;
-   static private Hashtable<byte[], PublicKey> pubKeyMap;
+   static public Hashtable<byte[], PublicKey> pubKeyMap;
 
-   private byte[] shasum(byte[] in) {
+   static public byte[] shasum(byte[] in) {
       try {
          MessageDigest shasum = MessageDigest.getInstance("SHA-256");
          return shasum.digest(in);
