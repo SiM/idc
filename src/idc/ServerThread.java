@@ -48,8 +48,10 @@ public class ServerThread extends Thread {
             System.out.println("message :" + ((Message) message).getMessage());
             Accueil.jtrep.get(0).append(((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
+            
          } else if (message.getClass().toString().equals("class idc.Request")) {
-            if (((Request) message).getKey() != null) {
+            System.out.println("RESQUEST CATCHED !");
+        	if (((Request) message).getKey() != null) {
                CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
             }
 

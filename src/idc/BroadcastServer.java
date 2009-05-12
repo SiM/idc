@@ -46,8 +46,8 @@ public class BroadcastServer extends Thread {
 				String[] d = dString.split(" ");
 				
 				IDCManager.addLocalNode(new FriendNode(d[0], d[1].getBytes(), packet.getAddress()));
-	
-				System.out.println("Address of the packet :"+packet.getAddress());
+				IDCManager.addNode(new Node(d[0],d[1].getBytes()));
+				System.out.println("Address of the packet : "+packet.getAddress());
 				IDCManager.enQueue(new Node(d[0], d[1].getBytes()),packet.getAddress());
 
 			} catch (Exception e) {

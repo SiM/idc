@@ -67,7 +67,7 @@ public class Channel extends Object implements Serializable,Cipherable{
 	
 	public byte[] getSecretKey(){	
 		integrity();
-		return secret_key.toString().getBytes();
+		return secret_key.getEncoded();
 	}
 	
 	public void setSignature(byte[] s){
@@ -112,7 +112,7 @@ public class Channel extends Object implements Serializable,Cipherable{
 		nodes = new ArrayList();
 		id = IdGen.getID();
 		data=new byte[0];
-		digest=shasum(name+nodes.toString()+id);
+		digest=shasum(name); // TODO
 		
 		CreateSecretKey();
 		

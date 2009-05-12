@@ -32,7 +32,7 @@ public class BroadcastClient extends Thread {
 				// send request
 				byte[] buf = new byte[256];
 
-				buf = (Config.nickname + " " + new String(Config.identity))
+				buf = (Config.nickname + " " + new String(IDCManager.myNode.getId()))
 						.getBytes();
 
 				InetAddress address = InetAddress.getByName("255.255.255.255");

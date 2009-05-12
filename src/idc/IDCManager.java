@@ -14,48 +14,49 @@ import ihm.Accueil;
 import java.net.InetAddress;
 
 import ihm.*;
+
 /**
  * 
  * @author fridim
  */
 public class IDCManager {
 
-	static private HashMap<byte[],Node> nodes; // tous les noeuds connus du réseau
-	static private HashMap<byte[],byte[]> WaitingStruct;
-	static private List friends; // Connexions directes
-	static private Vector<Channel> Channels;
-	static private HashMap<Node,Queue<InetAddress>> gate;
-	static private boolean server=false;
-	static private boolean broadcastserver=false;
-	
-	// Config.port
+	static private HashMap<byte[], Node> nodes; // tous les noeuds connus du
 
+	// réseau
+
+	static private HashMap<byte[], byte[]> WaitingStruct;
+
+	static private List friends; // Connexions directes
+
+	static private Vector<Channel> Channels;
+
+	static private HashMap<Node, Queue<InetAddress>> gate;
+
+	static private boolean server = false;
+
+	static private boolean broadcastserver = false;
+
+	// Config.port
 	static public Node myNode;
 
 	public IDCManager() {
-		nodes = new HashMap<byte[], Node>(100,100);
+		nodes = new HashMap<byte[], Node>(100, 100);
+
 		friends = new ArrayList<FriendNode>(10);
-		Channels=new Vector<Channel>(100,100);
+		Channels = new Vector<Channel>(100, 100);
 		myNode = new Node(Config.nickname, CryptoManager.getId());
-		WaitingStruct=new HashMap<byte[], byte[]>(100,100);
-		gate =new HashMap<Node, Queue<InetAddress>>(100,100);
-		Server server=new Server();
+		System.out.println("MON ID : " + new String(myNode.getId()));
+
+		WaitingStruct = new HashMap<byte[], byte[]>(100, 100);
+		gate = new HashMap<Node, Queue<InetAddress>>(100, 100);
+		Server server = new Server();
 		server.start();
-		/*try {
-			server.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		//new BroadcastServer().checkAccess();
-		BroadcastServer broadcaster =new BroadcastServer();
+		
+
+		BroadcastServer broadcaster = new BroadcastServer();
 		broadcaster.start();
-		/*try {
-			broadcaster.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		
 		new BroadcastClient().start();
 
 		/* Test */
@@ -65,27 +66,26 @@ public class IDCManager {
 		 */
 	}
 
-	static public void enQueue(Node node,InetAddress address){
+	static public void enQueue(Node node, InetAddress address) {
 		/**
-		 * on enfile les InetAddress pour chaque noeud. La tête correspond a la meilleur gate.
-		 * L'esprit du truc est le suivant, pour atteindre tel noeuds, je dois passer par telle gate.
-		 * si celle-ci tombe on defile la tête et le suivant devient la meilleur gate.
+		 * on enfile les InetAddress pour chaque noeud. La tête correspond a la
+		 * meilleur gate. L'esprit du truc est le suivant, pour atteindre tel
+		 * noeuds, je dois passer par telle gate. si celle-ci tombe on defile la
+		 * tête et le suivant devient la meilleur gate.
 		 */
-		
-		assert(node!=null);
-		assert(address!=null);
-		
-		if(gate.containsKey(node)){
-			if(gate.get(node).contains(address)){
+		assert (node != null);
+		assert (address != null);
+
+		if (gate.containsKey(node)) {
+			if (gate.get(node).contains(address)) {
 				return;
-			}else{
+			} else {
 				gate.get(node).add(address);
 			}
 		}
-		return;	
+		return;
 	}
-	
-	
+
 	/*
 	 * fait du broadcast et retourne une liste de noeuds connectés et qui ne
 	 * sont pas déjà dans la liste "friends". On peut ensuite faire des demandes
@@ -96,29 +96,28 @@ public class IDCManager {
 		return friends;
 	}
 
-	static public HashMap<byte[], Node> getNodeStruct(){
+	static public HashMap<byte[], Node> getNodeStruct() {
 		return nodes;
 	}
-	
-	static public void setBroadcastServerAsUp(boolean bool){
-		broadcastserver=bool;
+
+	static public void setBroadcastServerAsUp(boolean bool) {
+		broadcastserver = bool;
 	}
-	
-	static public boolean isBroadcastServerUp(){
+
+	static public boolean isBroadcastServerUp() {
 		return broadcastserver;
-		
+
 	}
-	static public boolean isServerUp(){
+
+	static public boolean isServerUp() {
 		return server;
-		
+
 	}
-	
-	
-	static public void setServerAsUp(boolean bool){
-		server=bool;
+
+	static public void setServerAsUp(boolean bool) {
+		server = bool;
 	}
-	
-	
+
 	/* envoie un message au réseau */
 	static public void send(Object message) {
 		/**
@@ -126,43 +125,38 @@ public class IDCManager {
 		 * monde on envoi sur le port server de l'application.
 		 * 
 		 */
-		
-		if(friends.isEmpty()){
+		if (friends.isEmpty()) {
 			System.out.println("YOU HAVE NO FRIENDS !");
 			return;
 		}
-		
-		ListIterator<FriendNode> iter= friends.listIterator();
+
+		ListIterator<FriendNode> iter = friends.listIterator();
 		/* obtention de l'adresse par les friend node */
-		
+
 		while (iter.hasNext()) {
 			Socket socket = null;
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
-			FriendNode friend=iter.next();
+			FriendNode friend = iter.next();
 			try {
-				System.out.println("Size of the friends list :"+friends.size());
-				System.out.println("address of next friend = "+ friend.getAddress());
-				
-				socket = new Socket(friend.getAddress(),Config.port);
-				
+				System.out.println("Size of the friends list :"
+						+ friends.size());
+				System.out.println("address of next friend = "
+						+ friend.getAddress());
+
+				socket = new Socket(friend.getAddress(), Config.port);
+
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
 
+				out.writeObject((Message) message);
+				out.flush();
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
+				friends.remove(friend);
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
-
-			try {
-				out.writeObject((Message)message);
-				out.flush();
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
-			
-
 		}
 
 	}
@@ -173,77 +167,78 @@ public class IDCManager {
 
 	}
 
-	public void askForRequest(byte[]source ,byte[] target) {
-	
-		
-		
+	public void askForRequest(byte[] source, byte[] target) {
+
 		/**
 		 * 1 -> we ask someone to engage a private conversation
 		 * 
 		 */
-		if(!(nodes.containsKey(source)||nodes.containsKey(target))){
+		if (!(nodes.containsKey(source) || nodes.containsKey(target))) {
 			System.out.println("Source or Target doesn't exist !");
 			return;
 		}
-		
-		Channel chan =new Channel("NEW CHANNEL");
+
+		Channel chan = new Channel("NEW CHANNEL");
 		Channels.add(chan.getId(), chan);
-		Request req=new Request(source,target,chan.getId(),null);
+		Request req = new Request(source, target, chan.getId(), null);
 		sendRequest(req);
 		/**
-		 * here we need to know who we are waiting for. 
-		 * We also need to know the id of the channel. 
+		 * here we need to know who we are waiting for. We also need to know the
+		 * id of the channel.
 		 */
 		WaitingStruct.put(source, target);
 		/**
 		 * this could be dangerous if we have some people waiting for one.
 		 */
-		
 	}
 
-	
-	static public void catchRequest(Request req){
-		/**
-		 * autor : a request has been catched by the ServerThread and it's the duty of this 
-		 * method to deal with that.
+	static public void catchRequest(Request req) {
+      /**
+		 * autor : a request has been catched by the ServerThread and it's the
+		 * duty of this method to deal with that.
 		 */
-		
-		assert(req!=null);
-		
-		if(nodes.get(req.getTarget()).getId()!=Config.identity){
-			System.out.println("Request not for me !");
-		}
-		
-		if(WaitingStruct.containsKey(req.getSource())){
-			/**
+      assert (req != null);
+            
+   
+      if (req.getTarget().equals(myNode.getId())) {
+         System.out.println("Request not for me !");
+         return;
+      }
+     
+   
+      System.out.println("BEFORE THE FIRST IF OK");
+      
+      if (WaitingStruct.containsKey( req.getSource() )) {
+         /**
 			 * we code the channel and send it.
 			 */
-			if(req.getAnswer()){
-				/**
-				 * on envoi sa clef publique
-				 */
-				
-				CryptoManager.keyExchangeProcess(Channels.get(req.getIdChan()),req.getKey());
-				send(new Agreement(CryptoManager.public_key,Channels.get(req.getIdChan())));
-				
-			}else{
-				System.out.println("Request refused !");
-				return;
-			}
-			
-		}else{
-			
-			Request answer=new Request(req.getTarget(),req.getSource(),req.getIdChan(),null);
-			sendRequest(req);
-		}
-	}
-	
-	static public void sendRequest(Request req){
+    	  WaitingStruct.remove(req.getSource());
+    	  System.out.println("FIRST IF OK");
+         if (req.isAnAnswer()&&req.getAnswer()) {
+            /**
+			 * on envoi sa clef publique
+			 */
+        	 System.out.println("THE ANSWER IS YES!");
+            CryptoManager.keyExchangeProcess(Channels.get(req.getIdChan()), req.getKey());
+            send(new Agreement(CryptoManager.public_key, Channels.get(req.getIdChan())));
+
+         } else {
+            System.out.println("Request refused !");
+            return;
+         }
+
+      } else {
+
+         Request answer = new Request(myNode.getId(), req.getSource(), req.getIdChan(), null);
+         sendRequest(answer);
+      }
+   }
+
+	static public void sendRequest(Request req) {
 		/**
-		 *  autor : el-indio 
-		 *  here we simply send a request, as same as we do for message.
+		 * autor : el-indio here we simply send a request, as same as we do for
+		 * message.
 		 */
-		
 		int i = 0;
 
 		/* obtention de l'adresse par les friend node */
@@ -257,46 +252,46 @@ public class IDCManager {
 						Config.port);
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
-
+				out.writeObject(req);
+				out.flush();
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
 
-			try {
-				out.writeObject(req);
-				out.flush();
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
+			if(!req.isAnAnswer()){
+				WaitingStruct.put(req.getSource(), req.getTarget());
 			}
-			
-			WaitingStruct.put(req.getSource(), req.getTarget());
 			
 			i++;
 
 		}
-		
+
 	}
-	
+
 	public static void addNode(Node n) {
-		if (!nodes.containsValue(n))
-			nodes.put(n.getId(),n);
+		if (!nodes.containsValue(n)) {
+			nodes.put(n.getId(), n);
+		}
 		System.out.println("Noded added");
 	}
-	
-	public static void addChannel(Channel chan){
-		if(!Channels.contains(chan)){
-			Channels.add(chan.getId(),chan);
+
+	public static void addChannel(Channel chan) {
+		if (!Channels.contains(chan)) {
+			Channels.add(chan.getId(), chan);
 		}
 	}
-	
+
 	public static void addLocalNode(FriendNode n) {
-		System.out.println("nom: "+ n.getNickname()+ " adresse : "+ n.getAddress());
 		if (!friends.contains(n)) {
+			System.out.println("nom: " + n.getNickname() + "- ID : "
+					+ new String(n.getId()) + " adresse : " + n.getAddress());
 			friends.add(n);
 			Accueil.listJlist2.add(n.getNickname());
-			if(Accueil.listJlist2.isEmpty()) System.out.println("problemme");
+			if (Accueil.listJlist2.isEmpty()) {
+				System.out.println("problemme");
+			}
 			Accueil.jList2.setListData(Accueil.listJlist2);
 		}
 	}

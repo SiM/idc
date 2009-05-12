@@ -12,6 +12,7 @@ import java.security.PublicKey;
 public class Request extends Object implements Serializable {
 	private byte[] target;
 	private byte[] source;
+	private boolean isAnAnswer;
 	private boolean answer;
 	private int chan;
 	private PublicKey RSAPub;
@@ -25,6 +26,16 @@ public class Request extends Object implements Serializable {
 		RSAPub=pub;
 	}
 	
+	public void setAsAnswer(boolean bool){
+		integrity();
+		isAnAnswer=bool;
+	}
+	
+	public boolean isAnAnswer(){
+		integrity();
+		return isAnAnswer;
+	}
+	
 	public boolean getAnswer(){
 		integrity();
 		return answer;
@@ -32,7 +43,7 @@ public class Request extends Object implements Serializable {
 	
 	public byte[] getSource(){
 		integrity();
-		return source;
+		return new String(source).getBytes();
 	}
 	public PublicKey getKey(){
 		integrity();
@@ -53,13 +64,19 @@ public class Request extends Object implements Serializable {
 		integrity();
 		stream.writeObject(source);
 		stream.writeObject(target);
-		integrity();
+		stream.writeBoolean(isAnAnswer);
+		stream.writeBoolean(answer);
+		stream.writeInt(chan);
+		stream.writeObject(RSAPub);
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-		integrity();
 		source=(byte[])stream.readObject();
 		target = (byte[]) stream.readObject();
+		isAnAnswer=stream.readBoolean();
+		answer=stream.readBoolean();
+		chan=stream.readInt();
+		RSAPub=(PublicKey)stream.readObject();
 		integrity();
 	}
 	
