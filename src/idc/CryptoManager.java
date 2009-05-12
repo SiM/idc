@@ -203,7 +203,7 @@ public class CryptoManager {
 
    }
 
-   public void SignMessage(Message msg) {
+   static public void SignMessage(Message msg) {
       integrity();
 
       try {

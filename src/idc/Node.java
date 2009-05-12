@@ -10,6 +10,12 @@ import java.security.spec.*;
 import java.io.IOException;
 import java.io.*;
 import java.math.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * 
@@ -22,6 +28,7 @@ public class Node implements Serializable, Com {
 
    private String nickname;
    private byte[] key;
+   static public PublicKey public_key;
    private byte[] id;
 
    public Node(String nickname, byte[] id) {
@@ -74,6 +81,38 @@ public class Node implements Serializable, Com {
       assert (id != null);
       assert (id.length > 0);
       assert (nickname.length() > 0);
+   }
+
+   public boolean verisign(Message msg) {
+      if (public_key == null) {
+         return false;
+      } // TODO : il faudrait faire une request de clef publique
+      
+      byte[] coded;
+      try {
+         Cipher rsaCoder = Cipher.getInstance("RSA");
+         rsaCoder.init(Cipher.DECRYPT_MODE, public_key);
+
+         coded = rsaCoder.doFinal(msg.getDigest());
+
+      } catch (IllegalBlockSizeException ex) {
+         Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+         return false;
+      } catch (BadPaddingException ex) {
+         Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+         return false;
+      } catch (InvalidKeyException ex) {
+         Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+         return false;
+      } catch (NoSuchAlgorithmException ex) {
+         Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+         return false;
+      } catch (NoSuchPaddingException ex) {
+         Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+         return false;
+      }
+
+      return coded.equals(CryptoManager.shasum(msg.getData()));
    }
 
    @Override
