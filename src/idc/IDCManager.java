@@ -21,8 +21,8 @@ import ihm.*;
  */
 public class IDCManager {
 
-   static private HashMap<byte[], Node> nodes; // tous les noeuds connus du réseau
-   static private HashMap<byte[], byte[]> WaitingStruct;
+   static private Hashtable<byte[], Node> nodes; // tous les noeuds connus du réseau
+   static private Hashtable<byte[], byte[]> WaitingStruct;
    static private List friends; // Connexions directes
    static private Vector<Channel> Channels;
    static private HashMap<Node, Queue<InetAddress>> gate;
@@ -32,13 +32,13 @@ public class IDCManager {
    static public Node myNode;
 
    public IDCManager() {
-      nodes = new HashMap<byte[], Node>(100, 100);
+      nodes = new Hashtable<byte[], Node>(100, 100);
       friends = new ArrayList<FriendNode>(10);
       Channels = new Vector<Channel>(100, 100);
       myNode = new Node(Config.nickname, CryptoManager.getId());
       System.out.println("MON ID : " + new String(myNode.getId()));
       
-      WaitingStruct = new HashMap<byte[], byte[]>(100, 100);
+      WaitingStruct = new Hashtable<byte[], byte[]>(100, 100);
       gate = new HashMap<Node, Queue<InetAddress>>(100, 100);
       Server server = new Server();
       server.start();
@@ -95,7 +95,7 @@ public class IDCManager {
       return friends;
    }
 
-   static public HashMap<byte[], Node> getNodeStruct() {
+   static public Hashtable<byte[], Node> getNodeStruct() {
       return nodes;
    }
 
