@@ -1,59 +1,56 @@
 package idc;
 
-import java.io.IOException;
 import java.net.*;
 
 public class BroadcastServer extends Thread {
 
-	protected DatagramSocket socket;
+   protected DatagramSocket socket;
+   protected boolean listening = true;
 
-	protected boolean listening = true;
+   public BroadcastServer() {
+      if (!IDCManager.isBroadcastServerUp()) {
 
-	public BroadcastServer() {
-		if(!IDCManager.isBroadcastServerUp()){
-			
-			try {
-				socket = new DatagramSocket(Config.broadcastPort);
-				IDCManager.setBroadcastServerAsUp(true);
-			} catch (SocketException e) {
-				e.printStackTrace(System.err);
-			}
-		}else{
-			System.err.println("Th broadcast server is already up");
-		}
-	}
+         try {
+            socket = new DatagramSocket(Config.broadcastPort);
+            IDCManager.setBroadcastServerAsUp(true);
+         } catch (SocketException e) {
+            e.printStackTrace(System.err);
+         }
+      } else {
+         System.err.println("Th broadcast server is already up");
+      }
+   }
 
-	public void run() {
-		
-		
-		while (listening) {
+   public void run() {
 
-			try {
-				byte[] buf = new byte[256];
 
-				// receive request
-				DatagramPacket packet = new DatagramPacket(buf, buf.length);
-				//
-				socket.receive(packet);
+      while (listening) {
 
-				// figure out response
-				
-				buf = packet.getData();
-				
-				String dString = new String(buf);
-				//System.out.println("Broadcast received : " + dString);
-				
-				String[] d = dString.split(" ");
-				
-				IDCManager.addLocalNode(new FriendNode(d[0], d[1].getBytes(), packet.getAddress()));
-	
-				System.out.println("Address of the packet : "+packet.getAddress());
-				IDCManager.enQueue(new Node(d[0], d[1].getBytes()),packet.getAddress());
+         try {
+            byte[] buf = new byte[256];
 
-			} catch (Exception e) {
-				e.printStackTrace(System.err);
-				listening = false;
-			}
-		}
-	}
+            // receive request
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            //
+            socket.receive(packet);
+
+            // figure out response
+
+            buf = packet.getData();
+
+            String dString = new String(buf);
+            //System.out.println("Broadcast received : " + dString);
+
+            String[] d = dString.split(" ");
+
+            IDCManager.addLocalNode(new FriendNode(d[0], d[1].getBytes(), packet.getAddress()));
+            System.out.println("Address of the packet : " + packet.getAddress());
+            IDCManager.enQueue(new Node(d[0], d[1].getBytes()), packet.getAddress());
+
+         } catch (Exception e) {
+            e.printStackTrace(System.err);
+            listening = false;
+         }
+      }
+   }
 }

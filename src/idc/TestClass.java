@@ -14,10 +14,11 @@ import org.junit.runner.*;
 public class TestClass {
 
 	private IDCManager manager;
-
+	private CryptoManager crypto;
 	
 	@Test 
 	public void TestMain(){
+		crypto = new CryptoManager();
 		manager=new IDCManager();
 		
 		System.out.println("SERVER UP !");
@@ -80,7 +81,7 @@ public class TestClass {
 		System.out.println("CryptoManager TESTED SUCCESSFULLY !");
 	}
 	
-	@Test
+	//@Test
 	public void TestConnection() {
 		System.out.println("TESTING CONNECTION ---->");
 		int i = 0;
@@ -111,7 +112,7 @@ public class TestClass {
 		System.out.println("CONNECTION TESTED SUCCESSFULLY");
 	}
 
-	@Test
+	//@Test
 	public void TestSend() {
 		System.out.println("TESTING IDCManager ------>");
 		Node node = new Node("TEST NODE", "ID_DE_TEST_NODE".getBytes());
@@ -123,4 +124,20 @@ public class TestClass {
 		manager.send(msg);
 		System.out.println("IDCManager TESTED SUCCESSFULLY !");
 	}
+	
+	@Test
+	public void TestRequest() {
+		
+		System.out.println("TESTING REQUEST ------>");
+		Channel chan = new Channel("CHANNEL TEST");
+		Request req=new Request(IDCManager.myNode.getId(),IDCManager.myNode.getId(),chan.getId(),CryptoManager.public_key);
+		//IDCManager.sendRequest(req);
+	
+		
+		IDCManager.catchRequest(req);
+		
+		
+		System.out.println("REQUEST TESTED SUCCESSFULLY !");
+	}
+	
 }

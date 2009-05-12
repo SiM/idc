@@ -53,7 +53,7 @@ public class Node implements Serializable, Com {
 
 	public byte[] getId() {
 		integrity();
-		return id;
+		return id.clone();
 	}
 
 	

@@ -27,7 +27,7 @@ public class CryptoManager {
    static public PublicKey public_key;
    static private PrivateKey private_key;
    static private byte[] id;
-   static private HashTable<byte[], PublicKey> pubKeyMap;
+   static private Hashtable<byte[], PublicKey> pubKeyMap;
 
    private byte[] shasum(byte[] in) {
       try {
@@ -43,7 +43,7 @@ public class CryptoManager {
    }
 
    public CryptoManager() {
-      pubKeyMap = new HashMap<byte[], PublicKey>(100, 100);
+      pubKeyMap = new Hashtable<byte[], PublicKey>(100, 100);
       try {
          loadKeyPair();
       } catch (IOException ex) {
