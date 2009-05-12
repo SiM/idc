@@ -25,7 +25,7 @@ public class IDCManager {
 
    // réseau
    static private Hashtable<byte[], byte[]> WaitingStruct;
-   static private List friends; // Connexions directes
+   static public List friends; // Connexions directes
    static private Vector<Channel> Channels;
    static private Hashtable<Node, Queue<InetAddress>> gate;
    static private boolean server = false;
@@ -128,27 +128,8 @@ public class IDCManager {
       /* obtention de l'adresse par les friend node */
 
       while (iter.hasNext()) {
-         Socket socket = null;
-         ObjectOutputStream out = null;
-         ObjectInputStream in = null;
          FriendNode friend = iter.next();
-         try {
-            System.out.println("Size of the friends list :" + friends.size());
-            System.out.println("address of next friend = " + friend.getAddress());
-
-            socket = new Socket(friend.getAddress(), Config.port);
-
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-
-            out.writeObject((Message) message);
-            out.flush();
-         } catch (UnknownHostException e) {
-            e.printStackTrace(System.err);
-            friends.remove(friend);
-         } catch (IOException e) {
-            e.printStackTrace(System.err);
-         }
+         friend.send(message);
       }
 
    }
@@ -224,7 +205,7 @@ public class IDCManager {
          sendRequest(answer);
       }
    }
-
+   
    static public void sendRequest(Request req) {
       /**
        * autor : el-indio here we simply send a request, as same as we do for
@@ -278,11 +259,13 @@ public class IDCManager {
       if (!friends.contains(n)) {
          System.out.println("nom: " + n.getNickname() + "- ID : " + new String(n.getId()) + " adresse : " + n.getAddress());
          friends.add(n);
-         Accueil.listJlist2.add(n.getNickname());
+         /*
+         Accueil.listJlist2.add(n.getNickname() + " " + new String(n.getId()));
          if (Accueil.listJlist2.isEmpty()) {
             System.out.println("problemme");
          }
          Accueil.jList2.setListData(Accueil.listJlist2);
+         */
       }
    }
 }
