@@ -53,12 +53,13 @@ public class Node implements Serializable, Com {
 
 	public byte[] getId() {
 		integrity();
-		return id.clone();
+		return id;
 	}
 
 	
 	public void send(Message msg) {
 		assert (msg != null);
+		
 		integrity();
 		/*
 		 * C'est le manager qui choisi le noeud ami (connexion directe) pour

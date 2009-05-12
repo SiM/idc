@@ -161,7 +161,7 @@ public class CryptoManager {
 		}
 		
 		
-		if(checkSessionKey(agr, agr.getChannel().getData())){
+		if(!checkSessionKey(agr, agr.getChannel().getData())){
 			return null;
 		}
 		/**
@@ -184,7 +184,8 @@ public class CryptoManager {
 			Cipher rsaAuth = Cipher.getInstance("RSA");
 			rsaAuth.init(Cipher.DECRYPT_MODE,agr.getPubKey());
 			auth=rsaAuth.doFinal(agr.getChannel().getDigest());
-			
+			MessageDigest Auth = MessageDigest.getInstance("SHA-256");
+			digest=Auth.digest(msg);	
 		} catch (NoSuchAlgorithmException err) {
 			System.out.println(err);
 		} catch (NoSuchPaddingException err) {
@@ -195,18 +196,10 @@ public class CryptoManager {
 			System.out.println(err);
 		} catch (BadPaddingException err) {
 			System.out.println(err);
-		}
-		
-		try{
-			MessageDigest Auth = MessageDigest.getInstance("SHA-256");
-			digest=Auth.digest(msg);			
-		} catch (NoSuchAlgorithmException err) {
-			System.out.println(err);
-		} 
+		}		
 		
 		integrity();
 		return digest==auth;
-		
 		
 	}
 	
@@ -240,10 +233,14 @@ public class CryptoManager {
 		 * l'integrité de la clef doit être vérifier a l'aide du tableau integrityOfTheKey
 		 * qui est lui aussi chiffré.
 		 */
-
+		assert(chan!=null);
+		assert(pub!=null);
 		try {
 			loadKeyPair();
 			Cipher rsaCoder = Cipher.getInstance("RSA");
+			
+			
+			
 			rsaCoder.init(Cipher.ENCRYPT_MODE, pub);
 
 			SignChannel(chan);

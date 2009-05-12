@@ -77,28 +77,28 @@ public class Channel extends Object implements Serializable,Cipherable{
 	}
 	
 	private void writeObject(ObjectOutputStream stream) throws IOException {
-		integrity();
 		
+		integrity();
 		
 		// stream.writeObject(isCiphered);
 		stream.writeInt(id);
+		stream.writeObject(nodes);
 		stream.writeUTF(name);
-		stream.writeObject(data);
 		stream.writeObject(digest);
-		stream.writeObject(isciphered);
-		integrity();
+		stream.writeBoolean(isciphered);
+		stream.writeObject(data);
+		
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
-		integrity();
-		
-		 
+				 
 		id=stream.readInt();
+		nodes=(ArrayList)stream.readObject();
 		name=stream.readUTF();
-		data = (byte[]) stream.readObject();
 		digest = (byte[]) stream.readObject();
 		isciphered=stream.readBoolean();
+		data = (byte[]) stream.readObject();
 		integrity();
 	}
 	
@@ -109,7 +109,7 @@ public class Channel extends Object implements Serializable,Cipherable{
 
 	public Channel(String name) {
 		this.name = name;
-		nodes = new ArrayList();
+		nodes = new ArrayList<Node>(10);
 		id = IdGen.getID();
 		data=new byte[0];
 		digest=shasum(name); // TODO
@@ -119,6 +119,10 @@ public class Channel extends Object implements Serializable,Cipherable{
 		integrity();
 	}
 	
+	
+	public void send(Message msg){
+		
+	}
 	
 	
 	private byte[] shasum(String in) {

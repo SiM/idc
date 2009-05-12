@@ -43,12 +43,12 @@ public class Agreement extends Object implements Serializable {
 		integrity();
 		stream.writeObject(RSAPub);
 		stream.writeObject(chan);
-		integrity();
+		
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
-		integrity();
+	
 		RSAPub = (PublicKey) stream.readObject();
 		chan =(Channel) stream.readObject();
 		integrity();
@@ -57,7 +57,7 @@ public class Agreement extends Object implements Serializable {
 	public void integrity() {
 		assert (RSAPub != null);
 		assert (chan != null);
-		assert (chan.isCiphered());
+		//assert (chan.isCiphered());
 	}
 
 }

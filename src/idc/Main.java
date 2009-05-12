@@ -23,8 +23,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {		
 		Accueil temp = new Accueil(/*manager,crypto*/);
-
+		
 		temp.setVisible(true);	
+				
+		
+		IDCManager.askForRequest(IDCManager.myNode.getId(), IDCManager.myNode.getId(), "LODI chan");
 	}
 
 }

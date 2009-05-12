@@ -27,6 +27,8 @@ public class Message extends Object implements Serializable, Cipherable {
 
 	private boolean isCiphered;
 
+	private int chan;
+	
 	private byte[] data;
 
 	private byte[] digest;
@@ -37,6 +39,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		super();
 		this.sender = sender;
 		date = new Date();
+		chan=0;
 		data = message.getBytes();
 		id = shasum(new String(data) + date.getTime() + sender.getId());
 		digest = shasum(new String(data));
@@ -44,6 +47,18 @@ public class Message extends Object implements Serializable, Cipherable {
 		integrity();
 	}
 
+	public Message(String message, Node sender,int idchan) {
+		super();
+		this.sender = sender;
+		date = new Date();
+		chan=idchan;
+		data = message.getBytes();
+		id = shasum(new String(data) + date.getTime() + sender.getId());
+		digest = shasum(new String(data));
+
+		integrity();
+	}
+	
 	public boolean isCiphered() {
 		integrity();
 		return isCiphered;
@@ -127,6 +142,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		assert (data.length > 0);
 		assert (digest.length > 0);
 		assert (digest != null);
+		assert(chan>=0);
 
 	}
 }

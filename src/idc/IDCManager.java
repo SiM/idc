@@ -25,7 +25,7 @@ public class IDCManager {
 
 	// réseau
 
-	static private HashMap<byte[], byte[]> WaitingStruct;
+	static private HashMap<String, String> WaitingStruct;
 
 	static private List friends; // Connexions directes
 
@@ -45,25 +45,20 @@ public class IDCManager {
 
 		friends = new ArrayList<FriendNode>(10);
 		Channels = new Vector<Channel>(100, 100);
+		Channels.setSize(100);
 		myNode = new Node(Config.nickname, CryptoManager.getId());
 		System.out.println("MON ID : " + new String(myNode.getId()));
 
-		WaitingStruct = new HashMap<byte[], byte[]>(100, 100);
+		WaitingStruct = new HashMap<String, String>(100, 100);
 		gate = new HashMap<Node, Queue<InetAddress>>(100, 100);
 		Server server = new Server();
 		server.start();
-		
 
 		BroadcastServer broadcaster = new BroadcastServer();
 		broadcaster.start();
-		
+
 		new BroadcastClient().start();
 
-		/* Test */
-		/*
-		 * FriendNode local = new FriendNode("fridim", "blabla", "localhost");
-		 * local.send(new Message("coucou", local));
-		 */
 	}
 
 	static public void enQueue(Node node, InetAddress address) {
@@ -149,7 +144,8 @@ public class IDCManager {
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
 
-				out.writeObject((Message) message);
+				if(message.getClass().toString().equals("class idc.Agreement"))out.writeObject((Agreement) message);
+				if(message.getClass().toString().equals("class idc.Message"))out.writeObject((Message) message);
 				out.flush();
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
@@ -167,119 +163,157 @@ public class IDCManager {
 
 	}
 
-	public void askForRequest(byte[] source, byte[] target) {
+	static public void askForRequest(byte[] source, byte[] target, String str) {
 
 		/**
 		 * 1 -> we ask someone to engage a private conversation
 		 * 
 		 */
-		if (!(nodes.containsKey(source) || nodes.containsKey(target))) {
-			System.out.println("Source or Target doesn't exist !");
-			return;
-		}
+		/*
+		 * if (!(nodes.containsKey(source) || nodes.containsKey(target))) {
+		 * System.out.println("Source or Target doesn't exist !"); return; }
+		 */
+		Channel chan = new Channel(str);
 
-		Channel chan = new Channel("NEW CHANNEL");
 		Channels.add(chan.getId(), chan);
-		Request req = new Request(source, target, chan.getId(), null);
+		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
+		req.setAsAnswer(false);
+		WaitingStruct.put(new String(source), new String(target));
 		sendRequest(req);
 		/**
 		 * here we need to know who we are waiting for. We also need to know the
 		 * id of the channel.
 		 */
-		WaitingStruct.put(source, target);
+
 		/**
 		 * this could be dangerous if we have some people waiting for one.
 		 */
 	}
 
 	static public void catchRequest(Request req) {
-      /**
+		/**
 		 * autor : a request has been catched by the ServerThread and it's the
 		 * duty of this method to deal with that.
 		 */
-      assert (req != null);
-            
-   
-      if (req.getTarget().equals(myNode.getId())) {
-         System.out.println("Request not for me !");
-         return;
-      }
-     
-   
-      System.out.println("BEFORE THE FIRST IF OK");
-      
-      if (WaitingStruct.containsKey( req.getSource() )) {
-         /**
-			 * we code the channel and send it.
-			 */
-    	  WaitingStruct.remove(req.getSource());
-    	  System.out.println("FIRST IF OK");
-         if (req.isAnAnswer()&&req.getAnswer()) {
-            /**
-			 * on envoi sa clef publique
-			 */
-        	 System.out.println("THE ANSWER IS YES!");
-            CryptoManager.keyExchangeProcess(Channels.get(req.getIdChan()), req.getKey());
-            send(new Agreement(CryptoManager.public_key, Channels.get(req.getIdChan())));
 
-         } else {
-            System.out.println("Request refused !");
-            return;
-         }
+		accept acceptation = new accept("");
 
-      } else {
+		assert (req != null);
 
-         Request answer = new Request(myNode.getId(), req.getSource(), req.getIdChan(), null);
-         sendRequest(answer);
-      }
-   }
+		String me = new String(myNode.getId());
+		String targ = new String(myNode.getId());
+
+		if (!me.contentEquals(new StringBuffer(targ))) {
+			System.out.println("Request not for me !");
+			return;
+		}
+
+		if (req.isAnAnswer()) {
+
+			if (WaitingStruct.containsKey(new String(req.getSource()))) {
+
+				WaitingStruct.remove(req.getSource());
+
+				if (req.getAnswer()) {
+
+					System.out.println("THE ANSWER IS YES!");
+					CryptoManager.keyExchangeProcess(Channels.get(req
+							.getIdChan()), req.getKey());
+					send(new Agreement(CryptoManager.public_key, Channels
+							.get(req.getIdChan())));
+
+				} else {
+					System.out.println("Request refused !");
+					return;
+				}
+
+			}
+		} else {
+			Request answer = new Request(myNode.getId(), req.getSource(), req
+					.getIdChan(), CryptoManager.public_key);
+
+			acceptation
+					.setNom(/* nodes.get(req.getSource()).getNickname() */"test");
+			acceptation.setVisible(true);
+
+			answer.setAsAnswer(true);
+			answer.setAnswer(true);
+			sendRequest(answer);
+		}
+	}
 
 	static public void sendRequest(Request req) {
 		/**
 		 * autor : el-indio here we simply send a request, as same as we do for
 		 * message.
 		 */
-		int i = 0;
+		if (friends.isEmpty()) {
+			System.out.println("YOU HAVE NO FRIENDS !");
+			return;
+		}
 
-		/* obtention de l'adresse par les friend node */
-		while (i < friends.size()) {
+		ListIterator<FriendNode> iter = friends.listIterator();
+
+		while (iter.hasNext()) {
 			Socket socket = null;
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
+			FriendNode friend = iter.next();
 
 			try {
-				socket = new Socket(((FriendNode) friends.get(i)).getAddress(),
-						Config.port);
+				System.out.println("Size of the friends list :"
+						+ friends.size());
+				System.out.println("address of next friend = "
+						+ friend.getAddress());
+
+				socket = new Socket(friend.getAddress(), Config.port);
+
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
+
 				out.writeObject(req);
 				out.flush();
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
+				friends.remove(friend);
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
-
-			if(!req.isAnAnswer()){
-				WaitingStruct.put(req.getSource(), req.getTarget());
-			}
-			
-			i++;
-
 		}
+
+		if (!req.isAnAnswer()) {
+			WaitingStruct.put(new String(req.getSource()), new String(req
+					.getTarget()));
+		}
+
+		/*
+		 * 
+		 * try { socket = new Socket(((FriendNode) friends.get(i)).getAddress(),
+		 * Config.port); out = new ObjectOutputStream(socket.getOutputStream());
+		 * in = new ObjectInputStream(socket.getInputStream());
+		 * out.writeObject(req); out.flush(); } catch (UnknownHostException e) {
+		 * e.printStackTrace(System.err); } catch (IOException e) {
+		 * e.printStackTrace(System.err); }
+		 * 
+		 * 
+		 * 
+		 * i++; }
+		 */
 
 	}
 
 	public static void addNode(Node n) {
 		if (!nodes.containsValue(n)) {
 			nodes.put(n.getId(), n);
+			System.out.println("Noded added");
 		}
-		System.out.println("Noded added");
+
 	}
 
 	public static void addChannel(Channel chan) {
 		if (!Channels.contains(chan)) {
 			Channels.add(chan.getId(), chan);
+			System.out.println("Channel added");
 		}
 	}
 
@@ -290,7 +324,7 @@ public class IDCManager {
 			friends.add(n);
 			Accueil.listJlist2.add(n.getNickname());
 			if (Accueil.listJlist2.isEmpty()) {
-				System.out.println("problemme");
+				System.out.println("problem");
 			}
 			Accueil.jList2.setListData(Accueil.listJlist2);
 		}

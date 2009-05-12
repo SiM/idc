@@ -41,11 +41,10 @@ public class ServerThread extends Thread {
 
          if (message.getClass().toString().equals("class idc.Message")) {
 
-            // Ici on fait quelque chose avec le message
-
-            // par exemple on l'affiche :
-            //System.out.println("PASSAGE DANS LE TEST");
-            System.out.println("message :" + ((Message) message).getMessage());
+        
+        	 if(((Message)message).isCiphered()){
+        		 
+        	 }
             Accueil.jtrep.get(0).append(((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
             

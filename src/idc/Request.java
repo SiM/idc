@@ -22,8 +22,10 @@ public class Request extends Object implements Serializable {
 		source=from;
 		target=to;
 		chan=id_chan;
-		answer=true;
+		answer=false;
+		isAnAnswer=false;
 		RSAPub=pub;
+		integrity();
 	}
 	
 	public void setAsAnswer(boolean bool){
@@ -40,10 +42,14 @@ public class Request extends Object implements Serializable {
 		integrity();
 		return answer;
 	}
-	
+	public void setAnswer(boolean bool){
+		integrity();
+		answer=bool;
+		integrity();
+	}
 	public byte[] getSource(){
 		integrity();
-		return new String(source).getBytes();
+		return source;
 	}
 	public PublicKey getKey(){
 		integrity();
@@ -57,7 +63,7 @@ public class Request extends Object implements Serializable {
 	
 	public byte[] getTarget(){
 		integrity();
-		return target;
+		return target.clone();
 	}
 	
 	private void writeObject(ObjectOutputStream stream) throws IOException {
@@ -66,8 +72,9 @@ public class Request extends Object implements Serializable {
 		stream.writeObject(target);
 		stream.writeBoolean(isAnAnswer);
 		stream.writeBoolean(answer);
-		stream.writeInt(chan);
 		stream.writeObject(RSAPub);
+		stream.writeInt(chan);
+		
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
@@ -75,8 +82,9 @@ public class Request extends Object implements Serializable {
 		target = (byte[]) stream.readObject();
 		isAnAnswer=stream.readBoolean();
 		answer=stream.readBoolean();
-		chan=stream.readInt();
 		RSAPub=(PublicKey)stream.readObject();
+		chan=stream.readInt();
+		
 		integrity();
 	}
 	
@@ -84,5 +92,6 @@ public class Request extends Object implements Serializable {
 		assert(chan>=0);
 		assert(source!=null);
 		assert(target!=null);
+		assert(RSAPub!=null);
 	}
 }
