@@ -4,6 +4,7 @@
  */
 package idc;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,9 +32,10 @@ public class BroadcastClient extends Thread {
 
 				// send request
 				byte[] buf = new byte[256];
-
-				buf = (Config.nickname + " " + new String(IDCManager.myNode.getId()))
+                                String id = HexBin.encode(IDCManager.myNode.getId());
+                                buf = (Config.nickname + " " + id)
 						.getBytes();
+                                //System.out.println("envoi : " + new String(buf));
 
 				InetAddress address = InetAddress.getByName("255.255.255.255");
 

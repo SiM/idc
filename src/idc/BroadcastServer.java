@@ -1,5 +1,6 @@
 package idc;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import java.io.IOException;
 import java.net.*;
 
@@ -44,11 +45,16 @@ public class BroadcastServer extends Thread {
 				//System.out.println("Broadcast received : " + dString);
 				
 				String[] d = dString.split(" ");
+				//System.out.println("nickname : " + d[0] + " ID : " + d[1].substring(0, 64));
+                                
+                                byte[] id;
+                                id = HexBin.decode(d[1].substring(0, 64));
+                                //System.out.println("ID recu : " + new String(id));
+                                
+				IDCManager.addLocalNode(new FriendNode(d[0], id, packet.getAddress()));
+				IDCManager.addNode(new String(id),new Node(d[0],id));
 				
-				IDCManager.addLocalNode(new FriendNode(d[0], d[1].getBytes(), packet.getAddress()));
-				IDCManager.addNode(d[1],new Node(d[0],d[1].getBytes()));
-				
-				IDCManager.enQueue(new Node(d[0], d[1].getBytes()),packet.getAddress());
+				IDCManager.enQueue(new Node(d[0], id),packet.getAddress());
 
 			} catch (Exception e) {
 				e.printStackTrace(System.err);
