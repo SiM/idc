@@ -48,7 +48,7 @@ public class IDCManager {
 		friends = new ArrayList<FriendNode>(10);
 		Channels = new Hashtable<String,Channel>(100, 100);
 		myNode = new Node(Config.nickname, CryptoManager.getId());
-		System.out.println("MON ID : " + new String(myNode.getId()));
+		System.out.println("MON ID : " + HexBin.encode(myNode.getId()));
 
 		WaitingStruct = new Hashtable<String, String>(100, 100);
 		gate = new Hashtable<Node, Queue<InetAddress>>(100, 100);
