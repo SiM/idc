@@ -26,7 +26,7 @@ public class IDCManager {
    // réseau
    static private Hashtable<String, String> WaitingStruct;
    static public List friends; // Connexions directes
-   static private Vector<Channel> Channels;
+   static private Hashtable<String, Channel> Channels;
    static private Hashtable<Node, Queue<InetAddress>> gate;
    static private boolean server = false;
    static private boolean broadcastserver = false;
@@ -37,8 +37,8 @@ public class IDCManager {
    public IDCManager() {
       nodes = new Hashtable<String, Node>(100, 100);
       friends = new ArrayList<FriendNode>(10);
-      Channels = new Vector<Channel>(100, 100);
-      Channels.setSize(100);
+      Channels = new Hashtable<String, Channel>(100, 100);
+      
       myNode = new Node(Config.nickname, CryptoManager.getId());
       System.out.println("MON ID : " + new String(myNode.getId()));
 
@@ -179,7 +179,7 @@ public class IDCManager {
        */
       Channel chan = new Channel(str);
 
-      Channels.add(chan.getId(), chan);
+      Channels.put(new String(chan.getId()), chan);
       Request req = new Request(source, target, chan.getId(), CryptoManager.public_key);
       req.setAsAnswer(false);
       WaitingStruct.put(new String(source), new String(target));
@@ -257,7 +257,7 @@ public class IDCManager {
 
    public static void addChannel(Channel chan) {
       if (!Channels.contains(chan)) {
-         Channels.add(chan.getId(), chan);
+         Channels.put(new String(chan.getId()), chan);
          System.out.println("Channel added");
       }
    }
