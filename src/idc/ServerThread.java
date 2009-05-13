@@ -47,13 +47,17 @@ public class ServerThread extends Thread {
         
         	 if(((Message)message).isCiphered()){
         		 
+        		// IDCManager.getChannels().get(((Message)message).getIdChan());
         	 }
             Accueil.jtrep.get(0).append(((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
-
+            
          } else if (message.getClass().toString().equals("class idc.Request")) {
-            Request req = (Request) message;
-            System.out.println("RESQUEST CATCHED !");
+            
+        	 Request req = (Request) message;
+             System.out.println("RESQUEST CATCHED !");
+     
+
             if (req.getKey() != null) {
                if (!CryptoManager.shasum(req.getKey().getEncoded()).equals(req.getSource())) {
                   // si la clef publique passée en requete ne correspond pas à l'id on avertie
@@ -65,6 +69,7 @@ public class ServerThread extends Thread {
                   JOptionPane.showMessageDialog(null, "<html>Clef publique ajoutée.<br> <small>ID : " + HexBin.encode(req.getSource()));
                   CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
                }
+
             }
 
             IDCManager.catchRequest(((Request) message));
@@ -72,6 +77,7 @@ public class ServerThread extends Thread {
          } else if (message.getClass().toString().equals("class idc.Agreement")) {
 
             Channel chan = CryptoManager.decryptChannel((Agreement) message);
+            
             IDCManager.addChannel(chan);
          }
 

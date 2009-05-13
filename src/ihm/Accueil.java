@@ -85,18 +85,7 @@ public class Accueil extends javax.swing.JFrame {
          public void mouseExited(MouseEvent arg0) {
          }
       });
-   /* jList1.addListSelectionListener(new java.awt.event.MouseListener(){
-   public void mouseClicked(MouseEvent arg0) {
-   }
-   public void mousePressed(MouseEvent arg0) {
-   }
-   public void mouseReleased(MouseEvent arg0) {
-   }
-   public void mouseEntered(MouseEvent arg0) {
-   }
-   public void mouseExited(MouseEvent arg0) {
-   }
-   });*/
+
    }
 
    /** This method is called from within the constructor to
@@ -187,7 +176,7 @@ public class Accueil extends javax.swing.JFrame {
 
       jMenuBar1.add(jMenu3);
 
-//        jList1.setModel(new javax.swing.AbstractListModel() {
+      //jList1.setModel(new javax.swing.AbstractListModel() {
       //String[] strings = { "<html><span style=\"color: red\">Vide</span></html>"};
       //public int getSize() { return strings.length; }
       //public Object getElementAt(int i) { return strings[i]; }

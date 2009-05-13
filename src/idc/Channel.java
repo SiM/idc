@@ -15,6 +15,7 @@ import javax.crypto.interfaces.*;
 import javax.crypto.spec.*;
 import java.io.*;
 
+
 public class Channel extends Object implements Serializable, Cipherable {
 
    private byte[] id;
@@ -236,4 +237,5 @@ public class Channel extends Object implements Serializable, Cipherable {
       }
       integrity();
    }
+
 }

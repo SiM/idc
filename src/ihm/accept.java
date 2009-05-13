@@ -6,15 +6,20 @@
 
 package ihm;
 
+import idc.*;
+
 /**
  *
  * @author  yoann
  */
 public class accept extends javax.swing.JDialog {
     
+	private Request request;
+	public static int click=-1;
     /** Creates new form accept */
-    public accept(String pseudo) {
+    public accept(String pseudo,Request req) {
         initComponents(pseudo);
+        request=req;
     }
     
     public void setNom(String pseudo)
@@ -94,14 +99,18 @@ public class accept extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);  
+        
+    	request.setAnswer(true);
+    	setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+    	click=1;
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
+    	request.setAnswer(false);
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);  
+        click=1;
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
     

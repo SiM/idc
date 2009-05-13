@@ -47,10 +47,11 @@ public class FriendNode extends Node {
          in = new ObjectInputStream(socket.getInputStream());
          out.flush();
       } catch (UnknownHostException e) {
-         IDCManager.friends.remove(this);
+    	  IDCManager.friends.remove(this);
          e.printStackTrace(System.err);
+         
       } catch (IOException e) {
-         IDCManager.friends.remove(this);
+    	  IDCManager.friends.remove(this);
          e.printStackTrace(System.err);
       }
 
