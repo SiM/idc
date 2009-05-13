@@ -31,12 +31,19 @@ public class BroadcastClient extends Thread {
 				DatagramSocket sock = new DatagramSocket();
 
 				// send request
-				byte[] buf = new byte[256];
-                                String id = HexBin.encode(IDCManager.myNode.getId());
-                                buf = (Config.nickname + " " + id)
-						.getBytes();
-                                //System.out.println("envoi : " + new String(buf));
-
+                                byte[] nick = IDCManager.myNode.getNickname().getBytes();
+                                byte[] id = IDCManager.myNode.getId(); // size 32 bytes, 256 bits
+                                        
+                                byte[] buf = new byte[nick.length + id.length];
+                                
+                                for (int j = 0; j < nick.length; j++) {
+                                 buf[j] = nick[j];
+                                }
+                                
+                                for (int j = nick.length; j < buf.length; j++) {
+                                 buf[j] = id[j - nick.length];
+                                }
+ 
 				InetAddress address = InetAddress.getByName("255.255.255.255");
 
 				DatagramPacket packet = new DatagramPacket(buf, buf.length,
