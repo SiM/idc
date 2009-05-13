@@ -4,6 +4,7 @@
  */
 package idc;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -40,7 +41,7 @@ public class IDCManager {
       Channels = new Hashtable<String, Channel>(100, 100);
       
       myNode = new Node(Config.nickname, CryptoManager.getId());
-      System.out.println("MON ID : " + new String(myNode.getId()));
+      System.out.println("MON ID : " + HexBin.encode(myNode.getId()));
 
       WaitingStruct = new Hashtable<String, String>(100, 100);
       gate = new Hashtable<Node, Queue<InetAddress>>(100, 100);
@@ -125,40 +126,12 @@ public class IDCManager {
          ObjectOutputStream out = null;
          ObjectInputStream in = null;
          FriendNode friend = iter.next();
-         try {
-            System.out.println("Size of the friends list :" + friends.size());
-            System.out.println("address of next friend = " + friend.getAddress());
-
-            socket = new Socket(friend.getAddress(), Config.port);
-
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-
-            if (message.getClass().toString().equals("class idc.Agreement")) {
-               out.writeObject((Agreement) message);
-            }
-            if (message.getClass().toString().equals("class idc.Message")) {
-               out.writeObject((Message) message);
-            }
-            if (message.getClass().toString().equals("class idc.Request")) {
-               out.writeObject((Request) message);
-            }
-            out.flush();
-         } catch (UnknownHostException e) {
-            e.printStackTrace(System.err);
-            friends.remove(friend);
-         } catch (IOException e) {
-            e.printStackTrace(System.err);
-         }
-
+         friend.send(message);
 
          if (message.getClass().toString().equals("class idc.Request") && !((Request) message).isAnAnswer()) {
             WaitingStruct.put(new String(((Request) message).getSource()), new String(((Request) message).getTarget()));
          }
-
-
       }
-
    }
 
    /* envoie un message à un noeud du réseau */
@@ -264,7 +237,8 @@ public class IDCManager {
 
    public static void addLocalNode(FriendNode n) {
       if (!friends.contains(n)) {
-         System.out.println("nom: " + n.getNickname() + "- ID : " + new String(n.getId()) + " adresse : " + n.getAddress());
+         String id = HexBin.encode(n.getId());
+         System.out.println("Ajout friendnode : " + n.getNickname() + " ID : " + id + " (" + n.getAddress() + ")");
          friends.add(n);
       }
    }
