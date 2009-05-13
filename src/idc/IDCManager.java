@@ -31,7 +31,7 @@ public class IDCManager {
 
 	static public List friends; // Connexions directes
 
-	static private Vector<Channel> Channels;
+	static private Hashtable<String, Channel> Channels;
 
 	static private Hashtable<Node, Queue<InetAddress>> gate;
 
@@ -46,8 +46,7 @@ public class IDCManager {
 	public IDCManager() {
 		nodes = new Hashtable<String, Node>(100, 100);
 		friends = new ArrayList<FriendNode>(10);
-		Channels = new Vector<Channel>(100, 100);
-		Channels.setSize(100);
+		Channels = new Hashtable<String,Channel>(100, 100);
 		myNode = new Node(Config.nickname, CryptoManager.getId());
 		System.out.println("MON ID : " + new String(myNode.getId()));
 
@@ -135,12 +134,12 @@ public class IDCManager {
 		 * System.out.println("Source or Target doesn't exist !"); return; }
 		 */
 		Channel chan = new Channel(str);
-
-		Channels.add(chan.getId(), chan);
+		Channels.put(new String(chan.getId()), chan);
+		
 		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
 		req.setAsAnswer(false);
 		WaitingStruct.put(new String(source), new String(target));
-		sendRequest(req);
+		send(req);
 		/**
 		 * here we need to know who we are waiting for. We also need to know the
 		 * id of the channel.
@@ -207,7 +206,7 @@ public class IDCManager {
 			acceptation.setNom("test"/*nodes.get( new String(myNode.getId()) ).getNickname()*/);
 			acceptation.setVisible(true);
 			while(accept.click == -1){};
-			sendRequest(answer);
+			send(answer);
 		}
 	}
  /* envoie un message au réseau */
@@ -250,7 +249,7 @@ public class IDCManager {
 
 	public static void addChannel(Channel chan) {
 		if (!Channels.contains(chan)) {
-			Channels.add(chan.getId(), chan);
+			Channels.put(new String(chan.getId()), chan);
 			System.out.println("Channel added");
 		}
 	}

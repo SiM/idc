@@ -47,7 +47,7 @@ public class ChannelTest {
 		System.out.println("getId");
 		Channel instance = null;
 		int expResult = 0;
-		int result = instance.getId();
+		byte[] result = instance.getId();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to
 		// fail.

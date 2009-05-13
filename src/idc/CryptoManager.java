@@ -31,9 +31,9 @@ public class CryptoManager {
 
 	static private byte[] id;
 	
-	static private HashMap<byte[], PublicKey> pubKeyMap;
+	static public HashMap<byte[], PublicKey> pubKeyMap;
 	
-        static public  byte[] shasum(byte[] in) {
+    static public byte[] shasum(byte[] in) {
 		try {
 			MessageDigest shasum = MessageDigest.getInstance("SHA-256");
 			return shasum.digest(in);
@@ -203,7 +203,7 @@ public class CryptoManager {
 		
 	}
 	
-	public void SignMessage(Message msg) {
+	static public void SignMessage(Message msg) {
 		integrity();
 
 		try {

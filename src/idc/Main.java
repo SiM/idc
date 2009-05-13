@@ -28,6 +28,8 @@ public class Main {
 				
 		
 		IDCManager.askForRequest(IDCManager.myNode.getId(), IDCManager.myNode.getId(), "LODI chan");
+	
+			 
 	}
 
 }

@@ -10,6 +10,7 @@ import java.net.*;
 import java.security.PublicKey;
 import java.io.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
@@ -52,7 +53,10 @@ public class ServerThread extends Thread {
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
             
          } else if (message.getClass().toString().equals("class idc.Request")) {
-            System.out.println("RESQUEST CATCHED !");
+            
+        	 Request req = (Request) message;
+             System.out.println("RESQUEST CATCHED !");
+     
 
             if (req.getKey() != null) {
                if (!CryptoManager.shasum(req.getKey().getEncoded()).equals(req.getSource())) {
