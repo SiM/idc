@@ -4,6 +4,7 @@
  */
 package idc;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,6 +21,7 @@ import ihm.*;
  * @author fridim
  */
 public class IDCManager {
+
 
 	static private Hashtable<String, Node> nodes; // tous les noeuds connus du
 
@@ -114,58 +116,7 @@ public class IDCManager {
 		server = bool;
 	}
 
-	/* envoie un message au réseau */
-	static public void send(Object message) {
-		/**
-		 * on envoi pas le message en utilisant le broadcastServer à tout le
-		 * monde on envoi sur le port server de l'application.
-		 * 
-		 */
-		if (friends.isEmpty()) {
-			System.out.println("YOU HAVE NO FRIENDS !");
-			return;
-		}
-
-		ListIterator<FriendNode> iter = friends.listIterator();
-		/* obtention de l'adresse par les friend node */
-
-		while (iter.hasNext()) {
-			Socket socket = null;
-			ObjectOutputStream out = null;
-			ObjectInputStream in = null;
-			FriendNode friend = iter.next();
-			try {
-				System.out.println("Size of the friends list :"
-						+ friends.size());
-				System.out.println("address of next friend = "
-						+ friend.getAddress());
-
-				socket = new Socket(friend.getAddress(), Config.port);
-
-				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());
-
-				if(message.getClass().toString().equals("class idc.Agreement"))out.writeObject((Agreement) message);
-				if(message.getClass().toString().equals("class idc.Message"))out.writeObject((Message) message);
-				if(message.getClass().toString().equals("class idc.Request"))out.writeObject((Request) message);
-
-				out.flush();
-			} catch (UnknownHostException e) {
-				e.printStackTrace(System.err);
-				friends.remove(friend);
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
-
-			if(message.getClass().toString().equals("class idc.Request")&&!((Request)message).isAnAnswer()){
-			  
-			  WaitingStruct.put(new String(((Request)message).getSource()), new String(((Request)message).getTarget()));
-			  
-			}
-
-		}
-
-	}
+	
 
 	/* envoie un message à un noeud du réseau */
 	static public void send(Node n, Message message) {
@@ -259,66 +210,32 @@ public class IDCManager {
 			sendRequest(answer);
 		}
 	}
+ /* envoie un message au réseau */
+   static public void send(Object message) {
+      /**
+       * on envoi pas le message en utilisant le broadcastServer à tout le
+       * monde on envoi sur le port server de l'application.
+       * 
+       */
+      if (friends.isEmpty()) {
+         System.out.println("YOU HAVE NO FRIENDS !");
+         return;
+      }
 
-	static public void sendRequest(Request req) {
-		/**
-		 * autor : el-indio here we simply send a request, as same as we do for
-		 * message.
-		 */
-		if (friends.isEmpty()) {
-			System.out.println("YOU HAVE NO FRIENDS !");
-			return;
-		}
+      ListIterator<FriendNode> iter = friends.listIterator();
+      /* obtention de l'adresse par les friend node */
+      while (iter.hasNext()) {
+         Socket socket = null;
+         ObjectOutputStream out = null;
+         ObjectInputStream in = null;
+         FriendNode friend = iter.next();
+         friend.send(message);
 
-		ListIterator<FriendNode> iter = friends.listIterator();
-
-		while (iter.hasNext()) {
-			Socket socket = null;
-			ObjectOutputStream out = null;
-			ObjectInputStream in = null;
-			FriendNode friend = iter.next();
-
-			try {
-				System.out.println("Size of the friends list :"
-						+ friends.size());
-				System.out.println("address of next friend = "
-						+ friend.getAddress());
-
-				socket = new Socket(friend.getAddress(), Config.port);
-
-				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());
-
-				out.writeObject(req);
-				out.flush();
-			} catch (UnknownHostException e) {
-				e.printStackTrace(System.err);
-				friends.remove(friend);
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
-		}
-
-		if (!req.isAnAnswer()) {
-			WaitingStruct.put(new String(req.getSource()), new String(req
-					.getTarget()));
-		}
-
-		/*
-		 * 
-		 * try { socket = new Socket(((FriendNode) friends.get(i)).getAddress(),
-		 * Config.port); out = new ObjectOutputStream(socket.getOutputStream());
-		 * in = new ObjectInputStream(socket.getInputStream());
-		 * out.writeObject(req); out.flush(); } catch (UnknownHostException e) {
-		 * e.printStackTrace(System.err); } catch (IOException e) {
-		 * e.printStackTrace(System.err); }
-		 * 
-		 * 
-		 * 
-		 * i++; }
-		 */
-
-	}
+         if (message.getClass().toString().equals("class idc.Request") && !((Request) message).isAnAnswer()) {
+            WaitingStruct.put(new String(((Request) message).getSource()), new String(((Request) message).getTarget()));
+         }
+      }
+   }
 
 	public static void addNode(String str,Node n) {
 		if (! nodes.containsKey(str)) {
@@ -338,12 +255,15 @@ public class IDCManager {
 		}
 	}
 
-	public static void addLocalNode(FriendNode n) {
-		if (!friends.contains(n)) {
-			System.out.println("nom: " + n.getNickname() + "- ID : "
-					+ new String(n.getId()) + " adresse : " + n.getAddress());
-			friends.add(n);
-			
-		}
-	}
+  
+
+
+  public static void addLocalNode(FriendNode n) {
+    if (!friends.contains(n)) {
+      String id = HexBin.encode(n.getId());
+      System.out.println("Ajout friendnode : " + n.getNickname() + " ID : " + id + " (" + n.getAddress() + ")");
+      friends.add(n);
+    }
+  }
+
 }

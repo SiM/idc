@@ -4,6 +4,7 @@
  */
 package idc;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import ihm.*;
 import java.net.*;
 import java.security.PublicKey;
@@ -11,6 +12,7 @@ import java.io.*;
 
 import javax.swing.JTextArea;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import static org.junit.Assert.*;
 
 /**
@@ -51,8 +53,19 @@ public class ServerThread extends Thread {
             
          } else if (message.getClass().toString().equals("class idc.Request")) {
             System.out.println("RESQUEST CATCHED !");
-        	if (((Request) message).getKey() != null) {
-               CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
+
+            if (req.getKey() != null) {
+               if (!CryptoManager.shasum(req.getKey().getEncoded()).equals(req.getSource())) {
+                  // si la clef publique passée en requete ne correspond pas à l'id on avertie
+                  JOptionPane.showMessageDialog(null, "<html>Attention, la clef RSA et l'ID ne correspondent pas :<br><small> ID : " + HexBin.encode(req.getSource()));
+               }
+
+               if (!CryptoManager.pubKeyMap.containsKey(req.getSource())) {
+                  // on ajoute si la clef n'existe pas et on avertit
+                  JOptionPane.showMessageDialog(null, "<html>Clef publique ajoutée.<br> <small>ID : " + HexBin.encode(req.getSource()));
+                  CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
+               }
+
             }
 
             IDCManager.catchRequest(((Request) message));

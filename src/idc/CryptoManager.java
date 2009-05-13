@@ -33,7 +33,7 @@ public class CryptoManager {
 	
 	static private HashMap<byte[], PublicKey> pubKeyMap;
 	
-        private byte[] shasum(byte[] in) {
+        static public  byte[] shasum(byte[] in) {
 		try {
 			MessageDigest shasum = MessageDigest.getInstance("SHA-256");
 			return shasum.digest(in);

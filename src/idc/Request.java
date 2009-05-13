@@ -14,10 +14,10 @@ public class Request extends Object implements Serializable {
 	private byte[] source;
 	private boolean isAnAnswer;
 	private boolean answer;
-	private int chan;
+	private byte[] chan;
 	private PublicKey RSAPub;
 	
-	public Request(byte[] from,byte[] to,int id_chan,PublicKey pub){
+	public Request(byte[] from,byte[] to, byte[] id_chan,PublicKey pub){
 		super();
 		source=from;
 		target=to;
@@ -56,7 +56,7 @@ public class Request extends Object implements Serializable {
 		return RSAPub;
 	}
 	
-	public int getIdChan(){
+	public byte[] getIdChan(){
 		integrity();
 		return chan;
 	}
@@ -73,7 +73,7 @@ public class Request extends Object implements Serializable {
 		stream.writeBoolean(isAnAnswer);
 		stream.writeBoolean(answer);
 		stream.writeObject(RSAPub);
-		stream.writeInt(chan);
+		stream.writeObject(chan);
 		
 	}
 
@@ -83,13 +83,13 @@ public class Request extends Object implements Serializable {
 		isAnAnswer=stream.readBoolean();
 		answer=stream.readBoolean();
 		RSAPub=(PublicKey)stream.readObject();
-		chan=stream.readInt();
+		chan=(byte[]) stream.readObject();
 		
 		integrity();
 	}
 	
 	public void integrity(){
-		assert(chan>=0);
+		assert(chan.length>=0);
 		assert(source!=null);
 		assert(target!=null);
 		assert(RSAPub!=null);

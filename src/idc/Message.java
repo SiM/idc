@@ -27,7 +27,7 @@ public class Message extends Object implements Serializable, Cipherable {
 
 	private boolean isCiphered;
 
-	private int chan;
+	private byte[] chan;
 	
 	private byte[] data;
 
@@ -39,7 +39,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		super();
 		this.sender = sender;
 		date = new Date();
-		chan=0;
+		chan=new byte[0];
 		data = message.getBytes();
 		id = shasum(new String(data) + date.getTime() + sender.getId());
 		digest = shasum(new String(data));
@@ -47,7 +47,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		integrity();
 	}
 
-	public Message(String message, Node sender,int idchan) {
+	public Message(String message, Node sender,byte[] idchan) {
 		super();
 		this.sender = sender;
 		date = new Date();
@@ -123,18 +123,19 @@ public class Message extends Object implements Serializable, Cipherable {
 		integrity();
 		stream.writeObject(sender);
 		stream.writeObject(date);
-		stream.writeInt(chan);
+                stream.writeObject(chan);
 		stream.writeBoolean(isCiphered);
 		stream.writeObject(data);
 		stream.writeObject(digest);
 		stream.writeObject(id);
+                
 	}
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
 		sender = (Node) stream.readObject();
 		date = (Date) stream.readObject();
-		chan=stream.readInt();
+                chan = (byte[]) stream.readObject();
 		isCiphered=stream.readBoolean();
 		data = (byte[]) stream.readObject();
 		digest = (byte[]) stream.readObject();
@@ -149,7 +150,7 @@ public class Message extends Object implements Serializable, Cipherable {
 		assert (data.length > 0);
 		assert (digest.length > 0);
 		assert (digest != null);
-		assert(chan>=0);
+		assert(chan != null);
 
 	}
 }

@@ -10,15 +10,11 @@ import idc.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
-import javax.swing.JList;
 import javax.swing.JTextArea;
 
 /**
@@ -548,7 +544,6 @@ class ListData extends AbstractListModel {
       fireContentsChanged(this, 0, friends.size());
    }
 }
-
 
 class refreshNicknameList extends Thread {
 
