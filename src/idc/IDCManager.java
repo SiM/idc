@@ -21,7 +21,7 @@ import ihm.*;
  */
 public class IDCManager {
 
-	static private HashMap<byte[], Node> nodes; // tous les noeuds connus du
+	static private HashMap<String, Node> nodes; // tous les noeuds connus du
 
 	// réseau
 
@@ -41,8 +41,7 @@ public class IDCManager {
 	static public Node myNode;
 
 	public IDCManager() {
-		nodes = new HashMap<byte[], Node>(100, 100);
-
+		nodes = new HashMap<String, Node>(100, 100);
 		friends = new ArrayList<FriendNode>(10);
 		Channels = new Vector<Channel>(100, 100);
 		Channels.setSize(100);
@@ -91,7 +90,7 @@ public class IDCManager {
 		return friends;
 	}
 
-	static public HashMap<byte[], Node> getNodeStruct() {
+	static public HashMap<String, Node> getNodeStruct() {
 		return nodes;
 	}
 
@@ -217,8 +216,7 @@ public class IDCManager {
 				if (req.getAnswer()) {
 
 					System.out.println("THE ANSWER IS YES!");
-					CryptoManager.keyExchangeProcess(Channels.get(req
-							.getIdChan()), req.getKey());
+					CryptoManager.keyExchangeProcess(Channels.get(req.getIdChan()), req.getKey());
 					send(new Agreement(CryptoManager.public_key, Channels
 							.get(req.getIdChan())));
 
@@ -232,8 +230,14 @@ public class IDCManager {
 			Request answer = new Request(myNode.getId(), req.getSource(), req
 					.getIdChan(), CryptoManager.public_key);
 
-			acceptation
-					.setNom(/* nodes.get(req.getSource()).getNickname() */"test");
+			assert(nodes!=null);
+			
+			
+			
+			
+			//System.out.println("name of the requester :"+nodes.get("{"+new String( req.getSource())).getNickname());
+			
+			acceptation.setNom(nodes.get( new String(myNode.getId()) ).getNickname());
 			acceptation.setVisible(true);
 
 			answer.setAsAnswer(true);
@@ -302,10 +306,13 @@ public class IDCManager {
 
 	}
 
-	public static void addNode(Node n) {
-		if (!nodes.containsValue(n)) {
-			nodes.put(n.getId(), n);
+	public static void addNode(String str,Node n) {
+		if (! nodes.containsKey(str)) {
+			
+			nodes.put(str, n);
+			
 			System.out.println("Noded added");
+		
 		}
 
 	}
