@@ -10,9 +10,6 @@ import idc.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Vector;
 import javax.swing.JTextArea;
 
@@ -107,20 +104,8 @@ public class Accueil extends javax.swing.JFrame {
       jTextField1 = new javax.swing.JTextField();
       jScrollPane4 = new javax.swing.JScrollPane();
       jEditorPane1 = new javax.swing.JEditorPane();
-      jPopupMenu1 = new javax.swing.JPopupMenu();
-      jPopupMenu2 = new javax.swing.JPopupMenu();
-      jPopupMenu3 = new javax.swing.JPopupMenu();
-      jPopupMenu4 = new javax.swing.JPopupMenu();
+
       jFormattedTextField1 = new javax.swing.JFormattedTextField();
-      jMenuBar1 = new javax.swing.JMenuBar();
-      jMenu1 = new javax.swing.JMenu();
-      jMenuItem1 = new javax.swing.JMenuItem();
-      jMenuItem6 = new javax.swing.JMenuItem();
-      jMenuItem2 = new javax.swing.JMenuItem();
-      jMenu3 = new javax.swing.JMenu();
-      jMenuItem7 = new javax.swing.JMenuItem();
-      jMenuItem8 = new javax.swing.JMenuItem();
-      jMenuItem9 = new javax.swing.JMenuItem();
       jScrollPane1 = new javax.swing.JScrollPane();
       jList1 = new javax.swing.JList();
       jButton1 = new javax.swing.JButton();
@@ -133,11 +118,11 @@ public class Accueil extends javax.swing.JFrame {
       jButton2 = new javax.swing.JButton();
       jButton3 = new javax.swing.JButton();
       jButton4 = new javax.swing.JButton();
-      jMenuBar2 = new javax.swing.JMenuBar();
+      jMenuBar1 = new javax.swing.JMenuBar();
+      jMenu1 = new javax.swing.JMenu();
+      jMenuItem1 = new javax.swing.JMenuItem();
+      jMenuItem2 = new javax.swing.JMenuItem();
       jMenu2 = new javax.swing.JMenu();
-      jMenuItem10 = new javax.swing.JMenuItem();
-      jMenuItem4 = new javax.swing.JMenuItem();
-      jMenu4 = new javax.swing.JMenu();
       jMenuItem11 = new javax.swing.JMenuItem();
       jMenuItem12 = new javax.swing.JMenuItem();
       jMenuItem13 = new javax.swing.JMenuItem("À propos");
@@ -152,31 +137,7 @@ public class Accueil extends javax.swing.JFrame {
       jFormattedTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
       jFormattedTextField1.setText("Entrez votre texte ici...");
 
-      jMenu1.setText("Fichier");
-
-      jMenuItem1.setText("Options...");
-      jMenu1.add(jMenuItem1);
-
-      jMenuItem6.setText("Gérer les connexions...");
-      jMenu1.add(jMenuItem6);
-
-      jMenuItem2.setText("Quitter");
-      jMenu1.add(jMenuItem2);
-
-      jMenuBar1.add(jMenu1);
-
-      jMenu3.setText("?");
-
-      jMenuItem7.setText("Manuel");
-      jMenu3.add(jMenuItem7);
-
-      jMenuItem8.setText("FAQ");
-      jMenu3.add(jMenuItem8);
-
-      jMenuItem9.setText("A propos");
-      jMenu3.add(jMenuItem9);
-
-      jMenuBar1.add(jMenu3);
+      
 
 //        jList1.setModel(new javax.swing.AbstractListModel() {
       //String[] strings = { "<html><span style=\"color: red\">Vide</span></html>"};
@@ -273,25 +234,25 @@ public class Accueil extends javax.swing.JFrame {
          }
       });
 
-      jMenu2.setText("Fichier");
+      jMenu1.setText("Fichier");
 
-      jMenuItem10.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-      jMenuItem10.setText("Gérer les connexions...");
-      jMenu2.add(jMenuItem10);
+      jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+      jMenuItem1.setText("Gérer les connexions...");
+      jMenu1.add(jMenuItem1);
 
-      jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-      jMenuItem4.setText("Quitter");
-      jMenu2.add(jMenuItem4);
+      jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+      jMenuItem2.setText("Quitter");
+      jMenu1.add(jMenuItem2);
 
-      jMenuBar2.add(jMenu2);
+      jMenuBar1.add(jMenu1);
 
-      jMenu4.setText("?");
+      jMenu2.setText("?");
 
       jMenuItem11.setText("Manuel");
-      jMenu4.add(jMenuItem11);
+      jMenu2.add(jMenuItem11);
 
       jMenuItem12.setText("FAQ");
-      jMenu4.add(jMenuItem12);
+      jMenu2.add(jMenuItem12);
 
       jMenuItem13.addMouseListener(new java.awt.event.MouseAdapter() {
 
@@ -299,11 +260,11 @@ public class Accueil extends javax.swing.JFrame {
             jMenuItem13MousePressed(evt);
          }
       });
-      jMenu4.add(jMenuItem13);
+      jMenu2.add(jMenuItem13);
 
-      jMenuBar2.add(jMenu4);
+      jMenuBar1.add(jMenu2);
 
-      setJMenuBar(jMenuBar2);
+      setJMenuBar(jMenuBar1);
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -315,6 +276,11 @@ public class Accueil extends javax.swing.JFrame {
       jList1.setListData(listJlist1);
       jtrep.add(new JTextArea(""));
       pack();
+
+      // Appel du pop-up pour entrer son pseudo, avant le lancement d'IDCManager
+      Pseudo ps = new Pseudo(null, "Bienvenue sur IDC", true);
+      System.out.println("nouveau pseudo : " +ps.getPseudo());
+      Config.nickname = ps.getPseudo();
 
       crypto = new CryptoManager();
       manager = new IDCManager();
@@ -457,6 +423,8 @@ public class Accueil extends javax.swing.JFrame {
    private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
    // TODO add your handling code here:
    }//GEN-LAST:event_jTextArea1MouseClicked
+
+
    private void jMenuItem13SelectionBouton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem13SelectionBouton
       // TODO add your handling code here:
       //About temp = new About();
@@ -496,25 +464,12 @@ public class Accueil extends javax.swing.JFrame {
    public static javax.swing.JList jList2;
    private javax.swing.JMenu jMenu1;
    private javax.swing.JMenu jMenu2;
-   private javax.swing.JMenu jMenu3;
-   private javax.swing.JMenu jMenu4;
    private javax.swing.JMenuBar jMenuBar1;
-   private javax.swing.JMenuBar jMenuBar2;
    private javax.swing.JMenuItem jMenuItem1;
-   private javax.swing.JMenuItem jMenuItem10;
    private javax.swing.JMenuItem jMenuItem11;
    private javax.swing.JMenuItem jMenuItem12;
    private javax.swing.JMenuItem jMenuItem13;
    private javax.swing.JMenuItem jMenuItem2;
-   private javax.swing.JMenuItem jMenuItem4;
-   private javax.swing.JMenuItem jMenuItem6;
-   private javax.swing.JMenuItem jMenuItem7;
-   private javax.swing.JMenuItem jMenuItem8;
-   private javax.swing.JMenuItem jMenuItem9;
-   private javax.swing.JPopupMenu jPopupMenu1;
-   private javax.swing.JPopupMenu jPopupMenu2;
-   private javax.swing.JPopupMenu jPopupMenu3;
-   private javax.swing.JPopupMenu jPopupMenu4;
    private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JScrollPane jScrollPane2;
    private javax.swing.JScrollPane jScrollPane3;
