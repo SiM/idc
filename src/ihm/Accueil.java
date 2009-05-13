@@ -39,7 +39,7 @@ public class Accueil extends javax.swing.JFrame {
             if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                if (!jFormattedTextField1.getText().isEmpty()) {
                   String dial = new String(jFormattedTextField1.getText());
-                  dial = "[hh:mm] " + Config.nickname + " : " + dial + "\n";
+                  dial = Config.nickname + " : " + dial + "\n";
 
                   manager.send(new Message(dial, IDCManager.myNode));
                   jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
@@ -291,7 +291,7 @@ public class Accueil extends javax.swing.JFrame {
 
       if (!jFormattedTextField1.getText().isEmpty()) {
          String dial = new String(jFormattedTextField1.getText());
-         dial = "[hh:mm] " + Config.nickname + " : " + dial + "\n";
+         dial = Config.nickname + " : " + dial + "\n";
          manager.send(new Message(dial, IDCManager.myNode));
          jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
          jFormattedTextField1.setText("");

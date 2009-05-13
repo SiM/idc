@@ -9,6 +9,16 @@ import java.net.*;
 import java.security.PublicKey;
 import java.io.*;
 
+import java.util.Date;
+import java.util.Calendar;
+
+import java.text.Format;
+import java.text.DateFormat;
+
+
+import java.lang.String;
+
+
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
@@ -25,6 +35,13 @@ public class ServerThread extends Thread {
    public ServerThread(Socket socket) {
       this.socket = socket;
       integrity();
+   }
+
+   public String getDate() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+       return ("["+hour+":"+minute+"]");
    }
 
    public void run() {
@@ -47,7 +64,7 @@ public class ServerThread extends Thread {
             // par exemple on l'affiche :
             //System.out.println("PASSAGE DANS LE TEST");
             System.out.println("message :" + ((Message) message).getMessage());
-            Accueil.jtrep.get(0).append(((Message) message).getMessage());
+            Accueil.jtrep.get(0).append(getDate()+((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
 
          } else if (message.getClass().toString().equals("class idc.Request")) {
