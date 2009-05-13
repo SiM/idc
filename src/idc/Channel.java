@@ -80,7 +80,7 @@ public class Channel extends Object implements Serializable,Cipherable{
 		
 		integrity();
 		
-		// stream.writeObject(isCiphered);
+
 		stream.writeInt(id);
 		stream.writeObject(nodes);
 		stream.writeUTF(name);

@@ -9,7 +9,6 @@ import java.net.*;
 import java.security.PublicKey;
 import java.io.*;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import static org.junit.Assert.*;
@@ -45,24 +44,15 @@ public class ServerThread extends Thread {
         
         	 if(((Message)message).isCiphered()){
         		 
+        		// IDCManager.getChannels().get(((Message)message).getIdChan());
         	 }
             Accueil.jtrep.get(0).append(((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
-
+            
          } else if (message.getClass().toString().equals("class idc.Request")) {
-            Request req = (Request) message;
             System.out.println("RESQUEST CATCHED !");
-            if (req.getKey() != null) {
-               if (!CryptoManager.shasum(req.getKey().getEncoded()).equals(req.getSource())) {
-                  // si la clef publique passée en requete ne correspond pas à l'id on avertie
-                  JOptionPane.showMessageDialog(null, "Attention, la clef RSA et l'ID ne correspondent pas :<br> ID : " + new String(req.getSource()));
-               }
-
-               if (!CryptoManager.pubKeyMap.containsKey(req.getSource())) {
-                  // on ajoute si la clef n'existe pas et on avertit
-                  JOptionPane.showMessageDialog(null, "Clef publique ajoutée.<br> ID : " + new String(req.getSource()));
-                  CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
-               }
+        	if (((Request) message).getKey() != null) {
+               CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
             }
 
             IDCManager.catchRequest(((Request) message));
@@ -70,6 +60,7 @@ public class ServerThread extends Thread {
          } else if (message.getClass().toString().equals("class idc.Agreement")) {
 
             Channel chan = CryptoManager.decryptChannel((Agreement) message);
+            
             IDCManager.addChannel(chan);
          }
 

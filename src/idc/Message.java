@@ -46,11 +46,6 @@ public class Message extends Object implements Serializable, Cipherable {
 
 		integrity();
 	}
-        
-        public Message(String message) {
-            this(message, IDCManager.myNode);
-            CryptoManager.SignMessage(this);
-        }
 
 	public Message(String message, Node sender,int idchan) {
 		super();
@@ -118,11 +113,17 @@ public class Message extends Object implements Serializable, Cipherable {
 		data = ocTab;
 		integrity();
 	}
+	
+	public int getIdChan(){
+		integrity();
+		return chan;
+	}
 
 	private void writeObject(ObjectOutputStream stream) throws IOException {
 		integrity();
 		stream.writeObject(sender);
 		stream.writeObject(date);
+		stream.writeInt(chan);
 		stream.writeBoolean(isCiphered);
 		stream.writeObject(data);
 		stream.writeObject(digest);
@@ -133,6 +134,7 @@ public class Message extends Object implements Serializable, Cipherable {
 			ClassNotFoundException {
 		sender = (Node) stream.readObject();
 		date = (Date) stream.readObject();
+		chan=stream.readInt();
 		isCiphered=stream.readBoolean();
 		data = (byte[]) stream.readObject();
 		digest = (byte[]) stream.readObject();

@@ -26,6 +26,8 @@ public class Agreement extends Object implements Serializable {
 	public Agreement(PublicKey pub, Channel channel) {
 		RSAPub = pub;
 		chan = channel;
+
+		
 		integrity();
 	}
 

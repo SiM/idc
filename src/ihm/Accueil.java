@@ -26,71 +26,6 @@ import javax.swing.JTextArea;
  * @author  w705199
  */
 public class Accueil extends javax.swing.JFrame {
-<<<<<<< HEAD:src/ihm/Accueil.java
-	public static CryptoManager crypto;
-	public static IDCManager manager;
-    /** Creates new form Accueil */
-    public Accueil(/*IDCManager manager_arg,CryptoManager crypto*/) {
-    	
-        initComponents();
-        jFormattedTextField1.addKeyListener(new java.awt.event.KeyListener() {
-            public void actionPerformed(java.awt.event.KeyEvent evt) {
-              //  jFormattedTextField1ActionPerformed(evt);
-            }
-
-            public void keyTyped(KeyEvent arg0) {
-            }
-
-            public void keyPressed(KeyEvent arg0) {
-            	
-                if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
-                    if(jList1.getSelectedIndex() != -1)
-	                	if (!jFormattedTextField1.getText().isEmpty())
-	                    {
-	                        String dial = new String(jFormattedTextField1.getText());
-	                        dial = "[hh:mm] "+ Config.nickname +" : " + dial + "\n";
-	                        manager.send(new Message(dial, IDCManager.myNode));
-	                        jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-	                        jFormattedTextField1.setText("");
-	                    }
-            }
-            public void keyReleased(KeyEvent arg0) {
-            }
-        });
-        jFormattedTextField1.addMouseListener(new java.awt.event.MouseListener() {
-            public void actionPerformed(java.awt.event.MouseEvent evt) {
-              //  jFormattedTextField1ActionPerformed(evt);
-            }
-
-            public void mouseClicked(MouseEvent arg0) {
-                 if (jFormattedTextField1.getText().contentEquals("Entrez votre texte ici..."))
-                {
-                    jFormattedTextField1.setText("");
-                }
-            }
-
-            public void mousePressed(MouseEvent arg0) {
-            }
-
-            public void mouseReleased(MouseEvent arg0) {
-            }
-
-            public void mouseEntered(MouseEvent arg0) {
-            }
-
-            public void mouseExited(MouseEvent arg0) {
-            }
-
-        });
-       /* jList1.addListSelectionListener(new java.awt.event.MouseListener(){
-
-            public void mouseClicked(MouseEvent arg0) {
-            }
-
-            public void mousePressed(MouseEvent arg0) {
-            }
-=======
->>>>>>> fridim/master:src/ihm/Accueil.java
 
    public static CryptoManager crypto;
    public static IDCManager manager;
@@ -154,18 +89,7 @@ public class Accueil extends javax.swing.JFrame {
          public void mouseExited(MouseEvent arg0) {
          }
       });
-   /* jList1.addListSelectionListener(new java.awt.event.MouseListener(){
-   public void mouseClicked(MouseEvent arg0) {
-   }
-   public void mousePressed(MouseEvent arg0) {
-   }
-   public void mouseReleased(MouseEvent arg0) {
-   }
-   public void mouseEntered(MouseEvent arg0) {
-   }
-   public void mouseExited(MouseEvent arg0) {
-   }
-   });*/
+
    }
 
    /** This method is called from within the constructor to
@@ -256,7 +180,7 @@ public class Accueil extends javax.swing.JFrame {
 
       jMenuBar1.add(jMenu3);
 
-//        jList1.setModel(new javax.swing.AbstractListModel() {
+      //jList1.setModel(new javax.swing.AbstractListModel() {
       //String[] strings = { "<html><span style=\"color: red\">Vide</span></html>"};
       //public int getSize() { return strings.length; }
       //public Object getElementAt(int i) { return strings[i]; }
@@ -620,143 +544,11 @@ class ListData extends AbstractListModel {
       return friends.get(index);
    }
 
-<<<<<<< HEAD:src/ihm/Accueil.java
-        jMenuItem13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jMenuItem13MousePressed(evt);
-            }
-        });
-        jMenu4.add(jMenuItem13);
-
-        jMenuBar2.add(jMenu4);
-
-        setJMenuBar(jMenuBar2);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, 0, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
-                        .addGap(1, 1, 1)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        listJlist1.addElement("Chat Public");
-        jList1.setListData(listJlist1);
-        jtrep.add(new JTextArea(""));
-        pack();
-
-		crypto=new CryptoManager();
-		manager = new IDCManager();
-		jTextArea1.setLineWrap(true);
-    }// </editor-fold>//GEN-END:initComponents
-
-  
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-
-        	if(jList1.getSelectedIndex() != -1)
-                if (!jFormattedTextField1.getText().isEmpty())
-                {
-                    String dial = new String(jFormattedTextField1.getText());
-                    dial = "[hh:mm] "+ Config.nickname +" : " + dial + "\n";
-                    manager.send(new Message(dial, IDCManager.myNode));
-                    jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-                    jFormattedTextField1.setText("");
-                }
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        // TODO add your handling code here:
-        if (evt.getValueIsAdjusting() == false) {   
-                if(jList1.getSelectedIndex()!=-1)
-                {
-                    if(!jList1.getSelectedValue().toString().startsWith("  -")) //On affiche simplement le bon texte
-                        jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-                    else// on a cliqué sur un elt qui appartient a un chanel
-                    {
-                        int i=jList1.getSelectedIndex();
-                        while(listJlist1.get(i).startsWith("  -"))
-                        {
-                            i = i-1;
-
-                        }
-                        jList1.setSelectedIndex(i);
-                    }
-                }
-            }
-    }//GEN-LAST:event_jList1ValueChanged
-=======
    public void refreshList() {
       fireContentsChanged(this, 0, friends.size());
    }
 }
->>>>>>> fridim/master:src/ihm/Accueil.java
+
 
 class refreshNicknameList extends Thread {
 
