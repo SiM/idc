@@ -46,6 +46,11 @@ public class Message extends Object implements Serializable, Cipherable {
 
 		integrity();
 	}
+        
+        public Message(String message) {
+            this(message, IDCManager.myNode);
+            CryptoManager.SignMessage(this);
+        }
 
 	public Message(String message, Node sender,int idchan) {
 		super();

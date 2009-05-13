@@ -1,9 +1,9 @@
 package idc;
 
-import java.io.IOException;
 import java.net.*;
 
 public class BroadcastServer extends Thread {
+
 
 	protected DatagramSocket socket;
 
@@ -46,8 +46,7 @@ public class BroadcastServer extends Thread {
 				String[] d = dString.split(" ");
 				
 				IDCManager.addLocalNode(new FriendNode(d[0], d[1].getBytes(), packet.getAddress()));
-				IDCManager.addNode(new Node(d[0],d[1].getBytes()));
-				
+				IDCManager.addNode(d[1],new Node(d[0],d[1].getBytes()));				
 				IDCManager.enQueue(new Node(d[0], d[1].getBytes()),packet.getAddress());
 
 			} catch (Exception e) {
@@ -56,4 +55,4 @@ public class BroadcastServer extends Thread {
 			}
 		}
 	}
-}
+

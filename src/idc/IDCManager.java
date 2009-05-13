@@ -21,17 +21,18 @@ import ihm.*;
  */
 public class IDCManager {
 
-	static private HashMap<String, Node> nodes; // tous les noeuds connus du
+
+	static private Hashtable<String, Node> nodes; // tous les noeuds connus du
 
 	// réseau
 
-	static private HashMap<String, String> WaitingStruct;
+	static private Hashtable<String, String> WaitingStruct;
 
 	static private List friends; // Connexions directes
 
 	static private Vector<Channel> Channels;
 
-	static private HashMap<Node, Queue<InetAddress>> gate;
+	static private Hashtable<Node, Queue<InetAddress>> gate;
 
 	static private boolean server = false;
 
@@ -41,15 +42,15 @@ public class IDCManager {
 	static public Node myNode;
 
 	public IDCManager() {
-		nodes = new HashMap<String, Node>(100, 100);
+		nodes = new Hashtable<String, Node>(100, 100);
 		friends = new ArrayList<FriendNode>(10);
 		Channels = new Vector<Channel>(100, 100);
 		Channels.setSize(100);
 		myNode = new Node(Config.nickname, CryptoManager.getId());
 		System.out.println("MON ID : " + new String(myNode.getId()));
 
-		WaitingStruct = new HashMap<String, String>(100, 100);
-		gate = new HashMap<Node, Queue<InetAddress>>(100, 100);
+		WaitingStruct = new Hashtable<String, String>(100, 100);
+		gate = new Hashtable<Node, Queue<InetAddress>>(100, 100);
 		Server server = new Server();
 		server.start();
 
@@ -90,7 +91,7 @@ public class IDCManager {
 		return friends;
 	}
 
-	static public HashMap<String, Node> getNodeStruct() {
+	static public Hashtable<String, Node> getNodeStruct() {
 		return nodes;
 	}
 
@@ -145,6 +146,7 @@ public class IDCManager {
 
 				if(message.getClass().toString().equals("class idc.Agreement"))out.writeObject((Agreement) message);
 				if(message.getClass().toString().equals("class idc.Message"))out.writeObject((Message) message);
+				if(message.getClass().toString().equals("class idc.Request"))out.writeObject((Request) message);
 				out.flush();
 			} catch (UnknownHostException e) {
 				e.printStackTrace(System.err);
@@ -152,6 +154,14 @@ public class IDCManager {
 			} catch (IOException e) {
 				e.printStackTrace(System.err);
 			}
+
+			
+			if(message.getClass().toString().equals("class idc.Request")&&!req.isAnAnswer()){
+			  
+			  WaitingStruct.put(new String(req.getSource()), new String(req.getTarget()));
+			  
+			}
+			
 		}
 
 	}
@@ -178,7 +188,9 @@ public class IDCManager {
 		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
 		req.setAsAnswer(false);
 		WaitingStruct.put(new String(source), new String(target));
-		sendRequest(req);
+		send(req);
+		
+
 		/**
 		 * here we need to know who we are waiting for. We also need to know the
 		 * id of the channel.
@@ -242,70 +254,11 @@ public class IDCManager {
 
 			answer.setAsAnswer(true);
 			answer.setAnswer(true);
-			sendRequest(answer);
+			send(answer);
 		}
 	}
 
-	static public void sendRequest(Request req) {
-		/**
-		 * autor : el-indio here we simply send a request, as same as we do for
-		 * message.
-		 */
-		if (friends.isEmpty()) {
-			System.out.println("YOU HAVE NO FRIENDS !");
-			return;
-		}
-
-		ListIterator<FriendNode> iter = friends.listIterator();
-
-		while (iter.hasNext()) {
-			Socket socket = null;
-			ObjectOutputStream out = null;
-			ObjectInputStream in = null;
-			FriendNode friend = iter.next();
-
-			try {
-				System.out.println("Size of the friends list :"
-						+ friends.size());
-				System.out.println("address of next friend = "
-						+ friend.getAddress());
-
-				socket = new Socket(friend.getAddress(), Config.port);
-
-				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());
-
-				out.writeObject(req);
-				out.flush();
-			} catch (UnknownHostException e) {
-				e.printStackTrace(System.err);
-				friends.remove(friend);
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
-		}
-
-		if (!req.isAnAnswer()) {
-			WaitingStruct.put(new String(req.getSource()), new String(req
-					.getTarget()));
-		}
-
-		/*
-		 * 
-		 * try { socket = new Socket(((FriendNode) friends.get(i)).getAddress(),
-		 * Config.port); out = new ObjectOutputStream(socket.getOutputStream());
-		 * in = new ObjectInputStream(socket.getInputStream());
-		 * out.writeObject(req); out.flush(); } catch (UnknownHostException e) {
-		 * e.printStackTrace(System.err); } catch (IOException e) {
-		 * e.printStackTrace(System.err); }
-		 * 
-		 * 
-		 * 
-		 * i++; }
-		 */
-
-	}
-
+	
 	public static void addNode(String str,Node n) {
 		if (! nodes.containsKey(str)) {
 			
@@ -336,4 +289,5 @@ public class IDCManager {
 			Accueil.jList2.setListData(Accueil.listJlist2);
 		}
 	}
+
 }
