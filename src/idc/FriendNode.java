@@ -46,18 +46,13 @@ public class FriendNode extends Node {
          out = new ObjectOutputStream(socket.getOutputStream());
          in = new ObjectInputStream(socket.getInputStream());
          out.flush();
+         out.writeObject(message);
       } catch (UnknownHostException e) {
     	  IDCManager.friends.remove(this);
          e.printStackTrace(System.err);
          
       } catch (IOException e) {
     	  IDCManager.friends.remove(this);
-         e.printStackTrace(System.err);
-      }
-
-      try {
-         out.writeObject(message);
-      } catch (IOException e) {
          e.printStackTrace(System.err);
       }
    }
