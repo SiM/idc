@@ -31,7 +31,7 @@ public class Accueil extends javax.swing.JFrame {
       // Appel du pop-up pour entrer son pseudo, avant le lancement d'IDCManager
       Pseudo ps = new Pseudo(null, "Bienvenue sur IDC", true);
       Config.nickname = ps.getPseudo();
-      
+
       crypto = new CryptoManager();
       manager = new IDCManager();
       initComponents();
@@ -46,18 +46,20 @@ public class Accueil extends javax.swing.JFrame {
          }
 
          public void keyPressed(KeyEvent arg0) {
-            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-               if (!jFormattedTextField1.getText().isEmpty()) {
-                  String dial = new String(jFormattedTextField1.getText());
-                  dial = Config.nickname + " : " + dial + "\n";
+            if (jList1.getSelectedIndex() != -1) {
+               if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+                  if (!jFormattedTextField1.getText().isEmpty()) {
+                     String dial = new String(jFormattedTextField1.getText());
+                     dial = Config.nickname + " : " + dial + "\n";
 
-                  manager.send(new Message(dial, IDCManager.myNode));
-                  jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-                  jFormattedTextField1.setText("");
-               //Node nd = new Node("stickman");
-               //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
+                     IDCManager.send(new Message(dial, IDCManager.myNode));
+                     jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
+                     jFormattedTextField1.setText("");
+                  //Node nd = new Node("stickman");
+                  //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
 
 
+                  }
                }
             }
          }
@@ -142,7 +144,7 @@ public class Accueil extends javax.swing.JFrame {
       jFormattedTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
       jFormattedTextField1.setText("Entrez votre texte ici...");
 
-      
+
 
       //jList1.setModel(new javax.swing.AbstractListModel() {
       //String[] strings = { "<html><span style=\"color: red\">Vide</span></html>"};
@@ -283,23 +285,22 @@ public class Accueil extends javax.swing.JFrame {
       pack();
 
 
-      
+
 
       jTextArea1.setLineWrap(true);
    }// </editor-fold>//GEN-END:initComponents
    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       // TODO add your handling code here:
-
-      if (!jFormattedTextField1.getText().isEmpty()) {
-         String dial = new String(jFormattedTextField1.getText());
-         dial = Config.nickname + " : " + dial + "\n";
-         manager.send(new Message(dial, IDCManager.myNode));
-         jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-         jFormattedTextField1.setText("");
-      //Node nd = new Node("stickman");
-      //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
-
-
+      if (jList1.getSelectedIndex() != -1) {
+         if (!jFormattedTextField1.getText().isEmpty()) {
+            String dial = new String(jFormattedTextField1.getText());
+            dial = Config.nickname + " : " + dial + "\n";
+            manager.send(new Message(dial, IDCManager.myNode));
+            jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
+            jFormattedTextField1.setText("");
+         //Node nd = new Node("stickman");
+         //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
+         }
       }
 
    }//GEN-LAST:event_jButton1ActionPerformed
@@ -424,8 +425,6 @@ public class Accueil extends javax.swing.JFrame {
    private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
    // TODO add your handling code here:
    }//GEN-LAST:event_jTextArea1MouseClicked
-
-
    private void jMenuItem13SelectionBouton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem13SelectionBouton
       // TODO add your handling code here:
       //About temp = new About();
