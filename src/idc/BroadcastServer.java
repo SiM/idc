@@ -43,7 +43,7 @@ public class BroadcastServer extends Thread {
             
             // 256 - 32 is really enough for a nickname
             if (len < 256) {
-               System.out.println("received size : " + buf.length);
+               //System.out.println("received size : " + len);
                byte[] received = new byte[len];
 
                for (int i = 0; i < len; i++) {

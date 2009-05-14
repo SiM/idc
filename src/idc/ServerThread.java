@@ -66,7 +66,7 @@ public class ServerThread extends Thread {
 
                if (!CryptoManager.pubKeyMap.containsKey(req.getSource())) {
                   // on ajoute si la clef n'existe pas et on avertit
-                  JOptionPane.showMessageDialog(null, "<html>Clef publique ajoutée.<br> <small>ID : " + HexBin.encode(req.getSource()));
+                  //JOptionPane.showMessageDialog(null, "<html>Clef publique ajoutée.<br> <small>ID : " + HexBin.encode(req.getSource()));
                   CryptoManager.addPubKey(((Request) message).getSource(), ((Request) message).getKey());
                }
 
@@ -79,6 +79,8 @@ public class ServerThread extends Thread {
             Channel chan = CryptoManager.decryptChannel((Agreement) message);
             
             IDCManager.addChannel(chan);
+         } else if (message.getClass().toString().equals("class idc.QuitNotice")) {
+            IDCManager.send(new Void());
          }
 
          out.close();
