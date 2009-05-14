@@ -170,7 +170,7 @@ public class Accueil extends javax.swing.JFrame {
       });
       jScrollPane1.setViewportView(jList1);
 
-      jButton1.setText("Envoyer");
+      jButton1.setText("<html><small><small>Envoyer");
       jButton1.addActionListener(new java.awt.event.ActionListener() {
 
          public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,7 +180,7 @@ public class Accueil extends javax.swing.JFrame {
 
       jLabel1.setText("<html><small><small>Personnes sur le réseau");
 
-      jLabel2.setText(" Chan disponible");
+      jLabel2.setText("<html><small><small>Salons disponibles");
 
       /*jListNicknames.setModel(new javax.swing.AbstractListModel() {
       String[] strings = { "Axel", "Badiss", "Guillaume", "Simon", "Yoann" };
@@ -266,10 +266,10 @@ public class Accueil extends javax.swing.JFrame {
       jMenu2.setText("?");
 
       jMenuItem11.setText("Manuel");
-      jMenu2.add(jMenuItem11);
+      //jMenu2.add(jMenuItem11);
 
       jMenuItem12.setText("FAQ");
-      jMenu2.add(jMenuItem12);
+      //jMenu2.add(jMenuItem12);
 
       jMenuItem13.addMouseListener(new java.awt.event.MouseAdapter() {
 
