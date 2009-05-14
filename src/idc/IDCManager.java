@@ -253,6 +253,8 @@ public class IDCManager {
 			channels.add(chan);
 			System.out.println("Channel added");
 		}
+        else
+            System.out.println("Echec de channel");
 	}
 
   
