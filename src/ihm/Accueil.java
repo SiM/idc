@@ -51,20 +51,21 @@ public class Accueil extends javax.swing.JFrame {
          }
 
          public void keyPressed(KeyEvent arg0) {
-            if (jList1.getSelectedIndex() != -1) {
-               if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-                  if (!jFormattedTextField1.getText().isEmpty()) {
-                     String dial = new String(jFormattedTextField1.getText());
-                     dial = Config.nickname + " : " + dial + "\n";
+            if (jListChannels.getSelectedIndex() == -1) {
+               jListChannels.setSelectedIndex(0);
+            }
 
-                     IDCManager.send(new Message(dial, IDCManager.myNode));
-                     jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
-                     jFormattedTextField1.setText("");
-                  //Node nd = new Node("stickman");
-                  //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
+            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+               if (!jFormattedTextField1.getText().isEmpty()) {
+                  String dial = new String(jFormattedTextField1.getText());
+                  dial = Config.nickname + " : " + dial + "\n";
 
+                  IDCManager.send(new Message(dial, IDCManager.myNode));
+                  jTextArea1.setText(jtrep.get(jListChannels.getSelectedIndex()).getText());
+                  jFormattedTextField1.setText("");
+               //Node nd = new Node("stickman");
+               //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
 
-                  }
                }
             }
          }
@@ -113,7 +114,7 @@ public class Accueil extends javax.swing.JFrame {
 
       jFormattedTextField1 = new javax.swing.JFormattedTextField();
       jScrollPane1 = new javax.swing.JScrollPane();
-      jList1 = new javax.swing.JList();
+      jListChannels = new javax.swing.JList();
       jButton1 = new javax.swing.JButton();
       jLabel1 = new javax.swing.JLabel();
       jLabel2 = new javax.swing.JLabel();
@@ -150,25 +151,25 @@ public class Accueil extends javax.swing.JFrame {
 
 
 
-      //jList1.setModel(new javax.swing.AbstractListModel() {
+      //jListChannels.setModel(new javax.swing.AbstractListModel() {
       //String[] strings = { "<html><span style=\"color: red\">Vide</span></html>"};
       //public int getSize() { return strings.length; }
       //public Object getElementAt(int i) { return strings[i]; }
       //      });
-      jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-      jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+      jListChannels.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+      jListChannels.addMouseListener(new java.awt.event.MouseAdapter() {
 
          public void mouseClicked(java.awt.event.MouseEvent evt) {
             jList1MouseClicked(evt);
          }
       });
-      jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+      jListChannels.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
          public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
             jList1ValueChanged(evt);
          }
       });
-      jScrollPane1.setViewportView(jList1);
+      jScrollPane1.setViewportView(jListChannels);
 
       jButton1.setText("Envoyer");
       jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -290,7 +291,7 @@ public class Accueil extends javax.swing.JFrame {
       layout.setVerticalGroup(
               layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(jLabel1)).addGap(6, 6, 6).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)).addGap(1, 1, 1).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))).addGroup(layout.createSequentialGroup().addGap(7, 7, 7).addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))).addContainerGap()));
       listJlist1.addElement("Chat Public");
-      jList1.setListData(listJlist1);
+      jListChannels.setListData(listJlist1);
       pack();
 
 
@@ -300,12 +301,12 @@ public class Accueil extends javax.swing.JFrame {
    }// </editor-fold>//GEN-END:initComponents
    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       // TODO add your handling code here:
-      if (jList1.getSelectedIndex() != -1) {
+      if (jListChannels.getSelectedIndex() != -1) {
          if (!jFormattedTextField1.getText().isEmpty()) {
             String dial = new String(jFormattedTextField1.getText());
             dial = Config.nickname + " : " + dial + "\n";
             manager.send(new Message(dial, IDCManager.myNode));
-            jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
+            jTextArea1.setText(jtrep.get(jListChannels.getSelectedIndex()).getText());
             jFormattedTextField1.setText("");
          //Node nd = new Node("stickman");
          //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
@@ -322,18 +323,18 @@ public class Accueil extends javax.swing.JFrame {
    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
       // TODO add your handling code here:
       if (evt.getValueIsAdjusting() == false) {
-         if (jList1.getSelectedIndex() != -1) {
-            if (!jList1.getSelectedValue().toString().startsWith("  -")) //On affiche simplement le bon texte
+         if (jListChannels.getSelectedIndex() != -1) {
+            if (!jListChannels.getSelectedValue().toString().startsWith("  -")) //On affiche simplement le bon texte
             {
-               jTextArea1.setText(jtrep.get(jList1.getSelectedIndex()).getText());
+               jTextArea1.setText(jtrep.get(jListChannels.getSelectedIndex()).getText());
             } else// on a cliqué sur un elt qui appartient a un chanel
             {
-               int i = jList1.getSelectedIndex();
+               int i = jListChannels.getSelectedIndex();
                while (listJlist1.get(i).startsWith("  -")) {
                   i = i - 1;
 
                }
-               jList1.setSelectedIndex(i);
+               jListChannels.setSelectedIndex(i);
             }
          }
       }
@@ -342,24 +343,24 @@ public class Accueil extends javax.swing.JFrame {
       // TODO add your handling code here:
       for (int i = jListNicknames.getSelectedIndices().length - 1; i >= 0; i = i - 1) {
          if (jListNicknames.getSelectedIndices()[i] != -1) {
-            if (jList1.getSelectedIndex() != -1 && jList1.getSelectedValue().toString().startsWith("channel")) {
+            if (jListChannels.getSelectedIndex() != -1 && jListChannels.getSelectedValue().toString().startsWith("channel")) {
                if (!listJlist1.contains("  -" + jListNicknames.getSelectedValues()[i])) {
-                  int select = jList1.getSelectedIndex();
+                  int select = jListChannels.getSelectedIndex();
                   listJlist1.add(select + 1, "  -" + jListNicknames.getSelectedValues()[i]);
-                  jList1.setListData(listJlist1);
+                  jListChannels.setListData(listJlist1);
                   jtrep.add(select + 1, new JTextArea(""));
-                  jList1.setSelectedIndex(select);
+                  jListChannels.setSelectedIndex(select);
                   Message msg = new Message(jFormattedTextField1.getText(), (Node) IDCManager.getLANNodes().get(0));
                   IDCManager.send(msg);
                }
             } else {
                if (!listJlist1.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
-                  int select = jList1.getSelectedIndex();
+                  int select = jListChannels.getSelectedIndex();
                   listJlist1.addElement(jListNicknames.getSelectedValues()[i] + " (privée)");
-                  jList1.setListData(listJlist1);
+                  jListChannels.setListData(listJlist1);
                   jtrep.add(new JTextArea(""));
-                  jList1.setSelectedIndex(select);
-                  jList1.setSelectedIndex(listJlist1.size() - 1);
+                  jListChannels.setSelectedIndex(select);
+                  jListChannels.setSelectedIndex(listJlist1.size() - 1);
                }
             }
          }
@@ -372,8 +373,8 @@ public class Accueil extends javax.swing.JFrame {
          jtrep.add(new JTextArea(""));
          listJlist1.add("  -" + jListNicknames.getSelectedValue());
          jtrep.add(new JTextArea(""));
-         jList1.setListData(listJlist1);
-         jList1.setSelectedIndex(listJlist1.size() - 2);
+         jListChannels.setListData(listJlist1);
+         jListChannels.setSelectedIndex(listJlist1.size() - 2);
          Nbr_channel++;
       }
    }//GEN-LAST:event_jButton2MouseClicked
@@ -383,23 +384,23 @@ public class Accueil extends javax.swing.JFrame {
    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
       // TODO add your handling code here:
       //Bouton quitter
-      if (jList1.getSelectedIndex() != -1) {
-         if (jList1.getSelectedValue().toString().startsWith("channel")) {
-            int i = jList1.getSelectedIndex();
+      if (jListChannels.getSelectedIndex() != -1) {
+         if (jListChannels.getSelectedValue().toString().startsWith("channel")) {
+            int i = jListChannels.getSelectedIndex();
             listJlist1.remove(i);
             jtrep.remove(i);
             while (i < listJlist1.size() && listJlist1.get(i).startsWith("  -")) {
                listJlist1.remove(i);
                jtrep.remove(i);
             }
-            jList1.setListData(listJlist1);
-            jList1.setSelectedIndex(listJlist1.size() - 1);
+            jListChannels.setListData(listJlist1);
+            jListChannels.setSelectedIndex(listJlist1.size() - 1);
          } else {
-            int i = jList1.getSelectedIndex();
+            int i = jListChannels.getSelectedIndex();
             listJlist1.remove(i);
             jtrep.remove(i);
-            jList1.setListData(listJlist1);
-            jList1.setSelectedIndex(listJlist1.size() - 1);
+            jListChannels.setListData(listJlist1);
+            jListChannels.setSelectedIndex(listJlist1.size() - 1);
 
          }
       }
@@ -409,25 +410,25 @@ public class Accueil extends javax.swing.JFrame {
       if (evt.getClickCount() == 2) {
             int i=0;
             if (jListNicknames.getSelectedIndices()[i] != -1) {
-               if (jList1.getSelectedIndex() != -1 && jList1.getSelectedValue().toString().startsWith("channel")) {
+               if (jListChannels.getSelectedIndex() != -1 && jListChannels.getSelectedValue().toString().startsWith("channel")) {
                   if (!listJlist1.contains("  -" + jListNicknames.getSelectedValues()[i])) {
-                     int select = jList1.getSelectedIndex();
+                     int select = jListChannels.getSelectedIndex();
                      listJlist1.add(select + 1, "  -" + jListNicknames.getSelectedValues()[i]);
-                     jList1.setListData(listJlist1);
+                     jListChannels.setListData(listJlist1);
                      jtrep.add(select + 1, new JTextArea(""));
-                     jList1.setSelectedIndex(select);
+                     jListChannels.setSelectedIndex(select);
                   }
                } else {
                   if (!listJlist1.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
                      Node tp = (Node)((ListData)jListNicknames.getModel()).getRawElement(jListNicknames.getSelectedIndices()[i]);
                      byte[] id = tp.getId();
                      IDCManager.askForRequest(IDCManager.myNode.getId(), id, jListNicknames.getSelectedValues()[i] + " (privée)");
-                     int select = jList1.getSelectedIndex();
+                     int select = jListChannels.getSelectedIndex();
                      listJlist1.addElement(jListNicknames.getSelectedValues()[i] + " (privée)");
-                     jList1.setListData(listJlist1);
+                     jListChannels.setListData(listJlist1);
                      jtrep.add(new JTextArea("Beginning chat with " + jListNicknames.getSelectedValues()[i] + " ..."));
-                     jList1.setSelectedIndex(select);
-                     jList1.setSelectedIndex(listJlist1.size() - 1);
+                     jListChannels.setSelectedIndex(select);
+                     jListChannels.setSelectedIndex(listJlist1.size() - 1);
                   }
                }
             }
@@ -470,7 +471,7 @@ public class Accueil extends javax.swing.JFrame {
    private javax.swing.JFormattedTextField jFormattedTextField1;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
-   private javax.swing.JList jList1;
+   private javax.swing.JList jListChannels;
    public static javax.swing.JList jListNicknames;
    private javax.swing.JMenu jMenu1;
    private javax.swing.JMenu jMenu2;
