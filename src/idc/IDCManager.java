@@ -160,7 +160,7 @@ public class IDCManager {
 		assert (req != null);
 
 		String me = new String(myNode.getId());
-		String targ = new String(myNode.getId());
+		String targ = new String(req.getTarget());
 
 		if (!me.contentEquals(new StringBuffer(targ))) {
 			System.out.println("Request not for me !");
