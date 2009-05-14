@@ -4,6 +4,8 @@
  */
 package idc;
 
+import ihm.Accueil;
+
 import java.io.*;
 import java.net.*;
 
@@ -47,14 +49,12 @@ public class FriendNode extends Node {
          in = new ObjectInputStream(socket.getInputStream());
          out.flush();
          out.writeObject(message);
-      } catch (UnknownHostException e) {
+      } catch (Exception e) {
     	  IDCManager.friends.remove(this);
-    	  
-         e.printStackTrace(System.err);
-         
-      } catch (IOException e) {
-    	  IDCManager.friends.remove(this);
-         e.printStackTrace(System.err);
+          String dial = new String(ServerThread.getHeure()+" ### "+this.getNickname() + " a quitté le salon ### \n");
+          Accueil.jtrep.get(0).append(dial);
+          Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
+          e.printStackTrace(System.err);
       }
    }
 

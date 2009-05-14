@@ -5,13 +5,12 @@
 package idc;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
 
+
 import java.util.*;
-import ihm.Accueil;
 import java.net.InetAddress;
 
 import ihm.*;
@@ -264,7 +263,7 @@ public class IDCManager {
       
       friends.add(n);
       /** on ajoute une info au chat**/
-        String dial = new String(n.getNickname() + " a rejoint le salon \n");
+        String dial = new String(ServerThread.getHeure() +" ### "+ n.getNickname() + " a rejoint le salon ###  \n");
         Accueil.jtrep.get(0).append(dial);
         Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
       /** fin **/
