@@ -137,6 +137,8 @@ public class Accueil extends javax.swing.JFrame {
       // List des nicks
       ListData ld = new ListData(IDCManager.friends);
       jListNicknames.setModel(ld);
+      
+      jListChannels.setModel(new ListData(IDCManager.channels));
 
 
       jTextField1.setText("jTextField1");
@@ -290,8 +292,11 @@ public class Accueil extends javax.swing.JFrame {
               layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(27, 27, 27))).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)).addGroup(layout.createSequentialGroup().addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jButton4))).addGap(12, 12, 12).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, 0, 0, Short.MAX_VALUE).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addGap(12, 12, 12).addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))).addContainerGap()));
       layout.setVerticalGroup(
               layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(jLabel1)).addGap(6, 6, 6).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)).addGap(1, 1, 1).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))).addGroup(layout.createSequentialGroup().addGap(7, 7, 7).addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))).addContainerGap()));
-      listJlist1.addElement("Chat Public");
-      jListChannels.setListData(listJlist1);
+      
+      IDCManager.channels.add(new Channel("Chat Public"));
+      ListData m = (ListData) jListChannels.getModel();
+      m.refreshList();
+      
       pack();
 
 
@@ -330,7 +335,7 @@ public class Accueil extends javax.swing.JFrame {
             } else// on a cliqué sur un elt qui appartient a un chanel
             {
                int i = jListChannels.getSelectedIndex();
-               while (listJlist1.get(i).startsWith("  -")) {
+               while (((Channel )IDCManager.channels.get(i)).getName().startsWith("  -")) {
                   i = i - 1;
 
                }
@@ -344,92 +349,85 @@ public class Accueil extends javax.swing.JFrame {
       for (int i = jListNicknames.getSelectedIndices().length - 1; i >= 0; i = i - 1) {
          if (jListNicknames.getSelectedIndices()[i] != -1) {
             if (jListChannels.getSelectedIndex() != -1 && jListChannels.getSelectedValue().toString().startsWith("channel")) {
-               if (!listJlist1.contains("  -" + jListNicknames.getSelectedValues()[i])) {
                   int select = jListChannels.getSelectedIndex();
-                  listJlist1.add(select + 1, "  -" + jListNicknames.getSelectedValues()[i]);
-                  jListChannels.setListData(listJlist1);
+                  Channel c = new Channel((String) jListNicknames.getSelectedValues()[i]);
+                  IDCManager.addChannel(c);
+                  ListData m = (ListData) jListChannels.getModel();
+                  m.refreshList();
+                  
                   jtrep.add(select + 1, new JTextArea(""));
                   jListChannels.setSelectedIndex(select);
                   Message msg = new Message(jFormattedTextField1.getText(), (Node) IDCManager.getLANNodes().get(0));
                   IDCManager.send(msg);
                }
             } else {
-               if (!listJlist1.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
+               if (!IDCManager.channels.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
                   int select = jListChannels.getSelectedIndex();
-                  listJlist1.addElement(jListNicknames.getSelectedValues()[i] + " (privée)");
-                  jListChannels.setListData(listJlist1);
+                  Channel c = new Channel(jListNicknames.getSelectedValues()[i] + " (privée)");
+                  IDCManager.addChannel(c);
+                  ListData m = (ListData) jListChannels.getModel();
+                  m.refreshList();
+
                   jtrep.add(new JTextArea(""));
                   jListChannels.setSelectedIndex(select);
-                  jListChannels.setSelectedIndex(listJlist1.size() - 1);
+                  jListChannels.setSelectedIndex(IDCManager.channels.size() - 1);
                }
             }
          }
       }
-   }//GEN-LAST:event_jButton3MouseClicked
+   //GEN-LAST:event_jButton3MouseClicked
    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
       // TODO add your handling code here:
       if (jListNicknames.getSelectedIndex() != -1) {
-         listJlist1.addElement("channel " + Nbr_channel + " (privée)");
-         jtrep.add(new JTextArea(""));
-         listJlist1.add("  -" + jListNicknames.getSelectedValue());
-         jtrep.add(new JTextArea(""));
-         jListChannels.setListData(listJlist1);
-         jListChannels.setSelectedIndex(listJlist1.size() - 2);
-         Nbr_channel++;
       }
    }//GEN-LAST:event_jButton2MouseClicked
-   private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+   private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIx  RST:event_jList1MouseClicked
    // TODO add your handling code here:
    }//GEN-LAST:event_jList1MouseClicked
+   
+   // QUITTER CHAN
    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
       // TODO add your handling code here:
       //Bouton quitter
       if (jListChannels.getSelectedIndex() != -1) {
          if (jListChannels.getSelectedValue().toString().startsWith("channel")) {
-            int i = jListChannels.getSelectedIndex();
-            listJlist1.remove(i);
-            jtrep.remove(i);
-            while (i < listJlist1.size() && listJlist1.get(i).startsWith("  -")) {
-               listJlist1.remove(i);
-               jtrep.remove(i);
-            }
-            jListChannels.setListData(listJlist1);
-            jListChannels.setSelectedIndex(listJlist1.size() - 1);
+            // TODO
          } else {
             int i = jListChannels.getSelectedIndex();
-            listJlist1.remove(i);
+            IDCManager.channels.remove(i);
+            
+            ListData m = (ListData) jListChannels.getModel();
+            m.refreshList();
+            
             jtrep.remove(i);
-            jListChannels.setListData(listJlist1);
-            jListChannels.setSelectedIndex(listJlist1.size() - 1);
-
          }
       }
    }//GEN-LAST:event_jButton4MouseClicked
+   
+   // double clique sur la liste des nickname
    private void jList2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
       // TODO add your handling code here:
       if (evt.getClickCount() == 2) {
             int i=0;
             if (jListNicknames.getSelectedIndices()[i] != -1) {
                if (jListChannels.getSelectedIndex() != -1 && jListChannels.getSelectedValue().toString().startsWith("channel")) {
-                  if (!listJlist1.contains("  -" + jListNicknames.getSelectedValues()[i])) {
-                     int select = jListChannels.getSelectedIndex();
-                     listJlist1.add(select + 1, "  -" + jListNicknames.getSelectedValues()[i]);
-                     jListChannels.setListData(listJlist1);
-                     jtrep.add(select + 1, new JTextArea(""));
-                     jListChannels.setSelectedIndex(select);
-                  }
+                  // TODO
                } else {
-                  if (!listJlist1.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
                      Node tp = (Node)((ListData)jListNicknames.getModel()).getRawElement(jListNicknames.getSelectedIndices()[i]);
                      byte[] id = tp.getId();
-                     IDCManager.askForRequest(IDCManager.myNode.getId(), id, jListNicknames.getSelectedValues()[i] + " (privée)");
-                     int select = jListChannels.getSelectedIndex();
-                     listJlist1.addElement(jListNicknames.getSelectedValues()[i] + " (privée)");
-                     jListChannels.setListData(listJlist1);
-                     jtrep.add(new JTextArea("Beginning chat with " + jListNicknames.getSelectedValues()[i] + " ..."));
-                     jListChannels.setSelectedIndex(select);
-                     jListChannels.setSelectedIndex(listJlist1.size() - 1);
-                  }
+                     Channel c = new Channel(jListNicknames.getSelectedValues()[i] + " (privée)");
+                     if (!IDCManager.channels.contains(c)) {
+                        IDCManager.askForRequest(IDCManager.myNode.getId(), id, c);
+
+
+                        ListData m = (ListData) jListChannels.getModel();
+                        m.refreshList();
+
+                        int select = jListChannels.getSelectedIndex();
+                        jtrep.add(new JTextArea("Beginning chat with " + jListNicknames.getSelectedValues()[i] + " ..."));
+                        jListChannels.setSelectedIndex(select);
+                        jListChannels.setSelectedIndex(IDCManager.channels.size() - 1);
+                     }
                }
             }
       }
@@ -461,7 +459,6 @@ public class Accueil extends javax.swing.JFrame {
    }*/
    public static Vector<JTextArea> jtrep = new Vector<JTextArea>();  //ce tableau permet d'avoir toutes les discussions en cours
    int Nbr_channel = 0;
-   private Vector<String> listJlist1 = new Vector<String>();
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton2;
@@ -471,7 +468,7 @@ public class Accueil extends javax.swing.JFrame {
    private javax.swing.JFormattedTextField jFormattedTextField1;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
-   private javax.swing.JList jListChannels;
+   public static javax.swing.JList jListChannels;
    public static javax.swing.JList jListNicknames;
    private javax.swing.JMenu jMenu1;
    private javax.swing.JMenu jMenu2;
@@ -490,32 +487,39 @@ public class Accueil extends javax.swing.JFrame {
    // End of variables declaration//GEN-END:variables
 }
 
+
+
 class ListData extends AbstractListModel {
 
-   static private List friends;
+   private List dataList;
 
-   public ListData(List friends) {
-      assert (friends != null);
-      ListData.friends = friends;
+   public ListData(List data) {
+      assert (data != null);
+      dataList = data;
    }
 
    public int getSize() {
-      return friends.size();
+      return dataList.size();
    }
 
    public Object getElementAt(int index) {
-      return ((FriendNode) friends.get(index)).getNickname();
+      if (dataList.get(index).getClass().toString().equals("class idc.FriendNode") || dataList.get(index).getClass().toString().equals("class idc.Node")) {
+         return ((FriendNode) dataList.get(index)).getNickname();
+      } else if (dataList.get(index).getClass().toString().equals("class idc.Channel")) {
+         return ((Channel) dataList.get(index)).getName();
+      }
+      return null;
    }
 
    public Object getRawElement(int index) {
-      return friends.get(index);
+      return dataList.get(index);
    }
 
    public void refreshList() {
-      fireContentsChanged(this, 0, friends.size());
+      fireContentsChanged(this, 0, this.getSize());
+      
    }
 }
-
 class refreshNicknameList extends Thread {
 
    public void run() {

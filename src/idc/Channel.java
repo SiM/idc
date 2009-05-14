@@ -252,16 +252,21 @@ public class Channel extends Object implements Serializable, Cipherable {
       // returns false. (See Effective Java by Joshua Bloch.)
 
       if (aThat instanceof Channel) {
-          Channel that = (Channel) aThat;
+         Channel that = (Channel) aThat;
 
-      // now a proper field-by-field evaluation can be made
-       return this.getId().equals(that.getId());
-       
+         // now a proper field-by-field evaluation can be made
+         return this.getId().equals(that.getId()) || this.getName().equals(that.getName());
+
       }
       
       if (aThat instanceof byte[]) {
          byte[] thatid = (byte[]) aThat;
          return this.getId().equals(thatid);
+      }
+      
+      if (aThat instanceof String) {
+         String thatName = (String) aThat;
+         return this.getName().equals(thatName);
       }
       
       return false;
