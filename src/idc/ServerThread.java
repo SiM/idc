@@ -66,6 +66,8 @@ public class ServerThread extends Thread {
      
 
             if (req.getKey() != null) {
+                
+                
                if (!CryptoManager.shasum(req.getKey().getEncoded()).equals(req.getSource())) {
                   // si la clef publique passée en requete ne correspond pas à l'id on avertie
                   JOptionPane.showMessageDialog(null, "<html>Attention, la clef RSA et l'ID ne correspondent pas :<br><small> ID : " + HexBin.encode(req.getSource()));

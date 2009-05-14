@@ -6,8 +6,11 @@
  */
 package ihm;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import idc.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -32,6 +35,8 @@ public class Accueil extends javax.swing.JFrame {
       Pseudo ps = new Pseudo(null, "Bienvenue sur IDC", true);
       Config.nickname = ps.getPseudo();
 
+      jtrep.add(new JTextArea(""));
+      jTextArea1 = new javax.swing.JTextArea();
       crypto = new CryptoManager();
       manager = new IDCManager();
       initComponents();
@@ -115,7 +120,6 @@ public class Accueil extends javax.swing.JFrame {
       jScrollPane2 = new javax.swing.JScrollPane();
       jListNicknames = new javax.swing.JList();
       jScrollPane3 = new javax.swing.JScrollPane();
-      jTextArea1 = new javax.swing.JTextArea();
       jButton2 = new javax.swing.JButton();
       jButton3 = new javax.swing.JButton();
       jButton4 = new javax.swing.JButton();
@@ -249,6 +253,12 @@ public class Accueil extends javax.swing.JFrame {
 
       jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
       jMenuItem2.setText("Quitter");
+      jMenuItem2.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent arg0) {
+                System.exit(0); 
+            }
+        });
       jMenu1.add(jMenuItem2);
 
       jMenuBar1.add(jMenu1);
@@ -281,7 +291,6 @@ public class Accueil extends javax.swing.JFrame {
               layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(jLabel1)).addGap(6, 6, 6).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)).addGap(1, 1, 1).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))).addGroup(layout.createSequentialGroup().addGap(7, 7, 7).addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))).addContainerGap()));
       listJlist1.addElement("Chat Public");
       jList1.setListData(listJlist1);
-      jtrep.add(new JTextArea(""));
       pack();
 
 
@@ -398,7 +407,7 @@ public class Accueil extends javax.swing.JFrame {
    private void jList2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
       // TODO add your handling code here:
       if (evt.getClickCount() == 2) {
-         for (int i = jListNicknames.getSelectedIndices().length - 1; i >= 0; i = i - 1) {
+            int i=0;
             if (jListNicknames.getSelectedIndices()[i] != -1) {
                if (jList1.getSelectedIndex() != -1 && jList1.getSelectedValue().toString().startsWith("channel")) {
                   if (!listJlist1.contains("  -" + jListNicknames.getSelectedValues()[i])) {
@@ -410,6 +419,9 @@ public class Accueil extends javax.swing.JFrame {
                   }
                } else {
                   if (!listJlist1.contains(jListNicknames.getSelectedValues()[i] + " (privée)")) {
+                     Node tp = (Node)((ListData)jListNicknames.getModel()).getRawElement(jListNicknames.getSelectedIndices()[i]);
+                     byte[] id = tp.getId();
+                     IDCManager.askForRequest(IDCManager.myNode.getId(), id, jListNicknames.getSelectedValues()[i] + " (privée)");
                      int select = jList1.getSelectedIndex();
                      listJlist1.addElement(jListNicknames.getSelectedValues()[i] + " (privée)");
                      jList1.setListData(listJlist1);
@@ -419,7 +431,6 @@ public class Accueil extends javax.swing.JFrame {
                   }
                }
             }
-         }
       }
    }//GEN-LAST:event_jList2MouseClicked
    private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
@@ -511,6 +522,7 @@ class refreshNicknameList extends Thread {
          while (true) {
             ((ListData) Accueil.jListNicknames.getModel()).refreshList();
             sleep(Config.refreshListSleep);
+            
          }
       } catch (InterruptedException ex) {
          Logger.getLogger(refreshNicknameList.class.getName()).log(Level.SEVERE, null, ex);
