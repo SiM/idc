@@ -159,7 +159,7 @@ public class IDCManager {
 
 		String me = new String(myNode.getId());
 		String targ = new String(req.getTarget());
-
+		System.out.println("TARGET EQUALS ?"+me+" --------- "+targ+" ------ "+new String (req.getSource()));
 		if (!me.contentEquals(new StringBuffer(targ))) {
 			System.out.println("Request not for me !");
 			return;
@@ -203,7 +203,7 @@ public class IDCManager {
 			
 			//System.out.println("name of the requester :"+nodes.get("{"+new String( req.getSource())).getNickname());
 			answer.setAsAnswer(true);
-			acceptation.setNom(nodes.get( new String(myNode.getId()) ).getNickname());
+			acceptation.setNom(nodes.get( new String(req.getSource()) ).getNickname());
 			acceptation.setVisible(true);
 			while(accept.click == -1){};
 			send(answer);
