@@ -148,6 +148,7 @@ public class IDCManager {
 		 */
 	}
 
+   @SuppressWarnings("empty-statement")
 	static public void catchRequest(Request req) {
 		/**
 		 * autor : a request has been catched by the ServerThread and it's the
@@ -200,6 +201,7 @@ public class IDCManager {
 
 			}
 		} else {
+                   System.out.println("REQUEST("+new String(myNode.getId())+", "+new String(req.getSource())+", "+new String(req.getIdChan())+")");
 			Request answer = new Request(myNode.getId(), req.getSource(), req
 					.getIdChan(), CryptoManager.public_key);
 
@@ -218,8 +220,8 @@ public class IDCManager {
 			answer.setAsAnswer(true);
 			acceptation.setNom(nodes.get( new String(req.getSource()) ).getNickname());
 			acceptation.setVisible(true);
-			while(accept.click == -1){};
-			send(answer);
+			while(accept.click == -1) {System.out.print("");};
+			IDCManager.send(answer);
 		}
 	}
  /* envoie un message au réseau */

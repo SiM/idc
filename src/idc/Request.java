@@ -63,7 +63,7 @@ public class Request extends Object implements Serializable {
 	
 	public byte[] getTarget(){
 		integrity();
-		return target.clone();
+		return target;
 	}
 	
 	private void writeObject(ObjectOutputStream stream) throws IOException {
