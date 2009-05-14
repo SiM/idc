@@ -31,7 +31,7 @@ public class IDCManager {
 
 	static public List friends; // Connexions directes
 
-	static private Hashtable<String, Channel> Channels;
+	static private List channels;
 
 	static private Hashtable<Node, Queue<InetAddress>> gate;
 
@@ -46,7 +46,7 @@ public class IDCManager {
 	public IDCManager() {
 		nodes = new Hashtable<String, Node>(100, 100);
 		friends = new ArrayList<FriendNode>(10);
-		Channels = new Hashtable<String,Channel>(100, 100);
+		channels = new ArrayList<Channel>();
 		myNode = new Node(Config.nickname, CryptoManager.getId());
 		System.out.println("MON ID : " + HexBin.encode(myNode.getId()));
 
@@ -134,7 +134,7 @@ public class IDCManager {
 		 * System.out.println("Source or Target doesn't exist !"); return; }
 		 */
 		Channel chan = new Channel(str);
-		Channels.put(new String(chan.getId()), chan);
+		channels.add(chan);
 		
 		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
 		req.setAsAnswer(false);
@@ -174,11 +174,11 @@ public class IDCManager {
 				WaitingStruct.remove(req.getSource());
 
 				if (req.getAnswer()) {
-
+                                        int i = channels.indexOf(req.getIdChan());
+                                        Channel c = (Channel) channels.get(i);
 					System.out.println("THE ANSWER IS YES!");
-					CryptoManager.keyExchangeProcess(Channels.get(req.getIdChan()), req.getKey());
-					send(new Agreement(CryptoManager.public_key, Channels
-							.get(req.getIdChan())));
+					CryptoManager.keyExchangeProcess(c, req.getKey());
+					send(new Agreement(CryptoManager.public_key, c));
 
 				} else {
 					System.out.println("Request refused !");
@@ -248,8 +248,8 @@ public class IDCManager {
 	}
 
 	public static void addChannel(Channel chan) {
-		if (!Channels.contains(chan)) {
-			Channels.put(new String(chan.getId()), chan);
+		if (!channels.contains(chan)) {
+			channels.add(chan);
 			System.out.println("Channel added");
 		}
 	}

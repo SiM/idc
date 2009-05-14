@@ -16,7 +16,7 @@ public class Config {
    static public int port = 44441; // listening port for the server
    static public int broadcastPort = 44442; // listening port for the server
    static public long broadcastSleep = 5000;
-   static public String nickname = "stickman";
+   static public String nickname = "fridim";
    static public long refreshListSleep = 2000;
    static public int AES_size = 128;
    static public int RSA_size = 1024;
