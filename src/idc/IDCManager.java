@@ -45,7 +45,7 @@ public class IDCManager {
 
 	public IDCManager() {
 		nodes = new Hashtable<String, Node>(100, 100);
-		friends = new ArrayList<FriendNode>(10);
+		friends = new ArrayList<FriendNode>();
 		channels = new ArrayList<Channel>();
 		myNode = new Node(Config.nickname, CryptoManager.getId());
 		System.out.println("MON ID : " + HexBin.encode(myNode.getId()));
@@ -174,9 +174,11 @@ public class IDCManager {
 				WaitingStruct.remove(req.getSource());
 
 				if (req.getAnswer()) {
-                                        int i = channels.indexOf(req.getIdChan());
-                                        Channel c = (Channel) channels.get(i);
+                                        //int i = channels.indexOf(req.getIdChan());
+                                        //Channel c = (Channel) channels.get(i);
 					System.out.println("THE ANSWER IS YES!");
+
+					Channel c =new Channel("private channel between "+new String(req.getSource())+" and "+new String(req.getTarget()));
 					CryptoManager.keyExchangeProcess(c, req.getKey());
 					send(new Agreement(CryptoManager.public_key, c));
 
