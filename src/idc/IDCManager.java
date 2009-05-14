@@ -122,7 +122,7 @@ public class IDCManager {
 
 	}
 
-	static public void askForRequest(byte[] source, byte[] target, String str) {
+	static public void askForRequest(byte[] source, byte[] target, Channel chan) {
 
 		/**
 		 * 1 -> we ask someone to engage a private conversation
@@ -132,8 +132,7 @@ public class IDCManager {
 		 * if (!(nodes.containsKey(source) || nodes.containsKey(target))) {
 		 * System.out.println("Source or Target doesn't exist !"); return; }
 		 */
-		Channel chan = new Channel(str);
-		channels.add(chan);
+		addChannel(chan);
 		
 		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
 		req.setAsAnswer(false);
@@ -247,14 +246,12 @@ public class IDCManager {
 		}
 
 	}
-
-	public static void addChannel(Channel chan) {
-		if (!channels.contains(chan)) {
-			channels.add(chan);
-			System.out.println("Channel added");
-		}
-	}
-
+      
+   public static void addChannel(Channel c) {
+      if (!channels.contains(c)) {
+         channels.add(c);
+      }
+   }
   
 
 
