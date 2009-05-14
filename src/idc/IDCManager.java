@@ -261,7 +261,14 @@ public class IDCManager {
     if (!friends.contains(n)) {
       String id = HexBin.encode(n.getId());
       System.out.println("Ajout friendnode : " + n.getNickname() + " ID : " + id + " (" + n.getAddress() + ")");
+      
       friends.add(n);
+      /** on ajoute une info au chat**/
+        String dial = new String(n.getNickname() + " a rejoint le salon \n");
+        Accueil.jtrep.get(0).append(dial);
+        Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
+      /** fin **/
+      
     }
   }
 
