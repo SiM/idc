@@ -93,6 +93,16 @@ public class ServerThread extends Thread {
 
          } else if (message.getClass().toString().equals("class idc.Agreement")) {
             assert(message != null);
+            
+            String me = new String(IDCManager.myNode.getId());
+    		String targ = new String(((Agreement)message).getTarget());
+    		System.out.println("AGREEMENT TARGET EQUALS ?"+me+" -----the target---- "+targ);
+    		if (!me.contentEquals(new StringBuffer(targ))) {
+    			System.out.println("Agreement not for me !");
+    			return;
+    		}
+    		System.out.println("AGREEMENT RECEIVED");
+            
             CryptoManager.decryptChannel(((Agreement) message));
             //Channel chan = CryptoManager.decryptChannel(((Agreement) message));
             Channel chan = ((Agreement) message).getChannel();

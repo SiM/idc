@@ -192,7 +192,7 @@ public class IDCManager {
                                         }
                                         if (c != null) {
                                             CryptoManager.keyExchangeProcess(c, req.getKey());
-                                            send(new Agreement(CryptoManager.public_key, c));
+                                            send(new Agreement(CryptoManager.public_key, c,myNode.getId(),req.getSource()));
                                        }
 
 				} else {

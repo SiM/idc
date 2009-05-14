@@ -20,23 +20,29 @@ import javax.crypto.spec.*;
 public class Agreement extends Object implements Serializable {
 
 	private PublicKey RSAPub;
-
+	private byte[] source;
+	private byte[] target;
 	private Channel chan;
 
-	public Agreement(PublicKey pub, Channel channel) {
+	public Agreement(PublicKey pub, Channel channel,byte[] src,byte[] targ) {
 		RSAPub = pub;
 		chan = channel;
-
-		
+		target=targ;
+		source = src;
 		integrity();
 	}
 
 	public Channel getChannel() {
+			integrity();
+			assert(chan!=null);
+			return chan;
+	}	
+	
+	public byte[] getTarget(){
 		integrity();
-                assert(chan!=null);
-		return chan;
+		return target;
 	}
-
+	
 	public PublicKey getPubKey() {
 		integrity();
 		return RSAPub;
@@ -44,6 +50,8 @@ public class Agreement extends Object implements Serializable {
 
 	private void writeObject(ObjectOutputStream stream) throws IOException {
 		integrity();
+		stream.writeObject(source);
+		stream.writeObject(target);
 		stream.writeObject(RSAPub);
 		stream.writeObject(chan);
 		
@@ -51,7 +59,9 @@ public class Agreement extends Object implements Serializable {
 
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
-	
+		
+		source=(byte[])stream.readObject();
+		target=(byte[])stream.readObject();
 		RSAPub = (PublicKey) stream.readObject();
 		chan =(Channel) stream.readObject();
 		integrity();
@@ -60,6 +70,8 @@ public class Agreement extends Object implements Serializable {
 	public void integrity() {
 		assert (RSAPub != null);
 		assert (chan != null);
+		assert (source!=null);
+		assert(target!=null);
 		//assert (chan.isCiphered());
 	}
 
