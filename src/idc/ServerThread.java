@@ -25,11 +25,20 @@ public class ServerThread extends Thread {
       integrity();
    }
 
-   public String getDate() {
+   public static String formatChiffre(int c) {
+       String s = new String();
+       if (c < 10)
+           s = "0"+c;
+       else
+           s = ""+c;
+       return s;
+   }
+
+   public static String getHeure() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
-       return ("["+hour+":"+minute+"]");
+       return ("["+formatChiffre(hour)+":"+formatChiffre(minute)+"]");
    }
 
    public void run() {
@@ -56,7 +65,7 @@ public class ServerThread extends Thread {
             // par exemple on l'affiche :
             //System.out.println("PASSAGE DANS LE TEST");
             //System.out.println("message :" + ((Message) message).getMessage());
-            Accueil.jtrep.get(0).append(getDate()+ " " +((Message) message).getMessage());
+            Accueil.jtrep.get(0).append(getHeure()+ " " +((Message) message).getMessage());
             Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
             
          } else if (message.getClass().toString().equals("class idc.Request")) {
