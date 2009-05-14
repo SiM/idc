@@ -178,9 +178,12 @@ public class IDCManager {
                                         Iterator i = channels.iterator();
                                         
                                         Channel c = null;
+                                        System.out.println("id du chan dans la requete : " + new String(req.getIdChan()));
                                         while (i.hasNext()) {
                                           Channel a = (Channel) i.next();
-                                          if (c.equals(req.getIdChan())) {
+                                          System.out.println("id chan parcouru dans la liste : " + new String(a.getId()));
+                                          
+                                          if (a.equals(req.getIdChan())) {
                                              c = a;
                                              break;
                                           }
@@ -260,6 +263,7 @@ public class IDCManager {
    public static void addChannel(Channel c) {
       if (!channels.contains(c)) {
          channels.add(c);
+         ((ListData) Accueil.jListChannels.getModel()).refreshList();
       }
    }
   

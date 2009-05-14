@@ -261,7 +261,7 @@ public class Channel extends Object implements Serializable, Cipherable {
       
       if (aThat instanceof byte[]) {
          byte[] thatid = (byte[]) aThat;
-         return this.getId().equals(thatid);
+         return Arrays.equals(this.getId(), thatid);
       }
       
       if (aThat instanceof String) {
