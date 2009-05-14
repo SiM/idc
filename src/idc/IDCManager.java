@@ -175,10 +175,20 @@ public class IDCManager {
                                         //int i = channels.indexOf(req.getIdChan());
                                         //Channel c = (Channel) channels.get(i);
 					System.out.println("THE ANSWER IS YES!");
-
-					Channel c =new Channel("private channel between "+new String(req.getSource())+" and "+new String(req.getTarget()));
-					CryptoManager.keyExchangeProcess(c, req.getKey());
-					send(new Agreement(CryptoManager.public_key, c));
+                                        Iterator i = channels.iterator();
+                                        
+                                        Channel c = null;
+                                        while (i.hasNext()) {
+                                          Channel a = (Channel) i.next();
+                                          if (c.equals(req.getIdChan())) {
+                                             c = a;
+                                             break;
+                                          }
+                                        }
+                                        if (c != null) {
+                                            CryptoManager.keyExchangeProcess(c, req.getKey());
+                                            send(new Agreement(CryptoManager.public_key, c));
+                                       }
 
 				} else {
 					System.out.println("Request refused !");
