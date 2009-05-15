@@ -135,7 +135,7 @@ public class CryptoManager {
 		integrity();
 				
 		try{
-			loadKeyPair();
+			
 			Cipher rsaDeCoder = Cipher.getInstance("RSA/ECB/NOPADDING");
 			rsaDeCoder.init(Cipher.DECRYPT_MODE,private_key);
 			/**
@@ -145,7 +145,7 @@ public class CryptoManager {
 			byte[] decoded = rsaDeCoder.doFinal(agr.getChannel().getData());
 			                       
 			assert (decoded!=null);
-                        agr.getChannel().setData(decoded);
+            agr.getChannel().setData(decoded);
 			
 		}catch (NoSuchAlgorithmException err) {
 			System.out.println(err);
@@ -157,30 +157,29 @@ public class CryptoManager {
 			System.out.println(err);
 		} catch (BadPaddingException err) {
 			System.out.println(err);
-		}catch(IOException err){
-			System.out.println(err);
 		}
-		
 		
 		if(!checkSessionKey(agr, agr.getChannel().getData())){
 			return;
 		}
+        
 		/**
 		 * on reconstruit la clef a partir de data.
 		 */ 
 		
 		agr.getChannel().buildKey();
-		
+		assert(agr.getChannel()!=null);
+        
 		integrity();
                 
-                assert(agr.getChannel()!=null);
+        assert(agr.getChannel()!=null);
                 
 		//return agr.getChannel(); 
 	}	
 	
 	static boolean checkSessionKey(Agreement agr,byte[] msg){
 		integrity();
-		
+		System.out.println("ENTREE DANS CHECK SESSION");
 		byte[] digest=new  byte[0];
 		byte[] auth=new byte[0];
 		
@@ -201,9 +200,14 @@ public class CryptoManager {
 		} catch (BadPaddingException err) {
 			System.out.println(err);
 		}		
-		
+
+    System.out.println("AUTH :"+new String(auth));
+
+    System.out.println("DIGEST :"+new String(digest));
+
+
 		integrity();
-		return digest==auth;
+		return digest.equals(auth);
 		
 	}
 	
