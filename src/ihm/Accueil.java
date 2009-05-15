@@ -57,12 +57,30 @@ public class Accueil extends javax.swing.JFrame {
 
             if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                if (!jFormattedTextField1.getText().isEmpty()) {
+                   if (jListChannels.getSelectedIndex() == 0) {
                   String dial = new String(jFormattedTextField1.getText());
                   dial = Config.nickname + " : " + dial + "\n";
 
                   IDCManager.send(new Message(dial, IDCManager.myNode));
                   jTextArea1.setText(jtrep.get(jListChannels.getSelectedIndex()).getText());
                   jFormattedTextField1.setText("");
+                  }
+
+                   else {
+                      String dial = new String(jFormattedTextField1.getText());
+                      dial = Config.nickname + " : " + dial + "\n";
+                      Message m = new Message(dial, IDCManager.myNode);
+
+                      String s = jtrep.get(jListChannels.getSelectedIndex()).getText().toString().concat(ServerThread.getHeure()+" "+dial);
+                    System.out.println(s);
+                      jtrep.set(jListChannels.getSelectedIndex(), new JTextArea(s));
+                      Channel chan = (Channel)IDCManager.channels.get(jListChannels.getSelectedIndex());
+                      chan.cipher(m);
+                      IDCManager.send(m);
+                      //System.out.println(jListChannels.getSelectedIndex());
+                      jTextArea1.setText(jtrep.get(jListChannels.getSelectedIndex()).getText());
+                      jFormattedTextField1.setText("");
+                   }
                //Node nd = new Node("stickman");
                //IDCManager.addLocalNode(new FrienNode(nd.getNickname(),))
 

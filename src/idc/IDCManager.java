@@ -271,7 +271,7 @@ public class IDCManager {
          
          ((ListData) Accueil.jListChannels.getModel()).refreshList();
          int select =channels.indexOf(c);
-         Accueil.jtrep.add(new JTextArea("Nouvelle discussion privée..."));
+         Accueil.jtrep.add(new JTextArea("Nouvelle discussion privée...\n"));
          Accueil.jListChannels.setSelectedIndex(select);
       }
    }
