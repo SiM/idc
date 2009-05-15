@@ -393,13 +393,15 @@ public class Accueil extends javax.swing.JFrame {
          if (jListChannels.getSelectedValue().toString().startsWith("channel")) {
             // TODO
          } else {
-            int i = jListChannels.getSelectedIndex();
-            IDCManager.channels.remove(i);
-            
-            ListData m = (ListData) jListChannels.getModel();
-            m.refreshList();
-            
-            jtrep.remove(i);
+            if (jListChannels.getSelectedIndex() != 0) {
+               int i = jListChannels.getSelectedIndex();
+               IDCManager.channels.remove(i);
+
+               ListData m = (ListData) jListChannels.getModel();
+               m.refreshList();
+
+               jtrep.remove(i);
+            }
          }
       }
    }//GEN-LAST:event_jButton4MouseClicked
