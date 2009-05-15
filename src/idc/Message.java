@@ -154,5 +154,13 @@ public class Message extends Object implements Serializable, Cipherable {
     assert(chan != null);
  
   }
+  
+  public byte[] getChan() {
+   assert(chan != null);
+   return chan;
+  }
+  public void setChan(byte[] c) {
+   chan = c;
+  }
 }
  

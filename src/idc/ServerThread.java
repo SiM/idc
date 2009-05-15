@@ -57,7 +57,8 @@ public class ServerThread extends Thread {
          if (message.getClass().toString().equals("class idc.Message")) {
         
         	 if(((Message)message).isCiphered()){
-        		 
+                    Message m = (Message) message;
+                    Channel c = m.
         		// IDCManager.getChannels().get(((Message)message).getIdChan());
         	 }
             // Ici on fait quelque chose avec le message
