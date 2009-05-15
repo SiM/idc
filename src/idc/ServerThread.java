@@ -55,10 +55,14 @@ public class ServerThread extends Thread {
          message = in.readObject();
 
          if (message.getClass().toString().equals("class idc.Message")) {
-        
+                 int indice_chan = 0;
         	 if(((Message)message).isCiphered()){
                     Message m = (Message) message;
-                    Channel c = m.
+                    Channel c = (Channel) IDCManager.channels.get(IDCManager.channels.indexOf(m.getChan()));
+                    if (c != null) {
+                     c.decipher(m);
+                     indice_chan = IDCManager.channels.indexOf(c);
+                    }
         		// IDCManager.getChannels().get(((Message)message).getIdChan());
         	 }
             // Ici on fait quelque chose avec le message
