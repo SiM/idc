@@ -14,6 +14,7 @@ import java.util.*;
 import java.net.InetAddress;
 
 import ihm.*;
+import javax.swing.JTextArea;
 
 /**
  * 
@@ -136,7 +137,7 @@ public class IDCManager {
 		
 		Request req = new Request(source, target, chan.getId(),CryptoManager.public_key);
 		req.setAsAnswer(false);
-		WaitingStruct.put(new String(source), new String(target));
+		WaitingStruct.put(new String(target), new String(source));
 		send(req);
 		/**
 		 * here we need to know who we are waiting for. We also need to know the
@@ -264,8 +265,14 @@ public class IDCManager {
       
    public static void addChannel(Channel c) {
       if (!channels.contains(c)) {
+         System.out.println("size of the channels list AVANT AJOUT: " + channels.size());
          channels.add(c);
+         System.out.println("size of the channels list APRES AJOUT: " + channels.size());
+         
          ((ListData) Accueil.jListChannels.getModel()).refreshList();
+         int select =channels.indexOf(c);
+         Accueil.jtrep.add(new JTextArea("Nouvelle discussion privée..."));
+         Accueil.jListChannels.setSelectedIndex(select);
       }
    }
   

@@ -92,8 +92,12 @@ public class ServerThread extends Thread {
             IDCManager.catchRequest(((Request) message));
 
          } else if (message.getClass().toString().equals("class idc.Agreement")) {
-
-            Channel chan = CryptoManager.decryptChannel((Agreement) message);
+            assert(message != null);
+            CryptoManager.decryptChannel(((Agreement) message));
+            //Channel chan = CryptoManager.decryptChannel(((Agreement) message));
+            Channel chan = ((Agreement) message).getChannel();
+            
+            assert(chan != null);
             
             IDCManager.addChannel(chan);
          } else if (message.getClass().toString().equals("class idc.QuitNotice")) {

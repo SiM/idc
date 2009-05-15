@@ -54,7 +54,7 @@ public class FriendNode extends Node {
           String dial = new String(ServerThread.getHeure()+" ### "+this.getNickname() + " a quitté le salon ### \n");
           Accueil.jtrep.get(0).append(dial);
           Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
-          e.printStackTrace(System.err);
+          //e.printStackTrace(System.err);
       }
    }
 

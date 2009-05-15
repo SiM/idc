@@ -418,15 +418,6 @@ public class Accueil extends javax.swing.JFrame {
                      Channel c = new Channel(jListNicknames.getSelectedValues()[i] + " (privée)");
                      if (!IDCManager.channels.contains(c)) {
                         IDCManager.askForRequest(IDCManager.myNode.getId(), id, c);
-
-
-                        ListData m = (ListData) jListChannels.getModel();
-                        m.refreshList();
-
-                        int select = jListChannels.getSelectedIndex();
-                        jtrep.add(new JTextArea("Beginning chat with " + jListNicknames.getSelectedValues()[i] + " ..."));
-                        jListChannels.setSelectedIndex(select);
-                        jListChannels.setSelectedIndex(IDCManager.channels.size() - 1);
                      }
                }
             }

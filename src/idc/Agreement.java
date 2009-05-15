@@ -33,6 +33,7 @@ public class Agreement extends Object implements Serializable {
 
 	public Channel getChannel() {
 		integrity();
+                assert(chan!=null);
 		return chan;
 	}
 

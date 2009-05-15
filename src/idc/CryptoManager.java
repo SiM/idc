@@ -78,7 +78,7 @@ public class CryptoManager {
 	private void genKeyPair() {
 		{
 			try {
-				KeyPairGenerator KeyFact = KeyPairGenerator.getInstance("RSA");
+				KeyPairGenerator KeyFact = KeyPairGenerator.getInstance("RSA/ECB/NOPADDING");
 				KeyFact.initialize(Config.RSA_size);
 				KeyPair PairOfKey = KeyFact.genKeyPair();
 				public_key = PairOfKey.getPublic();
@@ -113,7 +113,7 @@ public class CryptoManager {
 		integrity();
 
 		try {
-			Cipher rsaCoder = Cipher.getInstance("RSA");
+			Cipher rsaCoder = Cipher.getInstance("RSA/ECB/NOPADDING");
 			rsaCoder.init(Cipher.ENCRYPT_MODE, private_key);
 			byte[] coded = rsaCoder.doFinal(chan.getDigest());
 			chan.setSignature(coded);
@@ -131,20 +131,21 @@ public class CryptoManager {
 		}
 	}
 	
-	static public Channel decryptChannel(Agreement agr){
+	static public void decryptChannel(Agreement agr){
 		integrity();
 				
 		try{
 			loadKeyPair();
-			Cipher rsaDeCoder = Cipher.getInstance("RSA");
+			Cipher rsaDeCoder = Cipher.getInstance("RSA/ECB/NOPADDING");
 			rsaDeCoder.init(Cipher.DECRYPT_MODE,private_key);
 			/**
 			 * on recupère tout les champs de l'objet channel;
 			 */
 			
 			byte[] decoded = rsaDeCoder.doFinal(agr.getChannel().getData());
-			agr.getChannel().setData(decoded);
-			
+			                       
+			assert (decoded!=null);
+                        agr.getChannel().setData(decoded);
 			
 		}catch (NoSuchAlgorithmException err) {
 			System.out.println(err);
@@ -162,7 +163,7 @@ public class CryptoManager {
 		
 		
 		if(!checkSessionKey(agr, agr.getChannel().getData())){
-			return null;
+			return;
 		}
 		/**
 		 * on reconstruit la clef a partir de data.
@@ -171,7 +172,10 @@ public class CryptoManager {
 		agr.getChannel().buildKey();
 		
 		integrity();
-		return agr.getChannel(); 
+                
+                assert(agr.getChannel()!=null);
+                
+		//return agr.getChannel(); 
 	}	
 	
 	static boolean checkSessionKey(Agreement agr,byte[] msg){
@@ -181,7 +185,7 @@ public class CryptoManager {
 		byte[] auth=new byte[0];
 		
 		try{
-			Cipher rsaAuth = Cipher.getInstance("RSA");
+			Cipher rsaAuth = Cipher.getInstance("RSA/ECB/NOPADDING");
 			rsaAuth.init(Cipher.DECRYPT_MODE,agr.getPubKey());
 			auth=rsaAuth.doFinal(agr.getChannel().getDigest());
 			MessageDigest Auth = MessageDigest.getInstance("SHA-256");
@@ -207,7 +211,7 @@ public class CryptoManager {
 		integrity();
 
 		try {
-			Cipher rsaCoder = Cipher.getInstance("RSA");
+			Cipher rsaCoder = Cipher.getInstance("RSA/ECB/NOPADDING");
 			rsaCoder.init(Cipher.ENCRYPT_MODE, private_key);
 
 			byte[] coded = rsaCoder.doFinal(msg.getDigest());
@@ -237,7 +241,7 @@ public class CryptoManager {
 		assert(pub!=null);
 		try {
 			loadKeyPair();
-			Cipher rsaCoder = Cipher.getInstance("RSA");
+			Cipher rsaCoder = Cipher.getInstance("RSA/ECB/NOPADDING");
 			
 			
 			

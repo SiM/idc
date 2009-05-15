@@ -28,11 +28,14 @@ public class ListData extends AbstractListModel {
    }
 
    public Object getElementAt(int index) {
-      if (dataList.get(index).getClass().toString().equals("class idc.FriendNode") || dataList.get(index).getClass().toString().equals("class idc.Node")) {
-         return ((FriendNode) dataList.get(index)).getNickname();
-      } else if (dataList.get(index).getClass().toString().equals("class idc.Channel")) {
-         return ((Channel) dataList.get(index)).getName();
-      }
+      assert(index < dataList.size() && index >= 0);
+      assert(dataList.get(index) != null);
+      
+         if (dataList.get(index).getClass().toString().equals("class idc.FriendNode") || dataList.get(index).getClass().toString().equals("class idc.Node")) {
+            return ((FriendNode) dataList.get(index)).getNickname();
+         } else if (dataList.get(index).getClass().toString().equals("class idc.Channel")) {
+            return ((Channel) dataList.get(index)).getName();
+         }
       return null;
    }
 
@@ -42,6 +45,5 @@ public class ListData extends AbstractListModel {
 
    public void refreshList() {
       fireContentsChanged(this, 0, this.getSize());
-      
    }
 }
