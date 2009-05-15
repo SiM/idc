@@ -24,7 +24,7 @@ public class Channel extends Object implements Serializable, Cipherable {
    private byte[] data;
    private byte[] digest;
    private ArrayList nodes;
-   private SecretKey secret_key;
+   static private SecretKey secret_key;
    private Random gen;
 
    public void destroyKey() {
@@ -184,8 +184,7 @@ public class Channel extends Object implements Serializable, Cipherable {
       return digest;
    }
 
-   public void cipher(Message message) {
-      integrity();
+   static public void cipher(Message message) {
       try {
          Cipher cipher = Cipher.getInstance("AES");
          cipher.init(Cipher.ENCRYPT_MODE, secret_key);
@@ -208,7 +207,6 @@ public class Channel extends Object implements Serializable, Cipherable {
          Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null,
                  ex);
       }
-      integrity();
    }
 
    public void decipher(Message message) {
