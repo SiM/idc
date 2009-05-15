@@ -70,8 +70,8 @@ public class ServerThread extends Thread {
             // par exemple on l'affiche :
             //System.out.println("PASSAGE DANS LE TEST");
             //System.out.println("message :" + ((Message) message).getMessage());
-            Accueil.jtrep.get(0).append(getHeure()+ " " +((Message) message).getMessage());
-            Accueil.jTextArea1.setText(Accueil.jtrep.get(0).getText());
+            Accueil.jtrep.get(indice_chan).append(getHeure()+ " " +((Message) message).getMessage());
+            Accueil.jTextArea1.setText(Accueil.jtrep.get(indice_chan).getText());
             
          } else if (message.getClass().toString().equals("class idc.Request")) {
             
